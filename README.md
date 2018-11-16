@@ -1,2 +1,4 @@
-# PriCoSha
-🐹 Database Project 
+REECE SUCKS!!!!!!!
+```go
+this is code go!!
+```
