@@ -23,12 +23,10 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		errorHandler(w, r, http.StatusNotFound)
 		return
 	}
-	/*
-		Template format is used as main is planned as templated page,
-		as such nil is passed to t.Execute()
-	*/
+
+	data := backend.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, nil)
+	t.Execute(w, data)
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

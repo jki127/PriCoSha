@@ -1,6 +1,4 @@
 <!-- This is the landing page for the PriCoSha website. -->
-<!-- Templating functionality is planned, as such this file
-    will be retained in /template -->
 <!DOCTYPE html>
 <html>
     <title>
@@ -13,6 +11,19 @@
             PriCoSha
         </h1>
         <hr>
-        Body of viewable content placeholder.
+        Body of other stuff.
+        <hr>
+        <h1>
+            Public Content:
+        </h1>
+        <hr>
+        <!-- Loops through array of data -->
+        {{range $value := .}}
+        <div>
+            Name: <b>{{$value.FileName}}</b><br>
+            Path: <b>{{$value.FilePath}}</b><br>
+            Posted by: <b>{{$value.Email}}</b> at <b>{{$value.PostTime}}</b><br>
+        </div>
+        {{end}}
     </body>
 </html>
