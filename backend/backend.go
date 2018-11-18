@@ -35,83 +35,33 @@ func TestDB() error {
 
 
 func GetPubContent() []*ContentItem {
-	// Query DB for data
+	
 	rows, err := db.Query(`SELECT * FROM Content_Item 
 		WHERE is_pub = true 
-		AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
+		AND post_time >= NOW() - INTERVAL 1 DAY`)
 	if err != nil {
-		log.Println("Could not query public content from DB.")
+		panic(err)
 	}
 	defer rows.Close()
 
-	// Declare variables for processing data
-	var (
-		itemID      int
-		email       string
-		filePath    string
-		fileName    string
-		postTime    string
-		isPub       int
-		data        []*ContentItem
-		CurrentItem *ContentItem
-	)
-
+	// Declare variables 
+	var isPub bool
+	var data[]*ContentItem
+	var CurrentItem *ContentItem
+	//iterate rows to add to array
 	for rows.Next() {
-		err = rows.Scan(&itemID, &email, &filePath, &fileName, &postTime, &isPub)
+		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, &CurrentItem.FilePath, &CurrentItem.FileName, &CurrentItem.PostTime, &isPub)
 		if err != nil {
-			log.Println("Could not scan row data from public content query.")
-		}
-		CurrentItem = &ContentItem{
-			ItemID:   itemID,
-			Email:    email,
-			FilePath: filePath,
-			FileName: fileName,
-			PostTime: postTime,
+			panic(err)
 		}
 		data = append(data, CurrentItem)
 	}
-
 	return data
 }
 
-/*
-ValidateInfo receives user entered login info and queries the DB on whether
-or not that info is valid
-*/
-func ValidateInfo(username string, password string) bool {
-	// Query DB for data
-	rows, err := db.Query(`SELECT email FROM Person
-		WHERE email=?
-		AND password=SHA2(?,256)`,
-		username, password)
-	if err != nil {
-		log.Println("Validate query statement failed.")
-	}
-
-	// Check if query returned 1 result (i.e. username and password matched entry)
-	var email string
-	count := 0
-	for rows.Next() {
-		err = rows.Scan(&email)
-		if err != nil {
-			log.Println("Could not scan row data from validate query")
-		}
-		count++
-	}
-
-	switch count {
-	case 1:
-		return true
-	case 0:
-		return false
-	default:
-		log.Println("Unexpected count in DB:", count)
-		return false
-	}
-}
 
 func init() {
-	var configData Conf
+	var configData UserData
 
 	configFile, err := os.Open("../backend/config.json")
 	if err != nil {
