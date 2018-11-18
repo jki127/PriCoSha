@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
 
 	b "pricosha/backend"
 )
@@ -23,6 +24,7 @@ func main() {
 	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateHandler)
+	http.HandleFunc("/logout", logoutHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
@@ -55,6 +57,14 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Currently prints whether user is logged in or not.
+	cookie, err := r.Cookie("username")
+	if err != nil {
+		log.Println("User is not logged in.")
+	} else {
+		log.Println("User is logged in as:", cookie.Value)
+	}
+
 	data := b.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
 	t.Execute(w, data)
@@ -65,7 +75,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "../web/static/login.html")
 }
 
-// Handles requests to validate user data
+// Handles requests to validate user data and sets cookies accordingly
 func validateHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
@@ -75,9 +85,29 @@ func validateHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	if ok := b.ValidateInfo(username, password); ok {
 		log.Println("User logged in with:", username, password)
+		cookie := http.Cookie{Name: "username", Value: username}
+		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
 	} else {
 		log.Println("User failed to log in with:", username, password)
 		http.Redirect(w, r, "/login", http.StatusFound)
+	}
+}
+
+// Handles requests to logout and deletes cookies accordingly
+func logoutHandler(w http.ResponseWriter, r *http.Request) {
+	_, err := r.Cookie("username")
+	if err != nil {
+		log.Println("User was not logged in and cannot be logged out.")
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		cookie := http.Cookie{
+			Name:    "username",
+			Value:   "",
+			Expires: time.Unix(0, 0),
+		}
+		http.SetCookie(w, &cookie)
+		log.Println("User successfully logged out.")
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }
