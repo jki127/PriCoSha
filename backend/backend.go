@@ -59,6 +59,23 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
+func ValidateInfo(username string, pass string) bool {
+	
+	var isValid bool
+	rows, err := db.Query(`SELECT email FROM Person
+		WHERE email=?
+		AND password=SHA2(?,256)`,
+		username, pass)
+	if err != nil {
+		log.Println("Failed Validation")
+		isValid = false
+	} else{
+		isValid = true
+	}
+
+	return isValid
+
+}
 
 func init() {
 	var configData UserData
