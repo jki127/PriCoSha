@@ -1,0 +1,18 @@
+<!-- This is a placeholder templated html file. -->
+<!DOCTYPE html>
+<html>
+    <title>PriCoSha</title>
+    <meta charset="UTF-8">
+    <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
+    <body>
+        {{range $key, $value := .}}
+        <div>
+            This uses templating to print key/val pairs of a map.
+            <br>
+            {{$key}} and {{$value}}
+            <br>
+        </div>
+        <br>
+        {{end}}
+    </body>
+</html>
