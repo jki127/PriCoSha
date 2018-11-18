@@ -6,6 +6,9 @@
     </title>
     <meta charset="UTF-8">
     <body>
+        {{if .IsErr}}
+            <div style="color: red">{{.ErrMsg}}</div>
+        {{end}}
         <form action="/validate" method="POST">
             Username: <input type="text" name="username" required><br>
             Password: <input type="text" name="password" required><br>
