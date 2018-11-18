@@ -92,25 +92,82 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to login page
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "../web/static/login.html")
+	_, err := r.Cookie("username")
+	if err == nil {
+		// User is already logged in, redirect
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	// Check if there was a previous login error
+	cookie, err := r.Cookie("logErr")
+	var errMsg string
+	var isErr bool
+	if err == nil {
+		isErr = true
+		if cookie.Value == "empty" {
+			errMsg = "Data fields were left empty. Please retry."
+		} else if cookie.Value == "fail" {
+			errMsg = "Incorrect login data. Please retry."
+		}
+	} else {
+		isErr = false
+	}
+
+	data := struct {
+		IsErr  bool
+		ErrMsg string
+	}{
+		isErr,
+		errMsg,
+	}
+
+	t := template.Must(template.ParseFiles("../web/template/login.html"))
+	t.Execute(w, data)
 }
 
 // Handles requests to validate user data and sets cookies accordingly
 func validateHandler(w http.ResponseWriter, r *http.Request) {
+	_, err := r.Cookie("username")
+	if err == nil {
+		// User is already logged in, redirect
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	// This check should be revised later
 	if username == "" || password == "" {
+		cookie := http.Cookie{Name: "logErr", Value: "empty"}
+		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/login", http.StatusFound)
+		return
 	}
 	if ok := b.ValidateInfo(username, password); ok {
 		log.Println("User logged in with:", username, password)
+		// Set cookie with user info
 		cookie := http.Cookie{Name: "username", Value: username}
 		http.SetCookie(w, &cookie)
+		// Delete logErr cookie if it exists
+		_, err := r.Cookie("logErr")
+		if err == nil {
+			c := http.Cookie{
+				Name:    "logErr",
+				Value:   "",
+				Expires: time.Unix(0, 0),
+			}
+			http.SetCookie(w, &c)
+		}
+
 		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	} else {
 		log.Println("User failed to log in with:", username, password)
+		cookie := http.Cookie{Name: "logErr", Value: "fail"}
+		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/login", http.StatusFound)
+		return
 	}
 }
 
@@ -120,6 +177,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("User was not logged in and cannot be logged out.")
 		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	} else {
 		cookie := http.Cookie{
 			Name:    "username",
@@ -128,5 +186,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, "/", http.StatusFound)
+		return
 	}
 }
