@@ -12,6 +12,16 @@ import (
 // Port that server listens to http requests on (only edit number value)
 var httpPort = ":" + "8080"
 
+/*
+MPD stands for MainPageData and holds all data necessary
+for main page to function
+*/
+type MPD struct {
+	Logged   bool // true if logged in, false otherwise
+	Username string
+	PubData  []*b.ContentItem
+}
+
 func main() {
 	if b.TestDB() == nil {
 		log.Println("Database connected successfully!")
@@ -59,15 +69,25 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Currently prints whether user is logged in or not.
 	cookie, err := r.Cookie("username")
+	var logged bool
+	var username string
 	if err != nil {
-		log.Println("User is not logged in.")
+		logged = false
+		username = ""
 	} else {
-		log.Println("User is logged in as:", cookie.Value)
+		logged = true
+		username = cookie.Value
 	}
 
-	data := b.GetPubContent()
+	CurrentMPD := MPD{
+		Logged:   logged,
+		Username: username,
+		PubData:  b.GetPubContent(),
+	}
+
+	// data := b.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, data)
+	t.Execute(w, CurrentMPD)
 }
 
 // Handles requests to login page
@@ -107,7 +127,6 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 			Expires: time.Unix(0, 0),
 		}
 		http.SetCookie(w, &cookie)
-		log.Println("User successfully logged out.")
 		http.Redirect(w, r, "/", http.StatusFound)
 	}
 }

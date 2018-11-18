@@ -10,8 +10,11 @@
         <h1>
             PriCoSha
             <div style="float:right">
+                {{if .Logged}}
+                Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
+                {{else}}
                 <a href="/login">Login!</a>
-                <a href="/logout">Logout!</a>
+                {{end}}
             </div>
         </h1>
         <hr>
@@ -22,7 +25,7 @@
         </h1>
         <hr>
         <!-- Loops through array of data -->
-        {{range $value := .}}
+        {{range $value := .PubData}}
         <div>
             ID: <b>{{$value.ItemID}}</b><br>
             Name: <b>{{$value.FileName}}</b><br>
