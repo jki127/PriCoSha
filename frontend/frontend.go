@@ -1,4 +1,3 @@
-// This is a placeholder frontend .go file
 package main
 
 import (
@@ -7,16 +6,30 @@ import (
 	"net/http"
 )
 
-var temp map[string]int
+// Port that server listens to http requests on (only edit number value)
+var httpPort = ":" + "8080"
 
+// Serves favicon file to favicon requests from browser
+func faviconHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "../assets/images/favicon_hearts.ico")
+}
+
+// Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	t := template.Must(template.ParseFiles("../views/main.html"))
-	t.Execute(w, temp)
+	/*
+		Template format is used as main is planned as templated page,
+		as such nil is passed to t.Execute()
+	*/
+	t := template.Must(template.ParseFiles("../web/template/main.html"))
+	t.Execute(w, nil)
 }
 
 func main() {
+	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
+	http.HandleFunc("/favicon.ico", faviconHandler)
 
+	// Start server
 	log.Println("Frontend spun up!")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(httpPort, nil))
 }
