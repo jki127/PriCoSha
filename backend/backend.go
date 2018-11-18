@@ -1,15 +1,15 @@
-package backend
+// This is a placeholder backend .go file
+package main
 
 import (
-	"database/sql"
-	"encoding/json"
 	"log"
-	"os"
 
-	// Used to interact with mySQL DB
+	_ "database/sql"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
+<<<<<<< HEAD
 // Holds configuration for user data
 type UserData struct {
 	User   string
@@ -97,4 +97,9 @@ func init() {
 	if err != nil {
 		log.Fatal("Could not connect to database")
 	}
+=======
+func main() {
+	log.Println(`I'm intended to interact with an sql server while handling
+		requests from the frontend.`)
+>>>>>>> ceff1421033ac6befd06f74534df1dd0c910d233
 }
