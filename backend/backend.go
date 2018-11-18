@@ -77,6 +77,40 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
+// ValidateInfo receives user entered login info and queries the DB on whether
+// or not that info is valid
+func ValidateInfo(username string, password string) bool {
+	// Query DB for data
+	rows, err := db.Query(`SELECT email FROM Person
+		WHERE email=?
+		AND password=SHA2(?,256)`,
+		username, password)
+	if err != nil {
+		log.Println("Validate query statement failed.")
+	}
+
+	// Check if query returned 1 result (i.e. username and password matched entry)
+	var email string
+	count := 0
+	for rows.Next() {
+		err = rows.Scan(&email)
+		if err != nil {
+			log.Println("Could not scan row data from validate query")
+		}
+		count++
+	}
+
+	switch count {
+	case 1:
+		return true
+	case 0:
+		return false
+	default:
+		log.Println("Unexpected count in DB:", count)
+		return false
+	}
+}
+
 func init() {
 	var configData Conf
 

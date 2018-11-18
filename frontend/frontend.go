@@ -5,11 +5,42 @@ import (
 	"log"
 	"net/http"
 
-	"pricosha/backend"
+	b "pricosha/backend"
 )
 
 // Port that server listens to http requests on (only edit number value)
 var httpPort = ":" + "8080"
+
+func main() {
+	if b.TestDB() == nil {
+		log.Println("Database connected successfully!")
+	} else {
+		log.Fatal("Database could not be contacted.")
+	}
+
+	// Establish functions for handling requests to specific pages
+	http.HandleFunc("/", mainHandler)
+	http.HandleFunc("/favicon.ico", faviconHandler)
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/validate", validateHandler)
+
+	// Start server
+	log.Println("Frontend spun up!")
+	err := http.ListenAndServe(httpPort, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe failed.")
+	}
+}
+
+// Handles requests to error pages
+func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
+	switch status {
+	case http.StatusNotFound:
+		http.ServeFile(w, r, "../web/static/not_found.html")
+	default:
+		http.ServeFile(w, r, "../web/static/unknown.html")
+	}
+}
 
 // Serves favicon file to favicon requests from browser
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,35 +55,29 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := backend.GetPubContent()
+	data := b.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
 	t.Execute(w, data)
 }
 
-func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
-	switch status {
-	case http.StatusNotFound:
-		http.ServeFile(w, r, "../web/static/not_found.html")
-	default:
-		http.ServeFile(w, r, "../web/static/unknown.html")
-	}
+// Handles requests to login page
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "../web/static/login.html")
 }
 
-func main() {
-	if backend.TestDB() == nil {
-		log.Println("Database connected successfully!")
-	} else {
-		log.Fatal("Database could not be contacted.")
+// Handles requests to validate user data
+func validateHandler(w http.ResponseWriter, r *http.Request) {
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	// This check should be revised later
+	if username == "" || password == "" {
+		http.Redirect(w, r, "/login", http.StatusFound)
 	}
-
-	// Establish functions for handling requests to specific pages
-	http.HandleFunc("/", mainHandler)
-	http.HandleFunc("/favicon.ico", faviconHandler)
-
-	// Start server
-	log.Println("Frontend spun up!")
-	err := http.ListenAndServe(httpPort, nil)
-	if err != nil {
-		log.Fatal("ListenAndServe failed.")
+	if ok := b.ValidateInfo(username, password); ok {
+		log.Println("User logged in with:", username, password)
+		http.Redirect(w, r, "/", http.StatusFound)
+	} else {
+		log.Println("User failed to log in with:", username, password)
+		http.Redirect(w, r, "/login", http.StatusFound)
 	}
 }
