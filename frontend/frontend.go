@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"pricosha/backend"
 )
 
 // Port that server listens to http requests on (only edit number value)
@@ -39,11 +41,20 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 }
 
 func main() {
+	if backend.TestDB() == nil {
+		log.Println("Database connected successfully!")
+	} else {
+		log.Fatal("Database could not be contacted.")
+	}
+
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
-	log.Fatal(http.ListenAndServe(httpPort, nil))
+	err := http.ListenAndServe(httpPort, nil)
+	if err != nil {
+		log.Fatal("ListenAndServe failed.")
+	}
 }
