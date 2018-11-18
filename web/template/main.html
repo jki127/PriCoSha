@@ -20,6 +20,7 @@
         <!-- Loops through array of data -->
         {{range $value := .}}
         <div>
+            ID: <b>{{$value.ItemID}}</b><br>
             Name: <b>{{$value.FileName}}</b><br>
             Path: <b>{{$value.FilePath}}</b><br>
             Posted by: <b>{{$value.Email}}</b> at <b>{{$value.PostTime}}</b><br>
