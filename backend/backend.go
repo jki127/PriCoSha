@@ -77,8 +77,10 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
-// ValidateInfo receives user entered login info and queries the DB on whether
-// or not that info is valid
+/*
+ValidateInfo receives user entered login info and queries the DB on whether
+or not that info is valid
+*/
 func ValidateInfo(username string, password string) bool {
 	// Query DB for data
 	rows, err := db.Query(`SELECT email FROM Person
