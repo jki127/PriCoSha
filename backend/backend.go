@@ -39,7 +39,9 @@ status and returns them as an array of ContentItem pointers.
 */
 func GetPubContent() []*ContentItem {
 	// Query DB for data
-	rows, err := db.Query("SELECT * FROM Content_Item WHERE is_pub = true")
+	rows, err := db.Query(`SELECT * FROM Content_Item 
+		WHERE is_pub = true 
+		AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
 	if err != nil {
 		log.Println("Could not query public content from DB.")
 	}
