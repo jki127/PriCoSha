@@ -1,4 +1,6 @@
 <!-- This is the landing page for the PriCoSha website. -->
+<!-- Templating functionality is planned, as such this file
+    will be retained in /template -->
 <!DOCTYPE html>
 <html>
     <title>
@@ -9,29 +11,8 @@
     <body>
         <h1>
             PriCoSha
-            <div style="float:right">
-                {{if .Logged}}
-                Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
-                {{else}}
-                <a href="/login">Login!</a>
-                {{end}}
-            </div>
         </h1>
         <hr>
-        Body of other stuff.
-        <hr>
-        <h1>
-            Public Content:
-        </h1>
-        <hr>
-        <!-- Loops through array of data -->
-        {{range $value := .PubData}}
-        <div>
-            ID: <b>{{$value.ItemID}}</b><br>
-            Name: <b>{{$value.FileName}}</b><br>
-            Path: <b>{{$value.FilePath}}</b><br>
-            Posted by: <b>{{$value.Email}}</b> at <b>{{$value.PostTime}}</b><br>
-        </div>
-        {{end}}
+        Body of viewable content placeholder.
     </body>
 </html>
