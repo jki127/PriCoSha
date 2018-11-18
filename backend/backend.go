@@ -10,8 +10,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Conf holds configuration data for DSN
-type Conf struct {
+// Holds configuration for user data
+type UserData struct {
 	User   string
 	Pass   string
 	DBName string
@@ -23,7 +23,7 @@ type ContentItem struct {
 	Email    string
 	FilePath string
 	FileName string
-	PostTime string // should use go date format later
+	PostTime string 
 }
 
 var db *sql.DB
@@ -33,10 +33,7 @@ func TestDB() error {
 	return db.Ping()
 }
 
-/*
-GetPubContent queries DB for all Content_Item entities with a public
-status and returns them as an array of ContentItem pointers.
-*/
+
 func GetPubContent() []*ContentItem {
 	// Query DB for data
 	rows, err := db.Query(`SELECT * FROM Content_Item 
