@@ -9,7 +9,7 @@ import (
 	b "pricosha/backend"
 )
 
-// Port that server listens to
+// Port that server listens 
 var httpPort = ":" + "8080"
 
 
@@ -28,7 +28,6 @@ func main() {
 
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
-	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateHandler)
 	http.HandleFunc("/logout", logoutHandler)
@@ -41,7 +40,7 @@ func main() {
 	}
 }
 
-// Handles requests to error pages
+// error pages
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	switch status {
 	case http.StatusNotFound:
@@ -49,11 +48,6 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	default:
 		http.ServeFile(w, r, "../web/static/unknown.html")
 	}
-}
-
-// Serves favicon file to favicon requests from browser
-func faviconHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "../assets/images/favicon_hearts.ico")
 }
 
 // Handles requests to root page (referred to as both / and main)
@@ -64,7 +58,6 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Currently prints whether user is logged in or not.
 	cookie, err := r.Cookie("username")
 	var logged bool
 	var username string
@@ -76,15 +69,14 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		username = cookie.Value
 	}
 
-	CurrentMPD := MPD{
-		Logged:   logged,
+	CurrentMP := MainPage{
+		LoggedOn:   logged,
 		Username: username,
 		PubData:  b.GetPubContent(),
 	}
 
-	// data := b.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, CurrentMPD)
+	t.Execute(w, CurrentMP)
 }
 
 // Handles requests to login page
@@ -123,66 +115,3 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, data)
 }
 
-// Handles requests to validate user data and sets cookies accordingly
-func validateHandler(w http.ResponseWriter, r *http.Request) {
-	_, err := r.Cookie("username")
-	if err == nil {
-		// User is already logged in, redirect
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	// This check should be revised later
-	if username == "" || password == "" {
-		cookie := http.Cookie{Name: "logErr", Value: "empty"}
-		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	}
-	if ok := b.ValidateInfo(username, password); ok {
-		log.Println("User logged in with:", username, password)
-		// Set cookie with user info
-		cookie := http.Cookie{Name: "username", Value: username}
-		http.SetCookie(w, &cookie)
-		// Delete logErr cookie if it exists
-		_, err := r.Cookie("logErr")
-		if err == nil {
-			c := http.Cookie{
-				Name:    "logErr",
-				Value:   "",
-				Expires: time.Unix(0, 0),
-			}
-			http.SetCookie(w, &c)
-		}
-
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	} else {
-		log.Println("User failed to log in with:", username, password)
-		cookie := http.Cookie{Name: "logErr", Value: "fail"}
-		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	}
-}
-
-// Handles requests to logout and deletes cookies accordingly
-func logoutHandler(w http.ResponseWriter, r *http.Request) {
-	_, err := r.Cookie("username")
-	if err != nil {
-		log.Println("User was not logged in and cannot be logged out.")
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	} else {
-		cookie := http.Cookie{
-			Name:    "username",
-			Value:   "",
-			Expires: time.Unix(0, 0),
-		}
-		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
-}
