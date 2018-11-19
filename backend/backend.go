@@ -51,7 +51,8 @@ func GetPubContent() []*ContentItem {
 	var CurrentItem *ContentItem
 	//iterate rows to add to array
 	for rows.Next() {
-		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, &CurrentItem.FilePath, &CurrentItem.FileName, &CurrentItem.PostTime, &isPub)
+		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, 
+			&CurrentItem.FilePath, &CurrentItem.FileName, &CurrentItem.PostTime, &isPub)
 		if err != nil {
 			panic(err)
 		}
@@ -62,19 +63,18 @@ func GetPubContent() []*ContentItem {
 
 func ValidateInfo(username string, pass string) bool {
 	
-	var isValid bool
 	rows, err := db.Query(`SELECT email FROM Person
 		WHERE email=?
 		AND password=SHA2(?,256)`,
 		username, pass)
 	if err != nil {
 		log.Println("Failed Validation")
-		isValid = false
+		reutrn false
 	} else{
-		isValid = true
+		reuturn true
 	}
 
-	return isValid
+	
 
 }
 
