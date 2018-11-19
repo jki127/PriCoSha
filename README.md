@@ -1,2 +1,2 @@
 # PriCoSha
-🐹 Database Project 
+🐹 Database Project
