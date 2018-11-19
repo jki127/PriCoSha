@@ -41,7 +41,7 @@ func GetPubContent() []*ContentItem {
 		WHERE is_pub = true 
 		AND post_time >= NOW() - INTERVAL 1 DAY`)
 	if err != nil {
-		panic(err)
+		log.Println("No public item available")
 	}
 	defer rows.Close()
 
@@ -54,7 +54,7 @@ func GetPubContent() []*ContentItem {
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, 
 			&CurrentItem.FilePath, &CurrentItem.FileName, &CurrentItem.PostTime, &isPub)
 		if err != nil {
-			panic(err)
+			log.Println("No Items Available")
 		}
 		data = append(data, CurrentItem)
 	}
