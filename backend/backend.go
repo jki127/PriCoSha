@@ -41,7 +41,7 @@ func GetPubContent() []*ContentItem {
 		WHERE is_pub = true 
 		AND post_time >= NOW() - INTERVAL 1 DAY`)
 	if err != nil {
-		log.Println("No public item available")
+		log.Println("Database Error")
 	}
 	defer rows.Close()
 
