@@ -2,10 +2,12 @@
 package main
 
 import (
+	"database/sql"
+	"encoding/json"
 	"log"
+	"os"
 
-	_ "database/sql"
-
+	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
 )
 
