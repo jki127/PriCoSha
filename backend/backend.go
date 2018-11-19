@@ -47,8 +47,8 @@ func GetPubContent() []*ContentItem {
 
 	// Declare variables 
 	var isPub bool
-	var data[]*ContentItem
-	var CurrentItem *ContentItem
+	var data[] *ContentItem
+	var currentItem *ContentItem
 	//iterate rows to add to array
 	for rows.Next() {
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, 
