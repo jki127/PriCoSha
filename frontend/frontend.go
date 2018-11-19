@@ -79,16 +79,16 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, CurrentMP)
 }
 
-// Handles requests to login page
+// Handles requests to login 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	_, err := r.Cookie("username")
 	if err == nil {
-		// User is already logged in, redirect
+		// User is already logged in
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	// Check if there was a previous login error
+	// Check for login error
 	cookie, err := r.Cookie("logErr")
 	var errMsg string
 	var isErr bool
@@ -114,4 +114,50 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t := template.Must(template.ParseFiles("../web/template/login.html"))
 	t.Execute(w, data)
 }
+
+// Handles requests to validate user data 
+func validateHandler(w http.ResponseWriter, r *http.Request) {
+	_, err := r.Cookie("username")
+	if err == nil {
+		// User is already logged in, redirect
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	username := r.FormValue("username")
+	password := r.FormValue("password")
+	// This check should be revised later
+	if username == "" || password == "" {
+		cookie := http.Cookie{Name: "logErr", Value: "empty"}
+		http.SetCookie(w, &cookie)
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+	if valid := b.ValidateInfo(username, password); valid {
+		log.Println("User logged in with:", username, password)
+		// Set cookie with user info
+		cookie := http.Cookie{Name: "username", Value: username}
+		http.SetCookie(w, &cookie)
+		// Delete logErr cookie if it exists
+		_, err := r.Cookie("logErr")
+		if err == nil {
+			c := http.Cookie{
+				Name:    "logErr",
+				Value:   "",
+				Expires: time.Unix(0, 0),
+			}
+			http.SetCookie(w, &c)
+		}
+
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	} else {
+		log.Println("User failed to log in with:", username, password)
+		cookie := http.Cookie{Name: "logErr", Value: "fail"}
+		http.SetCookie(w, &cookie)
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	}
+}
+
 
