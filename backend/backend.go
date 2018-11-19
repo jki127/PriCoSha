@@ -69,9 +69,9 @@ func ValidateInfo(username string, pass string) bool {
 		username, pass)
 	if err != nil {
 		log.Println("Failed Validation")
-		reutrn false
+		return false
 	} else{
-		reuturn true
+		return true
 	}
 
 	
