@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	b "PriCoSha/backend"
 )
 
 // Port that server listens to http requests on (only edit number value)
@@ -16,7 +17,7 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// Checks for requests to non-existant pages
+	// Checks for requests to non-existent pages
 	if r.URL.Path != "/" {
 		errorHandler(w, r, http.StatusNotFound)
 		return
@@ -29,6 +30,27 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, nil)
 }
 
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" { // GET - display login page
+		t := template.Must(template.ParseFiles("../web/template/login.html"))
+		t.Execute(w, nil)
+	} else if r.Method == "POST" { // POST - parse form for input data
+		email := r.FormValue("email")
+		password := r.FormValue("password")
+		if email == "" || password == "" {
+			http.Redirect(w, r, "/login", http.StatusFound)
+		} else {
+			if b.ValidateInfo(email, password) {
+				log.Println("User logged in successfully with:", email, password)
+				http.Redirect(w, r, "/", http.StatusFound)
+			} else {
+				log.Println("User failed to log in with:", email, password)
+				http.Redirect(w, r, "/login", http.StatusFound)
+			}
+		}
+	}
+}
+
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 	switch status {
 	case http.StatusNotFound:
@@ -39,11 +61,21 @@ func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
 }
 
 func main() {
+	// Test connection to database
+	if b.TestDB() == nil {
+		log.Println("Database connected successfully!")
+	} else {
+		log.Fatal("Database could not connect.")
+	}
+	
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
+	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
-	log.Fatal(http.ListenAndServe(httpPort, nil))
+	if http.ListenAndServe(httpPort, nil) != nil {
+		log.Fatal("ListenAndServe failed.")
+	}
 }
