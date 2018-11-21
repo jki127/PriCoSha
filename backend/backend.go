@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
-	
+
 	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -24,7 +24,7 @@ type ContentItem struct {
 	Email    string
 	FilePath string
 	FileName string
-	PostTime string 
+	PostTime string
 }
 
 var db *sql.DB
@@ -34,32 +34,30 @@ func TestDB() error {
 	return db.Ping()
 }
 
-
 func GetPubContent() []*ContentItem {
-	
-	rows, err := db.Query(`SELECT * FROM Content_Item 
-		WHERE is_pub = true 
+	rows, err := db.Query(`SELECT * FROM Content_Item
+		WHERE is_pub = true
 		AND post_time >= NOW() - INTERVAL 1 DAY`)
 	if err != nil {
 		log.Println("Database Error")
 	}
 	defer rows.Close()
 
-	// Declare variables 
+	// Declare variables
 	var isPub bool
-	var data[] *ContentItem
+	var data []*ContentItem
 	var currentItem *ContentItem
 	//iterate rows to add to array
-	
+
 	for rows.Next() {
-		err = rows.Scan(&currentItem.ItemID, &currentItem.Email, 
+		err = rows.Scan(&currentItem.ItemID, &currentItem.Email,
 			&currentItem.FilePath, &currentItem.FileName, &currentItem.PostTime, &isPub)
 		if err != nil {
 			log.Println("No Items Available")
 		}
 		data = append(data, currentItem)
 	}
-	
+
 	return data
 }
 

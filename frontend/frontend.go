@@ -1,10 +1,10 @@
 package main
 
 import (
+	b "PriCoSha/backend"
 	"html/template"
 	"log"
 	"net/http"
-	b "PriCoSha/backend"
 )
 
 // Port that server listens to http requests on (only edit number value)
@@ -70,7 +70,7 @@ func main() {
 	} else {
 		log.Fatal("Database could not connect.")
 	}
-	
+
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/login", loginHandler)
