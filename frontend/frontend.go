@@ -31,22 +31,25 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" { // GET - display login page
-		t := template.Must(template.ParseFiles("../web/template/login.html"))
-		t.Execute(w, nil)
-	} else if r.Method == "POST" { // POST - parse form for input data
-		email := r.FormValue("email")
-		password := r.FormValue("password")
-		if email == "" || password == "" {
-			http.Redirect(w, r, "/login", http.StatusFound)
+	t := template.Must(template.ParseFiles("../web/template/login.html"))
+	t.Execute(w, nil)
+}
+
+func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	if email == "" || password == "" {
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
+	} else {
+		if b.ValidateInfo(email, password) {
+			log.Println("User logged in successfully with:", email, password)
+			http.Redirect(w, r, "/", http.StatusFound)
+			return
 		} else {
-			if b.ValidateInfo(email, password) {
-				log.Println("User logged in successfully with:", email, password)
-				http.Redirect(w, r, "/", http.StatusFound)
-			} else {
-				log.Println("User failed to log in with:", email, password)
-				http.Redirect(w, r, "/login", http.StatusFound)
-			}
+			log.Println("User failed to log in with:", email, password)
+			http.Redirect(w, r, "/login", http.StatusFound)
+			return
 		}
 	}
 }
@@ -71,6 +74,7 @@ func main() {
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 
 	// Start server
