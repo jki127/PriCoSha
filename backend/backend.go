@@ -44,19 +44,22 @@ func GetPubContent() []*ContentItem {
 	}
 	defer rows.Close()
 
-	// Declare variables
-	var isPub bool
 	var data []*ContentItem
-	var currentItem *ContentItem
-	//iterate rows to add to array
 
+	//iterate rows to add to array
 	for rows.Next() {
+		var (
+			isPub       bool
+			currentItem ContentItem
+		)
+
 		err = rows.Scan(&currentItem.ItemID, &currentItem.Email,
 			&currentItem.FilePath, &currentItem.FileName, &currentItem.PostTime, &isPub)
 		if err != nil {
 			log.Println("No Items Available")
 		}
-		data = append(data, currentItem)
+
+		data = append(data, &currentItem)
 	}
 
 	return data
@@ -65,8 +68,8 @@ func GetPubContent() []*ContentItem {
 func ValidateInfo(username string, pass string) bool {
 	//rows, err := db.Query(`SELECT email FROM Person
 	_, err := db.Query(`SELECT email FROM Person
-		WHERE email=?
-		AND password=SHA2(?,256)`,
+	WHERE email=?
+	AND password=SHA2(?,256)`,
 		username, pass)
 	if err != nil {
 		log.Println("Failed Validation")

@@ -16,5 +16,14 @@
             </div>
         </h1>
         <hr>
+        {{ range .Items }}
+          <div>
+            <h3>{{ .ItemID }} {{ .FileName }}</h3>
+            <p>{{ .FilePath }}</p>
+            <p>{{ .Email }}</p>
+            <p>{{ .PostTime }}</p>
+          </div>
+        {{ end }}
+        </table>
     </body>
 </html>

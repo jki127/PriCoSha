@@ -7,6 +7,11 @@ import (
 	"net/http"
 )
 
+// context is used to send data to template files
+type context struct {
+	Items []*b.ContentItem
+}
+
 // Port that server listens to http requests on (only edit number value)
 var httpPort = ":" + "8080"
 
@@ -17,17 +22,15 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
+	mainCtx := context{Items: b.GetPubContent()}
 	// Checks for requests to non-existent pages
 	if r.URL.Path != "/" {
 		errorHandler(w, r, http.StatusNotFound)
 		return
 	}
-	/*
-		Template format is used as main is planned as templated page,
-		as such nil is passed to t.Execute()
-	*/
+
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, nil)
+	t.Execute(w, mainCtx)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
