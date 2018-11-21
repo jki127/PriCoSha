@@ -16,6 +16,7 @@ type UserData struct {
 	User   string
 	Pass   string
 	DBName string
+	Port   string
 }
 
 // ContentItem holds info of Content_Item entities in the database
@@ -88,7 +89,12 @@ func init() {
 		log.Println("Could not decode config file.")
 	}
 
-	dSN := configData.User + ":" + configData.Pass + "@/" + configData.DBName
+	if configData.Port != "" {
+		configData.Port = ":" + configData.Port
+	}
+
+	dSN := configData.User + ":" + configData.Pass +
+		"@(localhost" + configData.Port + ")" + "/" + configData.DBName
 	log.Println(dSN)
 
 	db, err = sql.Open("mysql", dSN)
