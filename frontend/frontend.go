@@ -43,18 +43,16 @@ func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 	if email == "" || password == "" {
 		http.Redirect(w, r, "/login", http.StatusFound)
-		return
 	} else {
 		if b.ValidateInfo(email, password) {
 			log.Println("User logged in successfully with:", email, password)
 			http.Redirect(w, r, "/", http.StatusFound)
-			return
 		} else {
 			log.Println("User failed to log in with:", email, password)
 			http.Redirect(w, r, "/login", http.StatusFound)
-			return
 		}
 	}
+	return
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {

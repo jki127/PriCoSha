@@ -1,4 +1,5 @@
-// This is a placeholder backend .go file
+// Package backend provides functions for connecting to the database as well as
+// apply logic to collections derived from the database
 package backend
 
 import (
@@ -11,7 +12,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Holds configuration for user data
+// UserData holds configuration for user data
 type UserData struct {
 	User   string
 	Pass   string
@@ -35,6 +36,8 @@ func TestDB() error {
 	return db.Ping()
 }
 
+// GetPubContent retrieves all ContentItems from the database with is_pub set
+// to true
 func GetPubContent() []*ContentItem {
 	rows, err := db.Query(`SELECT * FROM Content_Item
 		WHERE is_pub = true
@@ -65,6 +68,7 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
+// ValidateInfo validates the login credentials of a user
 func ValidateInfo(username string, pass string) bool {
 	//rows, err := db.Query(`SELECT email FROM Person
 	_, err := db.Query(`SELECT email FROM Person
@@ -74,9 +78,8 @@ func ValidateInfo(username string, pass string) bool {
 	if err != nil {
 		log.Println("Failed Validation")
 		return false
-	} else {
-		return true
 	}
+	return true
 }
 
 func init() {
