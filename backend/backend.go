@@ -1,12 +1,12 @@
 // This is a placeholder backend .go file
-package main
+package backend
 
 import (
 	"database/sql"
 	"encoding/json"
 	"log"
 	"os"
-
+	
 	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -50,32 +50,31 @@ func GetPubContent() []*ContentItem {
 	var data[] *ContentItem
 	var currentItem *ContentItem
 	//iterate rows to add to array
+	
 	for rows.Next() {
-		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email, 
-			&CurrentItem.FilePath, &CurrentItem.FileName, &CurrentItem.PostTime, &isPub)
+		err = rows.Scan(&currentItem.ItemID, &currentItem.Email, 
+			&currentItem.FilePath, &currentItem.FileName, &currentItem.PostTime, &isPub)
 		if err != nil {
 			log.Println("No Items Available")
 		}
-		data = append(data, CurrentItem)
+		data = append(data, currentItem)
 	}
+	
 	return data
 }
 
 func ValidateInfo(username string, pass string) bool {
-	
-	rows, err := db.Query(`SELECT email FROM Person
+	//rows, err := db.Query(`SELECT email FROM Person
+	_, err := db.Query(`SELECT email FROM Person
 		WHERE email=?
 		AND password=SHA2(?,256)`,
 		username, pass)
 	if err != nil {
 		log.Println("Failed Validation")
 		return false
-	} else{
+	} else {
 		return true
 	}
-
-	
-
 }
 
 func init() {
