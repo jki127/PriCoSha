@@ -1,11 +1,16 @@
 package main
 
 import (
+	b "PriCoSha/backend"
 	"html/template"
 	"log"
 	"net/http"
-	b "PriCoSha/backend"
 )
+
+// context is used to send data to template files
+type context struct {
+	Items []*b.ContentItem
+}
 
 // Port that server listens to http requests on (only edit number value)
 var httpPort = ":" + "8080"
@@ -17,17 +22,15 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
+	mainCtx := context{Items: b.GetPubContent()}
 	// Checks for requests to non-existent pages
 	if r.URL.Path != "/" {
 		errorHandler(w, r, http.StatusNotFound)
 		return
 	}
-	/*
-		Template format is used as main is planned as templated page,
-		as such nil is passed to t.Execute()
-	*/
+
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, nil)
+	t.Execute(w, mainCtx)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -40,18 +43,16 @@ func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 	if email == "" || password == "" {
 		http.Redirect(w, r, "/login", http.StatusFound)
-		return
 	} else {
 		if b.ValidateInfo(email, password) {
 			log.Println("User logged in successfully with:", email, password)
 			http.Redirect(w, r, "/", http.StatusFound)
-			return
 		} else {
 			log.Println("User failed to log in with:", email, password)
 			http.Redirect(w, r, "/login", http.StatusFound)
-			return
 		}
 	}
+	return
 }
 
 func errorHandler(w http.ResponseWriter, r *http.Request, status int) {
@@ -70,7 +71,7 @@ func main() {
 	} else {
 		log.Fatal("Database could not connect.")
 	}
-	
+
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/login", loginHandler)

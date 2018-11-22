@@ -1,6 +1,4 @@
-<!-- This is the landing page for the PriCoSha website. -->
-<!-- Templating functionality is planned, as such this file
-    will be retained in /template -->
+{{/* PriCoSha Homepage */}}
 <!DOCTYPE html>
 <html>
     <title>
@@ -16,5 +14,26 @@
             </div>
         </h1>
         <hr>
+        <table cellspacing="20">
+          <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>File Path</th>
+            <th>Author</th>
+            <th>Time Posted</th>
+          </tr>
+        {{ range .Items }}
+          <tr>
+            <td>{{ .ItemID }}</td>
+            <td>{{ .FileName }}</td>
+            <td>{{ .FilePath }}</td>
+            <td>{{ .Email }}</td>
+            <td>{{ .PostTime }}</td>
+          </tr>
+        {{ else }}
+          {{/* if the range is empty show this */}}
+          <tr><td colspan="5">No Items Available!<td></tr>
+        {{ end }}
+        </table>
     </body>
 </html>

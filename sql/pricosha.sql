@@ -17,7 +17,7 @@ create table content_item
     foreign key (poster_email) references person(email)
     );
 
-    
+
 create table friend_group
     (fg_name varchar(20),
     owner_email varchar(20),
@@ -38,7 +38,7 @@ create table tags
     foreign key (tagged_email) references person(email) on delete cascade,
     foreign key (item_id) references content_item(item_id) on delete cascade
     );
-    
+
 create table rates
     (email varchar(20),
     item_id int,
@@ -58,17 +58,17 @@ create table share
     foreign key (fg_name, owner_email) references friend_group(fg_name, owner_email) on delete cascade,
     foreign key (item_id) references content_item(item_id) on delete cascade
     );
-    
-    
+
+
 create table belong
-    (email varchar(20), 
+    (email varchar(20),
     fg_name varchar(20),
     owner_email varchar(20),
     primary key (email, fg_name, owner_email),
     foreign key (email) references person(email) on delete cascade,
     foreign key (fg_name, owner_email) references friend_group(fg_name, owner_email) on delete cascade
     );
-    
+
 -- Part B: INSERTS
 
 INSERT INTO person VALUES ("AA@nyu.edu", SHA2("AA",256), "Ann", "Anderson");
@@ -98,3 +98,9 @@ INSERT INTO content_item(poster_email, file_name, is_pub) values ("AA@nyu.edu", 
 INSERT INTO share VALUES ("roommates", "AA@nyu.edu", 2);
 INSERT INTO content_item(poster_email, file_name, is_pub) values ("BB@nyu.edu", "Rover", FALSE);
 INSERT INTO share VALUES ("family", "BB@nyu.edu", 3);
+INSERT INTO content_item
+  (poster_email, file_path, file_name, post_time, is_pub)
+VALUES
+  ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),
+  ("HH@nyu.edu", "/home/data/turkey.jpg", "Turkey", NOW(), 1),
+  ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1)
