@@ -10,8 +10,10 @@
             <div style="color: red">{{.ErrMsg}}</div>
         {{end}}
         <form action="/validate" method="POST">
-            Username: <input type="text" name="username" required><br>
-            Password: <input type="text" name="password" required><br>
+            <label for="username">Username:</label>
+            <input type="text" name="username" required><br>
+            <label for="password">Password:</label>
+            <input type="text" name="password" required><br>
             <input type="submit" value="Login">
         </form>
         <a href="/">Cancel</a>
