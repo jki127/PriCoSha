@@ -1,4 +1,4 @@
-{{/* PriCoSha Homepage */}}
+{{/* This is the landing page for the PriCoSha website. */}}
 <!DOCTYPE html>
 <html>
     <title>
@@ -10,10 +10,17 @@
         <h1>
             PriCoSha
             <div style="float:right">
-                <a href="/login">Login</a>
+                {{if .Logged}}
+                Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
+                {{else}}
+                <a href="/login">Login!</a>
+                {{end}}
             </div>
         </h1>
         <hr>
+        <h2>
+            Public Content:
+        </h2>
         <table cellspacing="20">
           <tr>
             <th>Item ID</th>
@@ -22,7 +29,7 @@
             <th>Author</th>
             <th>Time Posted</th>
           </tr>
-        {{ range .Items }}
+          {{ range .PubData }}
           <tr>
             <td>{{ .ItemID }}</td>
             <td>{{ .FileName }}</td>
@@ -30,10 +37,9 @@
             <td>{{ .Email }}</td>
             <td>{{ .PostTime }}</td>
           </tr>
-        {{ else }}
+          {{ else }}
           {{/* if the range is empty show this */}}
           <tr><td colspan="5">No Items Available!<td></tr>
-        {{ end }}
-        </table>
+          {{ end }}
     </body>
 </html>
