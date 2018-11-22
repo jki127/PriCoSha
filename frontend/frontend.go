@@ -61,7 +61,7 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// Checks for requests to non-existant pages
+	// Checks for requests to non-existent pages
 	if r.URL.Path != "/" {
 		errorHandler(w, r, http.StatusNotFound)
 		return
@@ -161,13 +161,13 @@ func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
-	} else {
-		log.Println("User failed to log in with:", username, password)
-		cookie := http.Cookie{Name: "logErr", Value: "fail"}
-		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
 	}
+
+	log.Println("User failed to log in with:", username, password)
+	cookie := http.Cookie{Name: "logErr", Value: "fail"}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/login", http.StatusFound)
+	return
 }
 
 // Handles requests to logout and deletes cookies accordingly
@@ -177,14 +177,13 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("User was not logged in and cannot be logged out.")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
-	} else {
-		cookie := http.Cookie{
-			Name:    "username",
-			Value:   "",
-			Expires: time.Unix(0, 0),
-		}
-		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
 	}
+	cookie := http.Cookie{
+		Name:    "username",
+		Value:   "",
+		Expires: time.Unix(0, 0),
+	}
+	http.SetCookie(w, &cookie)
+	http.Redirect(w, r, "/", http.StatusFound)
+	return
 }

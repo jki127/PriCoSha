@@ -40,11 +40,11 @@ status and returns them as an array of ContentItem pointers.
 */
 func GetPubContent() []*ContentItem {
 	// Query DB for data
-	rows, err := db.Query(`SELECT * FROM Content_Item 
-		WHERE is_pub = true 
+	rows, err := db.Query(`SELECT * FROM Content_Item
+		WHERE is_pub = true
 		AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
 	if err != nil {
-		log.Println(`backend: GetPubContent(): Could not 
+		log.Println(`backend: GetPubContent(): Could not
 		query public content from DB.`)
 	}
 	defer rows.Close()
@@ -61,7 +61,7 @@ func GetPubContent() []*ContentItem {
 			&CurrentItem.FilePath, &CurrentItem.FileName,
 			&CurrentItem.PostTime, &isPub)
 		if err != nil {
-			log.Println(`backend: GetPubContent(): Could not scan row data 
+			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
 		data = append(data, &CurrentItem)
