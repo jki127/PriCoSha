@@ -33,14 +33,14 @@ func main() {
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
 	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/validate", validateHandler)
+	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
 	err := http.ListenAndServe(httpPort, nil)
 	if err != nil {
-		log.Fatal("ListenAndServe failed.")
+		log.Fatal("frontend: main(): ListenAndServe() failed.")
 	}
 }
 
@@ -85,7 +85,6 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		PubData:  b.GetPubContent(),
 	}
 
-	// data := b.GetPubContent()
 	t := template.Must(template.ParseFiles("../web/template/main.html"))
 	t.Execute(w, CurrentMPD)
 }
@@ -127,7 +126,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // Handles requests to validate user data and sets cookies accordingly
-func validateHandler(w http.ResponseWriter, r *http.Request) {
+func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
 	_, err := r.Cookie("username")
 	if err == nil {
 		// User is already logged in, redirect

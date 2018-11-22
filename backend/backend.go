@@ -15,6 +15,7 @@ type Conf struct {
 	User   string
 	Pass   string
 	DBName string
+	Port   string
 }
 
 // ContentItem holds info of Content_Item entities in the database
@@ -43,35 +44,27 @@ func GetPubContent() []*ContentItem {
 		WHERE is_pub = true 
 		AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
 	if err != nil {
-		log.Println("Could not query public content from DB.")
+		log.Println(`backend: GetPubContent(): Could not 
+		query public content from DB.`)
 	}
 	defer rows.Close()
 
 	// Declare variables for processing data
 	var (
-		itemID      int
-		email       string
-		filePath    string
-		fileName    string
-		postTime    string
-		isPub       int
-		data        []*ContentItem
-		CurrentItem *ContentItem
+		isPub int
+		data  []*ContentItem
 	)
 
 	for rows.Next() {
-		err = rows.Scan(&itemID, &email, &filePath, &fileName, &postTime, &isPub)
+		var CurrentItem ContentItem
+		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
+			&CurrentItem.FilePath, &CurrentItem.FileName,
+			&CurrentItem.PostTime, &isPub)
 		if err != nil {
-			log.Println("Could not scan row data from public content query.")
+			log.Println(`backend: GetPubContent(): Could not scan row data 
+			from public content query.`)
 		}
-		CurrentItem = &ContentItem{
-			ItemID:   itemID,
-			Email:    email,
-			FilePath: filePath,
-			FileName: fileName,
-			PostTime: postTime,
-		}
-		data = append(data, CurrentItem)
+		data = append(data, &CurrentItem)
 	}
 
 	return data
@@ -83,33 +76,23 @@ or not that info is valid
 */
 func ValidateInfo(username string, password string) bool {
 	// Query DB for data
-	rows, err := db.Query(`SELECT email FROM Person
+	row := db.QueryRow(`SELECT email FROM Person
 		WHERE email=?
 		AND password=SHA2(?,256)`,
 		username, password)
-	if err != nil {
-		log.Println("Validate query statement failed.")
-	}
 
-	// Check if query returned 1 result (i.e. username and password matched entry)
 	var email string
-	count := 0
-	for rows.Next() {
-		err = rows.Scan(&email)
-		if err != nil {
-			log.Println("Could not scan row data from validate query")
-		}
-		count++
-	}
+	err := row.Scan(&email)
 
-	switch count {
-	case 1:
-		return true
-	case 0:
+	switch {
+	case err == sql.ErrNoRows:
+		log.Println("backend: ValidateInfo(): no valid user found")
+		return false
+	case err != nil:
+		log.Println("backend: ValidateInfo(): non nil Scan() error")
 		return false
 	default:
-		log.Println("Unexpected count in DB:", count)
-		return false
+		return true
 	}
 }
 
@@ -118,19 +101,23 @@ func init() {
 
 	configFile, err := os.Open("../backend/config.json")
 	if err != nil {
-		log.Println("Could not open config file.")
+		log.Println("backend: init(): Could not open config file.")
 	}
 	decoder := json.NewDecoder(configFile)
 	err = decoder.Decode(&configData)
 	if err != nil {
-		log.Println("Could not decode config file.")
+		log.Println("backend: init(): Could not decode config file.")
 	}
 
-	dSN := configData.User + ":" + configData.Pass + "@/" + configData.DBName
-	log.Println(dSN)
+	if configData.Port != "" {
+		configData.Port = ":" + configData.Port
+	}
+
+	dSN := configData.User + ":" + configData.Pass + "@(localhost" +
+		configData.Port + ")/" + configData.DBName
 
 	db, err = sql.Open("mysql", dSN)
 	if err != nil {
-		log.Fatal("Could not connect to database")
+		log.Fatal("backend: init(): Could not connect to database")
 	}
 }
