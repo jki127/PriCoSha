@@ -1,1 +1,3 @@
-*.json
+backend/config.json
+frontend/frontend
+.DS_Store
