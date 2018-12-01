@@ -55,7 +55,7 @@ create table Rate
     (email varchar(64),
     item_id int,
     rate_time timestamp,
-    emoji varchar(32),
+    emoji varchar(20) CHARACTER SET utf8mb4,
     primary key (email, item_id),
     foreign key (email) references Person(email)
         on delete cascade,
@@ -109,11 +109,17 @@ INSERT INTO Friend_Group VALUES ("roommates", "AA@nyu.edu", "Ann's Roommates");
 INSERT INTO Belong VALUES ("AA@nyu.edu", "roommates", "AA@nyu.edu");
 INSERT INTO Belong VALUES ("GG@nyu.edu", "roommates", "AA@nyu.edu");
 INSERT INTO Belong VALUES ("HH@nyu.edu", "roommates", "AA@nyu.edu");
-INSERT INTO Content_Item VALUES (1, "AA@nyu.edu", "/Photos/Animals", "Whiskers", "2008-01-01 00:00:01", TRUE);
+INSERT INTO Content_Item VALUES (1, "AA@nyu.edu", "/Photos/Animals", "Whiskers", "2010-12-01 03:39:01", TRUE);
 INSERT INTO Share VALUES ("family", "AA@nyu.edu", 1);
 INSERT INTO Content_Item VALUES (2, "AA@nyu.edu", "/Photos/Room21", "leftovers in fridge", "2014-06-10 04:00:30", FALSE);
 INSERT INTO Share VALUES ("roommates", "AA@nyu.edu", 2);
 INSERT INTO Content_Item VALUES (3, "BB@nyu.edu", "/Photos/Pets", "Rover", "2017-04-02 07:17:02", FALSE);
 INSERT INTO Share VALUES ("family", "BB@nyu.edu", 3);
-INSERT INTO Content_Item VALUES (4, "CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-11-21 04:12:10", TRUE);
+INSERT INTO Content_Item VALUES (4, "CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-01 03:12:10", TRUE);
 INSERT INTO Share VALUES ("family", "AA@nyu.edu", 4);
+INSERT INTO Tag VALUES ("AA@nyu.edu", "GG@nyu.edu", 2, TRUE, "2018-11-21 05:10:30");
+INSERT INTO Tag VALUES ("DD@nyu.edu", "CC@nyu.edu", 4, FALSE, "2018-09-18 03:12:30");
+INSERT INTO Tag VALUES ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:30");
+INSERT INTO Rate VALUES ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "0x1f61a");
+INSERT INTO Rate VALUES ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "0x1f61a");
+INSERT INTO Rate VALUES ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "0x1f61a");
