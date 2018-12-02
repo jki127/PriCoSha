@@ -3,8 +3,10 @@ package backend
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"os"
+	"time"
 
 	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
@@ -24,7 +26,7 @@ type ContentItem struct {
 	Email    string
 	FilePath string
 	FileName string
-	PostTime string // should use go date format later
+	PostTime time.Time // should use go date format later
 }
 
 var db *sql.DB
@@ -96,6 +98,68 @@ func ValidateInfo(username string, password string) bool {
 	}
 }
 
+// TagItem holds info of Tag entities in the database
+type TagItem struct {
+	TaggerEmail string
+	TaggedEmail string
+	ItemID      int
+	Status      bool
+	TagTime     time.Time
+}
+
+// execInsertTag takes the data for a tag entity and inserts in into the table
+func execInsertTag(id int, uTagger string, uTagged string, pubVal bool) {
+	stmt, err := db.Prepare(`INSERT Tag SET tagger_email=?, tagged_email=?,
+		item_id=?, status=?, tag_time=?`)
+	if err != nil {
+		log.Println("backend: InsertTag(): Could not prepare tag insertion")
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(uTagger, uTagged, id, pubVal, time.Now())
+	if err != nil {
+		log.Println("backend: InsertTag(): Could not execute tag insertion")
+	}
+}
+
+/*
+InsertTag receives info needed for adding a tag system and returns an error
+if add tag action cannot be performed due to database restraints
+*/
+func InsertTag(id int, uTagger string, uTagged string) error {
+	if uTagger == uTagged {
+		execInsertTag(id, uTagger, uTagged, true)
+		return nil
+	}
+
+	row := db.QueryRow(`SELECT fg_name, owner_email FROM Person
+		WHERE item_id=?
+		AND (is_pub=true OR
+			(fg_name, owner_email) IN (
+				SELECT fg_name, owner_email
+				FROM Belong
+				WHERE member_email=?`,
+		id, uTagged)
+
+	var (
+		fgName string
+		email  string
+	)
+	err := row.Scan(&fgName, &email)
+
+	switch {
+	case err == sql.ErrNoRows:
+		returnErr := errors.New("noview")
+		return returnErr
+	case err != nil:
+		returnErr := errors.New("failed")
+		return returnErr
+	default:
+		execInsertTag(id, uTagger, uTagged, false)
+		return nil
+	}
+}
+
 func init() {
 	var configData Conf
 
@@ -103,6 +167,7 @@ func init() {
 	if err != nil {
 		log.Println("backend: init(): Could not open config file.")
 	}
+	defer configFile.Close()
 	decoder := json.NewDecoder(configFile)
 	err = decoder.Decode(&configData)
 	if err != nil {
@@ -114,7 +179,7 @@ func init() {
 	}
 
 	dSN := configData.User + ":" + configData.Pass + "@(localhost" +
-		configData.Port + ")/" + configData.DBName
+		configData.Port + ")/" + configData.DBName + "?parseTime=true"
 
 	db, err = sql.Open("mysql", dSN)
 	if err != nil {

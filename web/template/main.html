@@ -41,32 +41,32 @@
                 {{if $iflogged}}
                 <tr>
                     <td colspan="5">
-                        <button onclick="openForm()" id="tag-button">Tag someone</button>
-                        <div class="tag-form-popup" id="tag-form" style="display: none">
-                            <form action="/addtag/{{.ItemID}}" method="POST">
+                        <button onclick="openForm({{.ItemID}})" id="tag-button-{{.ItemID}}">Tag someone</button>
+                        <div class="tag-form-popup" id="tag-form-{{.ItemID}}" style="display: none">
+                            <form action="/addtag?id={{.ItemID}}" method="POST">
                                 <label for="username">Username:</label>
                                 <input type="text" name="username" required>
                                 <input type="submit" value="Tag!">
-                                <input type="button" onclick="closeForm()" value="Close">
+                                <input type="button" onclick="closeForm({{.ItemID}})" value="Close">
                             </form>
                         </div>
                     </td>
+                    <script>
+                            function openForm(ID) {
+                                document.getElementById("tag-form-"+ID).style.display = "block";
+                                document.getElementById("tag-button-"+ID).style.display = "none";
+                            }
+                  
+                            function closeForm(ID) {
+                                document.getElementById("tag-form-"+ID).style.display = "none";
+                                document.getElementById("tag-button-"+ID).style.display = "block";
+                            }
+                        </script>
                 </tr>
                 {{end}}
             {{ else }}
             {{/* if the range is empty show this */}}
             <tr><td colspan="5">No Items Available!<td></tr>
             {{ end }}
-            <script>
-                function openForm() {
-                    document.getElementById("tag-form").style.display = "block";
-                    document.getElementById("tag-button").style.display = "none";
-                }
-      
-                function closeForm() {
-                    document.getElementById("tag-form").style.display = "none";
-                    document.getElementById("tag-button").style.display = "block";
-                }
-            </script>
     </body>
 </html>
