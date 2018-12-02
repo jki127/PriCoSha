@@ -170,33 +170,14 @@ func ValidateInfo(username string, password string) bool {
 	}
 }
 
-// //Checks for Pending Tags on  a User
-// func CheckPendingTags(taggedEmail string) ([]*string, []*int) {
-// 	//Check for Tags with the User's email with status flagged as false
-// 	var PendingTagsTagger []*string
-// 	var PendingTagsItemID []*int
-// 	rows, err := db.Query(`SELECT tagger_email, tagged_email, item_id FROM Tag WHERE tagged_email=?`,taggedEmail)
-// 	if err!=nil{
-// 		log.Println(`backend: CheckPendingTags(): Could not query Person's Pending Tags from DB.`)
-// 	}
-// 	defer rows.Close()
-
-// 	for rows.Next(){
-// 		var TaggerEmail string
-// 		var ItemID int
-// 		err = rows.Scan(&TaggerEmail, &ItemID)
-// 		if err != nil {
-// 			log.Println(`backend: CheckPendingTags(): Could not scan row data from Check Pending Tags query.`)
-// 		}
-// 		PendingTagsItemID=append(PendingTagsItemID,&ItemID)
-// 		PendingTagsTagger=append(PendingTagsTagger,&TaggerEmail)
-
-// 	}
-// 	return PendingTagsTagger, PendingTagsItemID
-// }
-
-
-
+func (m PendingTag) DeclineTag(){
+	_, err := db.Query(`DELETE FROM Tags WHERE tagger_email=? AND tagged_email=? AND item_id=?`,m.TaggerEmail,m.TaggedEmail,m.ItemID)
+	if err != nil {
+		log.Println(`backend: DeclineTag(): Could not
+		Delete from DB.`)
+	}
+	return
+}	
 
 func init() {
 	var configData Conf
