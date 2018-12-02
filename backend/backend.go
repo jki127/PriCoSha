@@ -27,6 +27,16 @@ type ContentItem struct {
 	PostTime string // should use go date format later
 }
 
+// PendingTag holds info of Pending Tag items, taken from database data
+type PendingTag struct {
+	TaggerEmail string
+	TaggedEmail string
+	ItemID int
+	TagTime string
+	FileName string
+	FilePath string
+}
+
 var db *sql.DB
 
 // TestDB tries to ping the database and returns the resulting error
@@ -70,6 +80,34 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
+func GetPendingTags(username string) []*PendingTag{
+	rows, err := db.Query(`SELECT tagger_email, tagged_email, item_id, tag_time, file_name, file_path FROM Tag NATURAL JOIN Content_Item
+		WHERE status = false
+		AND tagged_email=?`,username)
+	if err != nil {
+		log.Println(`backend: GetPendingTags(): Could not
+		query tags content from DB.`)
+	}
+	defer rows.Close()
+	
+	var data []*PendingTag
+
+	for rows.Next() {
+		var CurrentTag PendingTag
+		err = rows.Scan(&CurrentTag.TaggerEmail, &CurrentTag.TaggedEmail,
+			&CurrentTag.ItemID, &CurrentTag.TagTime,
+			&CurrentTag.FileName, &CurrentTag.FilePath)
+		if err != nil {
+			log.Println(`backend: GetPendingTags(): Could not scan row data
+			from tag content query.`)
+		}
+		data = append(data, &CurrentTag)
+	}
+
+	return data
+}
+
+
 /*
 ValidateInfo receives user entered login info and queries the DB on whether
 or not that info is valid
@@ -95,6 +133,34 @@ func ValidateInfo(username string, password string) bool {
 		return true
 	}
 }
+
+// //Checks for Pending Tags on  a User
+// func CheckPendingTags(taggedEmail string) ([]*string, []*int) {
+// 	//Check for Tags with the User's email with status flagged as false
+// 	var PendingTagsTagger []*string
+// 	var PendingTagsItemID []*int
+// 	rows, err := db.Query(`SELECT tagger_email, tagged_email, item_id FROM Tag WHERE tagged_email=?`,taggedEmail)
+// 	if err!=nil{
+// 		log.Println(`backend: CheckPendingTags(): Could not query Person's Pending Tags from DB.`)
+// 	}
+// 	defer rows.Close()
+
+// 	for rows.Next(){
+// 		var TaggerEmail string
+// 		var ItemID int
+// 		err = rows.Scan(&TaggerEmail, &ItemID)
+// 		if err != nil {
+// 			log.Println(`backend: CheckPendingTags(): Could not scan row data from Check Pending Tags query.`)
+// 		}
+// 		PendingTagsItemID=append(PendingTagsItemID,&ItemID)
+// 		PendingTagsTagger=append(PendingTagsTagger,&TaggerEmail)
+
+// 	}
+// 	return PendingTagsTagger, PendingTagsItemID
+// }
+
+
+
 
 func init() {
 	var configData Conf
