@@ -1,14 +1,14 @@
-{{/* This is the landing page for the PriCoSha website. */}}
+<!-- This is the tag management page for the PriCoSha website. -->
 <!DOCTYPE html>
 <html>
     <title>
-        PriCoSha
+        Tag Manager
     </title>
     <meta charset="UTF-8">
     <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
     <body>
         <h1>
-            PriCoSha
+            Tag manager
             <div style="float:right">
                 {{if .Logged}}
                 Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
@@ -19,17 +19,17 @@
         </h1>
         <hr>
         <h2>
-            Public Content:
+            Pending Tags:
         </h2>
         <table cellspacing="20">
           <tr>
             <th>Item ID</th>
             <th>Item Name</th>
-            <th>File Path</th>
             <th>Author</th>
-            <th>Time Posted</th>
+            <th>File Path</th>
+            <th>Tagged On</th>
           </tr>
-          {{ range .PubData }}
+          {{ range .PendingTagData }}
           <tr>
             <td>{{ .ItemID }}</td>
             <td>{{ .FileName }}</td>
@@ -39,8 +39,7 @@
           </tr>
           {{ else }}
           {{/* if the range is empty show this */}}
-          <tr><td colspan="5">No Items Available!<td></tr>
+          <tr><td colspan="5">No Pending Items!<td></tr>
           {{ end }}
-        <h3><a href="/tag_manger">Tag Manager</a></h3>
     </body>
 </html>
