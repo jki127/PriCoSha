@@ -21,6 +21,7 @@ type MPD struct {
 	Username string
 	PubData  []*b.ContentItem
 }
+
 /*
 TMD stands for TagManagerData and holds all data necessary
 for Tag Manager page to function
@@ -29,6 +30,7 @@ type TMD struct {
 	Logged   bool // true if logged in, false otherwise
 	Username string
 	PendingTagData  []*b.PendingTag
+	AcceptedTagData []*b.AcceptedTag
 }
 
 func main() {
@@ -71,13 +73,13 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	// Checks for requests to non-existent pages
-	// if r.URL.Path != "/" {
-	// 		errorHandler(w, r, http.StatusNotFound)
-	// 	return
-	// }
+	//Checks for requests to non-existent pages
+	if r.URL.Path != "/" {
+			errorHandler(w, r, http.StatusNotFound)
+		return
+	}
 
-	// Currently prints whether user is logged in or not.
+	//Currently prints whether user is logged in or not.
 	cookie, err := r.Cookie("username")
 	var logged bool
 	var username string
@@ -199,18 +201,15 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func tagManagerHandler(w http.ResponseWriter, r *http.Request){
-	_, err := r.Cookie("username")
-	if err != nil {
-		log.Println("User was not logged in and cannot manage tags.")
-		http.Redirect(w, r, "/", http.StatusFound)
-		return
-	}
 	cookie, err := r.Cookie("username")
 	var logged bool
 	var username string
 	if err != nil {
 		logged = false
 		username = ""
+		log.Println("User was not logged in and cannot manage tags.")
+		http.Redirect(w, r, "/login", http.StatusFound)
+		return
 	} else {
 		logged = true
 		username = cookie.Value
@@ -220,8 +219,8 @@ func tagManagerHandler(w http.ResponseWriter, r *http.Request){
 		Logged:	logged,
 		Username: username,
 		PendingTagData: b.GetPendingTags(username),
+		AcceptedTagData: b.GetAcceptedTags(username),
 	}
-	
 	t:=template.Must(template.ParseFiles("../web/template/tagmanager.html"))
 	t.Execute(w, CurrentTMD)
 }

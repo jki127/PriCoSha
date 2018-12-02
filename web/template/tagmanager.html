@@ -1,45 +1,72 @@
 <!-- This is the tag management page for the PriCoSha website. -->
 <!DOCTYPE html>
 <html>
-    <title>
-        Tag Manager
-    </title>
-    <meta charset="UTF-8">
-    <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
-    <body>
-        <h1>
-            Tag manager
-            <div style="float:right">
-                {{if .Logged}}
-                Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
-                {{else}}
-                <a href="/login">Login!</a>
-                {{end}}
-            </div>
-        </h1>
-        <hr>
-        <h2>
-            Pending Tags:
-        </h2>
-        <table cellspacing="20">
-          <tr>
-            <th>Item ID</th>
-            <th>Item Name</th>
-            <th>Author</th>
-            <th>File Path</th>
+<title>
+    Tag Manager
+</title>
+<meta charset="UTF-8">
+<link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
+
+<body>
+    <h1>
+        Tag manager
+        <div style="float:right">
+            {{if .Logged}}
+            Logged in as: <b>{{.Username}}</b> <a href="/">Home</a><b> </b><a href="/logout">Logout!</a>
+            {{else}}
+            <a href="/login">Login!</a>
+            {{end}}
+        </div>
+    </h1>
+    <hr>
+    <h2>
+        Pending Tags:
+    </h2>
+    <table cellspacing="20">
+        <tr>
+            <th>Name</th>
+            <th>Tagger</th>
             <th>Tagged On</th>
-          </tr>
-          {{ range .PendingTagData }}
-          <tr>
-            <td>{{ .ItemID }}</td>
+            <th>File Path</th>
+        </tr>
+        {{ range .PendingTagData }}
+        <tr>
             <td>{{ .FileName }}</td>
+            <td>{{ .TaggerEmail }}</td>
+            <td>{{ .TagTime }}</td>
             <td>{{ .FilePath }}</td>
-            <td>{{ .Email }}</td>
-            <td>{{ .PostTime }}</td>
-          </tr>
-          {{ else }}
-          {{/* if the range is empty show this */}}
-          <tr><td colspan="5">No Pending Items!<td></tr>
-          {{ end }}
-    </body>
+        </tr>
+        {{ else }}
+        {{/* if the range is empty show this */}}
+        <tr>
+            <td colspan="5">No Pending Items!<td>
+        </tr>
+        {{ end }}
+    </table>
+    <h3>
+        Accepted Tags:
+    </h3>
+    <table cellspacing="20">
+        <tr>
+            <th>Name</th>
+            <th>Tagger</th>
+            <th>Tagged On</th>
+            <th>File Path</th>
+        </tr>
+        {{ range .AcceptedTagData }}
+        <tr>
+            <td>{{ .Filename }}</td>
+            <td>{{ .Tagger }}</td>
+            <td>{{ .TagTime }}</td>
+            <td>{{ .FilePath }}</td>
+        </tr>
+        {{ else }}
+        {{/* if the range is empty show this */}}
+        <tr>
+            <td colspan="5">No Accepted Items!<td>
+        </tr>
+        {{ end }}
+    </table>
+</body>
+
 </html>

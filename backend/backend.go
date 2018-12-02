@@ -36,6 +36,15 @@ type PendingTag struct {
 	FileName string
 	FilePath string
 }
+// Accepted holds info of Pending Tag items, taken from database data
+type AcceptedTag struct {
+	TaggerEmail string
+	TaggedEmail string
+	ItemID int
+	TagTime string
+	FileName string
+	FilePath string
+}
 
 var db *sql.DB
 
@@ -99,6 +108,33 @@ func GetPendingTags(username string) []*PendingTag{
 			&CurrentTag.FileName, &CurrentTag.FilePath)
 		if err != nil {
 			log.Println(`backend: GetPendingTags(): Could not scan row data
+			from tag content query.`)
+		}
+		data = append(data, &CurrentTag)
+	}
+
+	return data
+}
+
+func GetAcceptedTags(username string) []*AcceptedTag{
+	rows, err := db.Query(`SELECT tagger_email, tagged_email, item_id, tag_time, file_name, file_path FROM Tag NATURAL JOIN Content_Item
+		WHERE status = true
+		AND tagged_email=?`,username)
+	if err != nil {
+		log.Println(`backend: AcceptedTags(): Could not
+		query tags content from DB.`)
+	}
+	defer rows.Close()
+	
+	var data []*AcceptedTag
+
+	for rows.Next() {
+		var CurrentTag AcceptedTag
+		err = rows.Scan(&CurrentTag.TaggerEmail, &CurrentTag.TaggedEmail,
+			&CurrentTag.ItemID, &CurrentTag.TagTime,
+			&CurrentTag.FileName, &CurrentTag.FilePath)
+		if err != nil {
+			log.Println(`backend: GetAcceptedTags(): Could not scan row data
 			from tag content query.`)
 		}
 		data = append(data, &CurrentTag)
