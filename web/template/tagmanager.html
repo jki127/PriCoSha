@@ -32,7 +32,7 @@
         </tr>
         {{ range .PendingTagData }}
         <tr>
-            <td><a href="/">Accept</a><b> </b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
+            <td><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Accept</a><b> </b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
             <td>{{ .FileName }}</td>
             <td>{{ .TaggerEmail }}</td>
             <td>{{ .TagTime }}</td>
@@ -57,8 +57,8 @@
         </tr>
         {{ range .AcceptedTagData }}
         <tr>
-            <td>{{ .Filename }}</td>
-            <td>{{ .Tagger }}</td>
+            <td>{{ .FileName }}</td>
+            <td>{{ .TaggerEmail }}</td>
             <td>{{ .TagTime }}</td>
             <td>{{ .FilePath }}</td>
         </tr>
