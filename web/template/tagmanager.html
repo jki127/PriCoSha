@@ -24,6 +24,7 @@
     </h2>
     <table cellspacing="20">
         <tr>
+            <th>Action</th>
             <th>Name</th>
             <th>Tagger</th>
             <th>Tagged On</th>
@@ -31,6 +32,7 @@
         </tr>
         {{ range .PendingTagData }}
         <tr>
+            <td><a href="/">Accept</a><b> </b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
             <td>{{ .FileName }}</td>
             <td>{{ .TaggerEmail }}</td>
             <td>{{ .TagTime }}</td>
