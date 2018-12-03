@@ -27,10 +27,10 @@ func declineTagHandler(w http.ResponseWriter, r *http.Request){
 
 	if username==queryData["ted"][0] {
 		b.DeclineTag(queryData["ter"][0],queryData["ted"][0],id)
-		
+
 	} else{
 		println("Cannot Manage other User's Tags")
 	}
 	
-	http.Redirect(w, r, "/login", http.StatusFound)
+	http.Redirect(w, r, "/tag_manager", http.StatusFound)
 }
