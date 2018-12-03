@@ -48,6 +48,8 @@ func main() {
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/tag_manager",tagManagerHandler)
 	http.HandleFunc("/decline",declineTagHandler)
+	http.HandleFunc("/accept",acceptTagHandler)
+
 
 
 	// Start server
