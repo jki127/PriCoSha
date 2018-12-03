@@ -10,7 +10,8 @@
         <h1>
             PriCoSha
             <div style="float:right">
-                {{if .Logged}}
+                {{ $iflogged := .Logged}}
+                {{if $iflogged}}
                 Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
                 {{else}}
                 <a href="/login">Login!</a>
@@ -22,24 +23,50 @@
             Public Content:
         </h2>
         <table cellspacing="20">
-          <tr>
-            <th>Item ID</th>
-            <th>Item Name</th>
-            <th>File Path</th>
-            <th>Author</th>
-            <th>Time Posted</th>
-          </tr>
-          {{ range .PubData }}
-          <tr>
-            <td>{{ .ItemID }}</td>
-            <td>{{ .FileName }}</td>
-            <td>{{ .FilePath }}</td>
-            <td>{{ .Email }}</td>
-            <td>{{ .PostTime }}</td>
-          </tr>
-          {{ else }}
-          {{/* if the range is empty show this */}}
-          <tr><td colspan="5">No Items Available!<td></tr>
-          {{ end }}
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>File Path</th>
+                <th>Author</th>
+                <th>Time Posted</th>
+            </tr>
+            {{ range .PubData }}
+            <tr>
+                <td>{{ .ItemID }}</td>
+                <td>{{ .FileName }}</td>
+                <td>{{ .FilePath }}</td>
+                <td>{{ .Email }}</td>
+                <td>{{ .PostTime }}</td>
+            </tr>
+                {{if $iflogged}}
+                <tr>
+                    <td colspan="5">
+                        <button onclick="openForm()" id="tag-button">Tag someone</button>
+                        <div class="tag-form-popup" id="tag-form" style="display: none">
+                            <form action="/addtag/{{.ItemID}}" method="POST">
+                                <label for="username">Username:</label>
+                                <input type="text" name="username" required>
+                                <input type="submit" value="Tag!">
+                                <input type="button" onclick="closeForm()" value="Close">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
+            {{ else }}
+            {{/* if the range is empty show this */}}
+            <tr><td colspan="5">No Items Available!<td></tr>
+            {{ end }}
+            <script>
+                function openForm() {
+                    document.getElementById("tag-form").style.display = "block";
+                    document.getElementById("tag-button").style.display = "none";
+                }
+      
+                function closeForm() {
+                    document.getElementById("tag-form").style.display = "none";
+                    document.getElementById("tag-button").style.display = "block";
+                }
+            </script>
     </body>
 </html>
