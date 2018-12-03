@@ -35,6 +35,7 @@ type PendingTag struct {
 	TagTime string
 	FileName string
 	FilePath string
+	TagID int
 }
 // Accepted holds info of Pending Tag items, taken from database data
 type AcceptedTag struct {
@@ -44,6 +45,7 @@ type AcceptedTag struct {
 	TagTime string
 	FileName string
 	FilePath string
+	TagID int
 }
 
 var db *sql.DB
@@ -73,7 +75,6 @@ func GetPubContent() []*ContentItem {
 		isPub int
 		data  []*ContentItem
 	)
-
 	for rows.Next() {
 		var CurrentItem ContentItem
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
@@ -100,7 +101,7 @@ func GetPendingTags(username string) []*PendingTag{
 	defer rows.Close()
 	
 	var data []*PendingTag
-
+	tagCounter:=0
 	for rows.Next() {
 		var CurrentTag PendingTag
 		err = rows.Scan(&CurrentTag.TaggerEmail, &CurrentTag.TaggedEmail,
@@ -110,7 +111,9 @@ func GetPendingTags(username string) []*PendingTag{
 			log.Println(`backend: GetPendingTags(): Could not scan row data
 			from tag content query.`)
 		}
+		CurrentTag.TagID=tagCounter
 		data = append(data, &CurrentTag)
+		tagCounter+=1
 	}
 
 	return data
@@ -170,12 +173,15 @@ func ValidateInfo(username string, password string) bool {
 	}
 }
 
-func (m PendingTag) DeclineTag(){
-	_, err := db.Query(`DELETE FROM Tags WHERE tagger_email=? AND tagged_email=? AND item_id=?`,m.TaggerEmail,m.TaggedEmail,m.ItemID)
+func  DeclineTag(tagger string, tagged string, itemID int){
+	_, err := db.Exec(`DELETE FROM Tag WHERE tagger_email=? AND tagged_email=? AND item_id=?`,tagger,tagged,itemID)
 	if err != nil {
 		log.Println(`backend: DeclineTag(): Could not
-		Delete from DB.`)
+		Delete from DB.`,tagger,tagged,itemID)
+		return
 	}
+		println("Tag Declined succesfully")
+	
 	return
 }	
 
