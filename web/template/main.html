@@ -14,12 +14,10 @@
     <meta charset="UTF-8">
     <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
     <body>
-        <h1>
-            PriCoSha
             <div style="float:right">
                 {{ $iflogged := .Logged}}
                 {{if $iflogged}}
-                Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>,<b> </b><a href="/tag_manager">Tag Manager</a>
+                Logged in as: <b>{{.Username}}</b> <a href="/tag_manager">Tag Manager</a> <a href="/logout">Logout!</a>
                 {{else}}
                 <a href="/login">Login!</a>
                 {{end}}
