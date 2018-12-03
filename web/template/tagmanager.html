@@ -9,7 +9,7 @@
 
 <body>
     <h1>
-        Tag manager
+        Tag Manager
         <div style="float:right">
             {{if .Logged}}
             Logged in as: <b>{{.Username}}</b> <a href="/">Home</a><b> </b><a href="/logout">Logout!</a>
@@ -32,7 +32,7 @@
         </tr>
         {{ range .PendingTagData }}
         <tr>
-            <td><a href="/">Accept</a><b> </b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
+            <td><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Accept</a><b> / </b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
             <td>{{ .FileName }}</td>
             <td>{{ .TaggerEmail }}</td>
             <td>{{ .TagTime }}</td>
@@ -54,13 +54,15 @@
             <th>Tagger</th>
             <th>Tagged On</th>
             <th>File Path</th>
+            <th>Action</th>
         </tr>
         {{ range .AcceptedTagData }}
         <tr>
-            <td>{{ .Filename }}</td>
-            <td>{{ .Tagger }}</td>
+            <td>{{ .FileName }}</td>
+            <td>{{ .TaggerEmail }}</td>
             <td>{{ .TagTime }}</td>
             <td>{{ .FilePath }}</td>
+            <td><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Delete?</a></td>
         </tr>
         {{ else }}
         {{/* if the range is empty show this */}}
