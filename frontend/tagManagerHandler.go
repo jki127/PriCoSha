@@ -5,6 +5,16 @@ import (
 	"net/http"
 	b "pricosha/backend"
 )
+/*
+TMD stands for TagManagerData and holds all data necessary
+for Tag Manager page to function
+*/
+type TMD struct {
+	Logged   bool // true if logged in, false otherwise
+	Username string
+	PendingTagData  []*b.PendingTag
+	AcceptedTagData []*b.AcceptedTag
+}
 
 func tagManagerHandler(w http.ResponseWriter, r *http.Request){
 	cookie, err := r.Cookie("username")
