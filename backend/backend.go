@@ -103,7 +103,7 @@ type TagItem struct {
 	TaggerEmail string
 	TaggedEmail string
 	ItemID      int
-	Status      bool
+	Status      bool // false = private; true = public
 	TagTime     time.Time
 }
 
@@ -123,8 +123,9 @@ func execInsertTag(id int, uTagger string, uTagged string, pubVal bool) {
 }
 
 /*
-InsertTag receives info needed for adding a tag system and returns an error
-if add tag action cannot be performed due to database restraints
+InsertTag receives tag info for insertion to the table, checks the validity of the
+insertion, and then calls execInsertTag with valid info if necessary. Otherwise, it
+returns an error for the frontend if the insertion could not be completed.
 */
 func InsertTag(id int, uTagger string, uTagged string) error {
 	if uTagger == uTagged {
@@ -133,6 +134,7 @@ func InsertTag(id int, uTagger string, uTagged string) error {
 	}
 
 	row := db.QueryRow(`SELECT fg_name, owner_email FROM Person
+		NATURAL JOIN Belong
 		WHERE item_id=?
 		AND (is_pub=true OR
 			(fg_name, owner_email) IN (
