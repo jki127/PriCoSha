@@ -47,6 +47,8 @@ func main() {
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.HandleFunc("/tag_manager",tagManagerHandler)
+	http.HandleFunc("/decline",declineTagHandler)
+
 
 	// Start server
 	log.Println("Frontend spun up!")
@@ -200,27 +202,5 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func tagManagerHandler(w http.ResponseWriter, r *http.Request){
-	cookie, err := r.Cookie("username")
-	var logged bool
-	var username string
-	if err != nil {
-		logged = false
-		username = ""
-		log.Println("User was not logged in and cannot manage tags.")
-		http.Redirect(w, r, "/login", http.StatusFound)
-		return
-	} else {
-		logged = true
-		username = cookie.Value
-	}
 
-	CurrentTMD := TMD{
-		Logged:	logged,
-		Username: username,
-		PendingTagData: b.GetPendingTags(username),
-		AcceptedTagData: b.GetAcceptedTags(username),
-	}
-	t:=template.Must(template.ParseFiles("../web/template/tagmanager.html"))
-	t.Execute(w, CurrentTMD)
-}
+
