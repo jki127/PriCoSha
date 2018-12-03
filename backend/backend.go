@@ -184,6 +184,17 @@ func  DeclineTag(tagger string, tagged string, itemID int){
 	
 	return
 }	
+func  AcceptTag(tagger string, tagged string, itemID int){
+	_, err := db.Exec(`UPDATE Tag SET status=1 WHERE tagger_email=? AND tagged_email=? AND item_id=?`,tagger,tagged,itemID)
+	if err != nil {
+		log.Println(`backend: AcceptTag(): Could not
+		UPDATE DB.`,tagger,tagged,itemID)
+		return
+	}
+		println("Tag Accepted succesfully")
+	
+	return
+}	
 
 func init() {
 	var configData Conf
