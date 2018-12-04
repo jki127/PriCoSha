@@ -6,12 +6,15 @@
 </title>
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="/css/stylesheet.css" title="Default Styles" media="screen">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 
 <div class="sidebar">
-    <a href="/">Home</a>
-    <a class="active" href="/tag_manager">Tag Manager</a>
-    <a href="/logout">Logout</a>
+    <a href="/"><i class="fa fa-fw fa-home"></i>Home</a>
+    <a href=""><i class="fa fa-fw fa-user"></i>Profile</a>
+    <a class="active" href="/tag_manager"><i class="fa fa-fw fa-tags"></i>Tag Manager</a>
+    <a href="/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
 </div>
 
 <div class="content">
@@ -41,8 +44,8 @@
             </tr>
             {{ range .PendingTagData }}
             <tr>
-                <td><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Accept</a><b> / </b><a
-                        href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Decline</a></td>
+                <td align="center"><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i class="fa fa-fw fa-check"></i></a><b>/</b><a
+                        href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i class="fa fa-fw fa-times"></i></a></td>
                 <td>{{ .FileName }}</td>
                 <td>{{ .TaggerEmail }}</td>
                 <td>{{ .TagTime }}</td>
@@ -72,7 +75,8 @@
                 <td>{{ .TaggerEmail }}</td>
                 <td>{{ .TagTime }}</td>
                 <td>{{ .FilePath }}</td>
-                <td><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">Delete?</a></td>
+                <td align="center"><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i
+                            class="fa fa-fw fa-trash"></i></a></td>
             </tr>
             {{ else }}
             {{/* if the range is empty show this */}}
