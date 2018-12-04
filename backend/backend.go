@@ -55,7 +55,6 @@ func GetPubContent() []*ContentItem {
 		isPub int
 		data  []*ContentItem
 	)
-
 	for rows.Next() {
 		var CurrentItem ContentItem
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
