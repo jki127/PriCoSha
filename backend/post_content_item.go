@@ -39,6 +39,9 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 	return data
 }
 
+/*
+GetNewItemID queries database for the last itemID and increments to assign to new content item
+*/
 func GetNewItemID() int {
 	// Query DB for current max item ID
 	row := db.QueryRow(`SELECT MAX(item_id) FROM Content_Item`)
@@ -49,18 +52,20 @@ func GetNewItemID() int {
 	switch {
 	case err == sql.ErrNoRows:
 		log.Println("post_content_item: GetNewItemID(): no item IDs found")
-		return -1
+		return -1 // not sure if I should be returning something else
 	case err != nil:
 		log.Println("post_content_item: GetNewItemID(): non nil Scan() error")
-		return -1
+		return -1 // not sure if I should be returning something else
 	default:
 		return maxItemID + 1
 	}
 }
 
+/*
+ExecInsertContentItem prepares and executes statement to insert new item into Content_Item
+*/
 func ExecInsertContentItem(item ContentItem, isPub int) {
 	log.Println("post_content_item: id:", item.ItemID, "privacy setting:", isPub)
-
 	statement, err := db.Prepare(`INSERT INTO Content_Item VALUES (?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		log.Println("post_content_item: execInsertContentItem(): Could not prepare content item insertion")
@@ -74,7 +79,11 @@ func ExecInsertContentItem(item ContentItem, isPub int) {
 	}
 }
 
+/*
+ExecInsertSharedContentItemToGroup prepares and executes statement to insert info about privately shared content items to Share
+*/
 func ExecInsertSharedContentItemToGroup(FGName string, OwnerEmail string, itemID int) {
+	log.Println("post_content_item: id:", itemID, "privately shared with", FGName, "owned by", OwnerEmail)
 	statement, err := db.Prepare(`INSERT INTO Share VALUES (?, ?, ?)`)
 	if err != nil {
 		log.Println("post_content_item: ExecInsertSharedContentItemToGroup(): Could not prepare shared content insertion")

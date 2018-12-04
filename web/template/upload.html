@@ -19,8 +19,7 @@
                 if (!checkedOne) {
                     alert ("Please choose at least one Friend Group")
                     return false
-                }
-                else {
+                } else {
                     return true
                 }
             }
@@ -42,14 +41,12 @@
             <label for="public">Public</label>
             <input type="radio" onclick="openGroups()" id="private" name="shareSetting" value="private">
             <label for="public">Private</label>
-
             <div class="friend-group-popup" id="friend-groups" style="display: none">
                 <label for="friendGroups">Select Applicable Friend Groups:</label>
                 {{ range . }}
                 <input type="checkbox" name=friendGroup value={{.FGName}}_{{.OwnerEmail}}>{{.FGName}} owned by {{.OwnerEmail}}
                 {{end}}
             </div>
-            
             <br><input type="submit" value="Post Item">
         </form>
         <a href="/">Cancel</a>

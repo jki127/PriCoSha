@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
-	_ "log"
 	"net/http"
-	b "pricosha/backend"
 	"strings"
 	"time"
+
+	b "pricosha/backend"
 )
 
 // Handles requests to post content item data
@@ -21,11 +21,14 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username = cookie.Value
 
+	// Parse HTML form for user-entered data about content item
 	r.ParseForm()
+	log.Println("New Content Item info:\n")
 	for key, value := range r.Form {
 		log.Println(key, value)
 	}
 
+	// Create new ContentItem with appropriate data
 	NewContentItem := b.ContentItem{
 		ItemID:   b.GetNewItemID(),
 		Email:    username,
@@ -34,6 +37,7 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 		PostTime: time.Now(),
 	}
 
+	// Designate privacy setting
 	var isPub int
 	privacySetting := r.FormValue("shareSetting")
 	if privacySetting == "public" {
@@ -41,6 +45,7 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		isPub = 0
 	}
+	// Send info to backend to be inserted into database
 	b.ExecInsertContentItem(NewContentItem, isPub)
 
 	// If the content item is private, need to update Share table for each FriendGroup
@@ -57,7 +62,6 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 			// right now only executes/processes the first FriendGroup returned by the form
 		}
 	}
-
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
 }
