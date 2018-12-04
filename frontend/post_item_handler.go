@@ -23,7 +23,7 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Parse HTML form for user-entered data about content item
 	r.ParseForm()
-	log.Println("New Content Item info:\n")
+	log.Println("New Content Item info:")
 	for key, value := range r.Form {
 		log.Println(key, value)
 	}
@@ -50,16 +50,18 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	// If the content item is private, need to update Share table for each FriendGroup
 	if isPub == 0 {
-		sharedGroups := strings.Fields(r.FormValue("friendGroup"))
+		sharedGroups := r.Form["friendGroup"]
+		// Create a FriendGroup for each chosen group to share item with
 		for group := range sharedGroups {
 			groupInfo := strings.Split(sharedGroups[group], "_")
+			log.Println(groupInfo)
 			SharedGroup := b.FriendGroup{
 				MemberEmail: username,
 				FGName:      groupInfo[0],
 				OwnerEmail:  groupInfo[1],
 			}
+			// Send info to backend to be inserted into database
 			b.ExecInsertSharedContentItemToGroup(SharedGroup.FGName, SharedGroup.OwnerEmail, NewContentItem.ItemID)
-			// right now only executes/processes the first FriendGroup returned by the form
 		}
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
