@@ -19,10 +19,12 @@ func acceptTagHandler(w http.ResponseWriter, r *http.Request) {
 
 	url := r.URL
 	queryData := url.Query()
-	id, _ := strconv.Atoi(queryData["iid"][0])
+	itemID, _ := strconv.Atoi(queryData["iid"][0])
+	tagger := queryData["ter"][0]
+	tagged := queryData["ted"][0]
 
 	if username == queryData["ted"][0] {
-		b.AcceptTag(queryData["ter"][0], queryData["ted"][0], id)
+		b.AcceptTag(tagger, tagged, itemID)
 
 	} else {
 		log.Println("frontend:	acceptTagHandler():	Tagged User must be logged in to Accept Tag")
