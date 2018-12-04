@@ -21,7 +21,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//Get Emails of Person's with inputted name
+	// Get Emails of Person's with inputted name
 	EmailList := b.GetEmail(fname, lname)
 	var userEmail string
 
@@ -36,6 +36,8 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, redirectStr, http.StatusFound)
 		return
 	}
+	clearCookie(&w, r, "addFriendErr")
+
 	userEmail = *EmailList[0]
 
 	queryData := url.Query()
