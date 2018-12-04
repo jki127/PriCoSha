@@ -51,22 +51,22 @@
 							</form>
 						</div>
 					</td>
-					<script>
-							function openForm(ID) {
-								document.getElementById("tag-form-"+ID).style.display = "block";
-								document.getElementById("tag-button-"+ID).style.display = "none";
-							}
-				
-							function closeForm(ID) {
-								document.getElementById("tag-form-"+ID).style.display = "none";
-								document.getElementById("tag-button-"+ID).style.display = "block";
-							}
-						</script>
 				</tr>
 				{{end}}
 			{{ else }}
 			{{/* if the range is empty show this */}}
 			<tr><td colspan="5">No Items Available!<td></tr>
 			{{ end }}
+			<script>
+				function openForm(ID) {
+					document.getElementById("tag-form-"+ID).style.display = "block";
+					document.getElementById("tag-button-"+ID).style.display = "none";
+				}
+	
+				function closeForm(ID) {
+					document.getElementById("tag-form-"+ID).style.display = "none";
+					document.getElementById("tag-button-"+ID).style.display = "block";
+				}
+			</script>
 	</body>
 </html>

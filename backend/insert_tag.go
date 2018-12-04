@@ -47,6 +47,15 @@ func InsertTag(id int, uTagger string, uTagged string) error {
 		return nil
 	}
 
+	/*
+		This query is meant more to just return a row than to return any specific
+		content. If it returns, that means the following: that an item exists with
+		item_id=id; that that item exists within the set of public items OR that the
+		member who was tagged is a member of one of the friend groups that item is
+		shared in.
+		If the query returns a row, that means the user can view the content item
+		they were tagged publically or privately.
+	*/
 	row := db.QueryRow(`SELECT item_id
 		FROM Content_Item LEFT OUTER JOIN Share
 		USING (item_id)
