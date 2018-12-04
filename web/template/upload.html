@@ -1,0 +1,27 @@
+<!-- This is the upload content item page for the PriCoSha website. -->
+<!DOCTYPE html>
+<html>
+    <title>
+        Post a Content Item
+    </title>
+    <meta charset="UTF-8">
+    <body>
+        {{if .IsErr}}
+            <div style="color: red">{{.ErrMsg}}</div>
+        {{end}}
+        <form action="/postItem" method="POST">
+            <label for="title">Item Title:</label>
+            <input type="text" name="itemName" required><br>
+            <label for="filePath">Filepath:</label>
+            <input type="text" name="filePath" required><br>
+            <label for="shareSetting">Sharing Settings:</label>
+            <input type="radio" id="public" name="shareSetting" value="public" required>
+            <label for="public">Public</label>
+            <input type="radio" id="private" name="shareSetting" value="private">
+            <label for="public">Private</label>
+            <!-- stuff to display FriendGroups to post to-->
+            <br><input type="submit" value="Post Item">
+        </form>
+        <a href="/">Cancel</a>
+    </body>
+</html>

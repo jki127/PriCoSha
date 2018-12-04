@@ -9,6 +9,10 @@
     <body>
         <h1>
             PriCoSha
+            {{ $iflogged := .Logged}}
+            {{if $iflogged}}
+            <a href="/upload">Upload</a>
+            {{end}}
             <div style="float:right">
                 {{ $iflogged := .Logged}}
                 {{if $iflogged}}
