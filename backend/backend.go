@@ -3,7 +3,6 @@ package backend
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"log"
 	"os"
 	"time"
@@ -95,70 +94,6 @@ func ValidateInfo(username string, password string) bool {
 		return false
 	default:
 		return true
-	}
-}
-
-// TagItem holds info of Tag entities in the database
-type TagItem struct {
-	TaggerEmail string
-	TaggedEmail string
-	ItemID      int
-	Status      bool // false = private; true = public
-	TagTime     time.Time
-}
-
-// execInsertTag takes the data for a tag entity and inserts in into the table
-func execInsertTag(id int, uTagger string, uTagged string, pubVal bool) {
-	stmt, err := db.Prepare(`INSERT Tag SET tagger_email=?, tagged_email=?,
-		item_id=?, status=?, tag_time=?`)
-	if err != nil {
-		log.Println("backend: InsertTag(): Could not prepare tag insertion")
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(uTagger, uTagged, id, pubVal, time.Now())
-	if err != nil {
-		log.Println("backend: InsertTag(): Could not execute tag insertion")
-	}
-}
-
-/*
-InsertTag receives tag info for insertion to the table, checks the validity of the
-insertion, and then calls execInsertTag with valid info if necessary. Otherwise, it
-returns an error for the frontend if the insertion could not be completed.
-*/
-func InsertTag(id int, uTagger string, uTagged string) error {
-	if uTagger == uTagged {
-		execInsertTag(id, uTagger, uTagged, true)
-		return nil
-	}
-
-	row := db.QueryRow(`SELECT fg_name, owner_email FROM Person
-		NATURAL JOIN Belong
-		WHERE item_id=?
-		AND (is_pub=true OR
-			(fg_name, owner_email) IN (
-				SELECT fg_name, owner_email
-				FROM Belong
-				WHERE member_email=?`,
-		id, uTagged)
-
-	var (
-		fgName string
-		email  string
-	)
-	err := row.Scan(&fgName, &email)
-
-	switch {
-	case err == sql.ErrNoRows:
-		returnErr := errors.New("noview")
-		return returnErr
-	case err != nil:
-		returnErr := errors.New("failed")
-		return returnErr
-	default:
-		execInsertTag(id, uTagger, uTagged, false)
-		return nil
 	}
 }
 

@@ -31,6 +31,8 @@ func addTagHandler(w http.ResponseWriter, r *http.Request) {
 	err = b.InsertTag(id, uTagger, uTagged)
 
 	switch {
+	case err == nil:
+		// do nothing
 	case err.Error() == "noview":
 		log.Println("received noview error from b.InsertTag()")
 	case err.Error() == "failed":
