@@ -34,7 +34,12 @@
         </div>
         <a href="/tag_manager" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-tags"></i>Tag
             Manager</a>
+        {{ $iflogged := .Logged}}
+        {{if $iflogged}}
         <a href="/logout" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        {{else}}
+        <a href="/login" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-in"></i>Login</a>
+        {{end}}
     </div>
 
     <!-- Page Container -->
@@ -42,7 +47,6 @@
         {{template "content" .}}
 
         <!-- End Page Container -->
-
     </div>
 
     <script>
