@@ -42,8 +42,13 @@
         </h1>
         <hr>
         <h2>
-            Public Content:
+            {{if .Logged}}
+            <a href="/friendgroups">Friend Group</a>
+            {{end}}
         </h2>
+        <h3>
+            Public Content:
+        </h3>
         <table cellspacing="20">
             <tr>
                 <th>Item ID</th>
@@ -60,25 +65,25 @@
                 <td>{{ .Email }}</td>
                 <td>{{ .PostTime }}</td>
             </tr>
-            {{if $iflogged}}
-            <tr>
-                <td colspan="5">
-                    <button onclick="openForm()" id="tag-button">Tag someone</button>
-                    <div class="tag-form-popup" id="tag-form" style="display: none">
-                        <form action="/addtag/{{.ItemID}}" method="POST">
-                            <label for="username">Username:</label>
-                            <input type="text" name="username" required>
-                            <input type="submit" value="Tag!">
-                            <input type="button" onclick="closeForm()" value="Close">
-                        </form>
-                    </div>
-                </td>
-            </tr>
-            {{end}}
+                {{if $iflogged}}
+                <tr>
+                    <td colspan="5">
+                        <button onclick="openForm()" id="tag-button">Tag someone</button>
+                        <div class="tag-form-popup" id="tag-form" style="display: none">
+                            <form action="/addtag/{{.ItemID}}" method="POST">
+                                <label for="username">Username:</label>
+                                <input type="text" name="username" required>
+                                <input type="submit" value="Tag!">
+                                <input type="button" onclick="closeForm()" value="Close">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {{end}}
             {{ else }}
             {{/* if the range is empty show this */}}
             <tr>
-                <td colspan="5">No Items Available!<td>
+              <td colspan="5">No Items Available!<td>
             </tr>
             {{ end }}
             <script>
@@ -86,7 +91,6 @@
                     document.getElementById("tag-form").style.display = "block";
                     document.getElementById("tag-button").style.display = "none";
                 }
-
                 function closeForm() {
                     document.getElementById("tag-form").style.display = "none";
                     document.getElementById("tag-button").style.display = "block";
@@ -94,6 +98,4 @@
             </script>
     </body>
 </div>
-
-
 </html>
