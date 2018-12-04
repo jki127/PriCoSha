@@ -1,0 +1,82 @@
+{{define "base"}}
+<!-- This is the base layouy for the PriCoSha website. -->
+<!DOCTYPE html>
+<html>
+<title>PriCoSha</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        font-family: "Open Sans", sans-serif
+    }
+</style>
+
+<body class="w3-theme-l5">
+    <div class="w3-sidebar w3-light-grey w3-card" style="width:160px">
+        <a href="/" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-home"></i>Home</a>
+        <a href="/profile" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-user"></i>Profile</a>
+        <!-- <button class="w3-button w3-block w3-left-align" onclick="myAccFunc()">
+            <i class="fa fa-fw fa-address-book"></i>Friends <i class="fa fa-caret-down"></i>
+        </button>
+        <div id="demoAcc" class="w3-bar-block w3-hide w3-white w3-card-4">
+            <a href="/addFriend" class="w3-bar-item w3-button">Add Friend</a>
+            <a href="/friendgroups" class="w3-bar-item w3-button">Friend Groups</a>
+        </div> -->
+        <a href="/friendgroups" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-users"></i>Friend
+            Groups</a>
+        <a href="/tag_manager" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-tags"></i>Tag
+            Manager</a>
+        {{ $iflogged := .Logged}}
+        {{if $iflogged}}
+        <a href="/logout" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
+        {{else}}
+        <a href="/login" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-in"></i>Login</a>
+        {{end}}
+    </div>
+
+    <!-- Page Container -->
+    <div class="w3-container w3-content" style="max-width:1400px;margin-left:160px;margin-top:20px">
+        {{template "content" .}}
+
+        <!-- End Page Container -->
+    </div>
+
+    <script>
+        function myAccFunc() {
+            var x = document.getElementById("demoAcc");
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-green";
+            } else {
+                x.className = x.className.replace(" w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-green", "");
+            }
+        }
+
+        function myFunction(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-theme-d1";
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        }
+    </script>
+</body>
+
+</html>
+{{end}}

@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-    <title>
+{{define "content"}}    <title>
         Friend Groups
     </title>
     <meta charset="UTF-8">
@@ -22,7 +20,7 @@
             <th>Owner</th>
             <th>Description</th>
           </tr>
-          {{ range . }}
+          {{ range .UserFriendGroups }}
           <tr>
             <td>{{ .FGName }}</td>
             <td>{{ .OwnerEmail }}</td>
@@ -34,4 +32,4 @@
           <tr><td colspan="5">No Friend Groups Available!<td></tr>
           {{ end }}
     </body>
-</html>
+{{end}}
