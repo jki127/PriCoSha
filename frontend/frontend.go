@@ -24,6 +24,7 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
+	http.HandleFunc("/addtag", addTagHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)
 	http.HandleFunc("/formAddFriend", formAddFriendHandler)

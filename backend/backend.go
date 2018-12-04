@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"time"
 
 	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
@@ -24,7 +25,7 @@ type ContentItem struct {
 	Email    string
 	FilePath string
 	FileName string
-	PostTime string // should use go date format later
+	PostTime time.Time // should use go date format later
 }
 
 var db *sql.DB
@@ -102,6 +103,7 @@ func init() {
 	if err != nil {
 		log.Println("backend: init(): Could not open config file.")
 	}
+	defer configFile.Close()
 	decoder := json.NewDecoder(configFile)
 	err = decoder.Decode(&configData)
 	if err != nil {
@@ -113,7 +115,7 @@ func init() {
 	}
 
 	dSN := configData.User + ":" + configData.Pass + "@(localhost" +
-		configData.Port + ")/" + configData.DBName
+		configData.Port + ")/" + configData.DBName + "?parseTime=true"
 
 	db, err = sql.Open("mysql", dSN)
 	if err != nil {
