@@ -36,6 +36,9 @@ func manageTagHandler(w http.ResponseWriter, r *http.Request) {
 		PendingTagData:  b.GetPendingTags(username),
 		AcceptedTagData: b.GetAcceptedTags(username),
 	}
-	t := template.Must(template.ParseFiles("../web/template/tagmanager.html"))
-	t.Execute(w, CurrentTMD)
+	t, err := template.New("").ParseFiles("../web/template/tagmanager2.html", "../web/template/base.html")
+	if err != nil {
+		log.Println("error")
+	}
+	t.ExecuteTemplate(w, "base", CurrentTMD)
 }
