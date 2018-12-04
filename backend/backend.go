@@ -96,20 +96,6 @@ func ValidateInfo(username string, password string) bool {
 	}
 }
 
-func AddFriend(fname string, lname string) bool {
-	rows, err := db.Query(`SELECT email FROM Person
-				WHERE f_name=? 
-				AND l_name=?`, fname, lname)
-	if err != nil {
-		log.Println(`backend: GetPubContent(): Could not
-		query public content from DB.`)
-	}
-	defer rows.Close()
-
-
-	return true
-}
-
 func init() {
 	var configData Conf
 
