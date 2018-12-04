@@ -69,7 +69,6 @@ func GetPubContent() []*ContentItem {
 	return data
 }
 
-
 /*
 ValidateInfo receives user entered login info and queries the DB on whether
 or not that info is valid

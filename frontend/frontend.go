@@ -23,11 +23,9 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
-	http.HandleFunc("/tag_manager",tagManagerHandler)
-	http.HandleFunc("/decline",declineTagHandler)
-	http.HandleFunc("/accept",acceptTagHandler)
-
-
+	http.HandleFunc("/tag_manager", manageTagHandler)
+	http.HandleFunc("/decline", declineTagHandler)
+	http.HandleFunc("/accept", acceptTagHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
