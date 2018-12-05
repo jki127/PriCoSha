@@ -45,6 +45,11 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	if !b.UserHasAccessToItem(username, itemId) {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
 	pageData := PageData{
 		LoggedIn:    logged,
 		Username:    username,
