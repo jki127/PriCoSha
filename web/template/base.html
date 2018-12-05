@@ -21,12 +21,19 @@
     }
 </style>
 
+<!-- This is code for the Side Bar -->
+
 <body class="w3-theme-l5">
     <div class="w3-sidebar w3-dark-grey w3-card" style="width:160px">
         <a href="/" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-home"></i>Home</a>
 
         {{ $iflogged := .Logged}}
+
+        <!-- buttons that require a user be logged in -->
         {{if $iflogged}}
+        <!-- Format of Button is as follows: w3-bar-item (provides proper positionining, spacing and padding), w3-button 
+            (gives the hover effect of turning grey), w3-left-align (aligns left) -->
+        <!-- <i class="fa fa-fw fa-user"> displays an icon, from font awesome 4.7, in this case it is the user icon -->
         <a href="/profile" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-user"></i>Profile</a>
         <a href="/friendgroups" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-users"></i>Friend
             Groups</a>
@@ -40,12 +47,13 @@
         <!-- <a href="/login" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-in"></i>Login</a> -->
 
         <!-- New Login Button -->
+        <!-- This button is used to display the Modal Login Popup defined later in this file -->
         <a onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-block w3-left-align"><i
                 class="fa fa-fw fa-sign-in"></i>Login</a>
         {{end}}
     </div>
 
-    <!-- Page Container -->
+    <!-- Page Container, This will be the body of the page and allow for content to be templated and added in to the right -->
     <div class="w3-container w3-content w3-padding-large" style="max-width:1400px;margin-left:160px">
 
         <!-- Check if User is logged in, if Logged in Page does not Require loading of Login Module -->
