@@ -36,6 +36,17 @@ type FriendGroup struct {
 	Description string
 }
 
+// Tag holds info of Tag entities in the database data
+type Tag struct {
+	TaggerEmail string
+	TaggedEmail string
+	ItemID      int
+	TagTime     time.Time
+	Status      bool // false = private; true = public
+	FileName    string
+	FilePath    string
+}
+
 var db *sql.DB
 
 // TestDB tries to ping the database and returns the resulting error
