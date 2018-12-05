@@ -24,11 +24,9 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	username = cookie.Value
+
 	// Query database for Friend_Group which user belongs to
 	friendGroupData := b.GetUserFriendGroup(username)
-
-	// t := template.Must(template.ParseFiles("../web/template/upload.html"))
-	// t.Execute(w, FriendGroupData)
 
 	CurrentUPD := UPD{
 		FriendGroupData: friendGroupData,
