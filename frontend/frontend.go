@@ -34,6 +34,8 @@ func main() {
 	http.HandleFunc("/formAddFriend", formAddFriendHandler)
 	http.HandleFunc("/addFriend", addFriendHandler)
 	http.HandleFunc("/deleteFriend", deleteFriendHandler)
+	http.HandleFunc("/formDeleteFriend", formDeleteFriendHandler)
+
 
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)
