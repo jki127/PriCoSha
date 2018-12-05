@@ -28,6 +28,7 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 		Username:         cookie.Value,
 		UserFriendGroups: b.GetFriendGroup(cookie.Value),
 	}
-	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html", "../web/template/base.html"))
+	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html",
+		"../web/template/base.html"))
 	t.ExecuteTemplate(w, "base", CurrentFGD)
 }
