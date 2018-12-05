@@ -24,7 +24,7 @@
       <td>{{ .FGName }}</td>
       <td>{{ .OwnerEmail }}</td>
       <td>{{ .Description }}</td>
-      <td> <button href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}">Add Friend</button> </td>
+      <td> <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a> </td>
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
