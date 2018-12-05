@@ -24,6 +24,10 @@ func main() {
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
+
+	http.HandleFunc("/upload", uploadHandler)
+	http.HandleFunc("/postItem", postItemHandler)
+  
 	http.HandleFunc("/addtag", addTagHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)
@@ -33,8 +37,11 @@ func main() {
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)
 	http.HandleFunc("/accept", acceptTagHandler)
+  
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
+
 	http.HandleFunc("/profile", profileHandler)
+
 
 	// Start server
 	log.Println("Frontend spun up!")

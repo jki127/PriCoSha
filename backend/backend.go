@@ -25,7 +25,7 @@ type ContentItem struct {
 	Email    string
 	FilePath string
 	FileName string
-	PostTime time.Time // should use go date format later
+	PostTime time.Time
 }
 
 var db *sql.DB

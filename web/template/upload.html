@@ -1,0 +1,54 @@
+<!-- This is the upload content item page for the PriCoSha website. -->
+<!DOCTYPE html>
+<html>
+    <title>
+        Post a Content Item
+    </title>
+    <meta charset="UTF-8">
+    <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
+    <body>
+        <form action="/postItem" method="POST" onsubmit="return validateInfo(this)">
+            <label for="title">Item Title:</label>
+            <input type="text" name="itemName" required><br>
+            <label for="filePath">Filepath:</label>
+            <input type="text" name="filePath" required><br>
+            <label for="shareSetting">Sharing Settings:</label>
+            <input type="radio" onclick="closeGroups()" id="public" name="shareSetting" value="public" required>
+            <label for="public">Public</label>
+            <input type="radio" onclick="openGroups()" id="private" name="shareSetting" value="private">
+            <label for="public">Private</label>
+            <div class="friend-group-popup" id="friend-groups" style="display: none">
+                <label for="friendGroups">Select Applicable Friend Groups:</label>
+                {{ range . }}
+                <input type="checkbox" name=friendGroup value={{.FGName}}_{{.OwnerEmail}}>{{.FGName}} owned by {{.OwnerEmail}}
+                {{end}}
+            </div>
+            <br><input type="submit" value="Post Item">
+        </form>
+        <a href="/">Cancel</a>
+        <script>
+            function openGroups() {
+                document.getElementById("friend-groups").style.display = "block";
+            }
+            function closeGroups() {
+                document.getElementById("friend-groups").style.display = "none";
+            }
+            function validateInfo() {
+                var private = document.getElementById("private").checked;
+                if (!private) {
+                    return true
+                }
+                else {
+                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
+                    if (!checkedOne) {
+                        alert ("Please choose at least one Friend Group")
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

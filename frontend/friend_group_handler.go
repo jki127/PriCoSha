@@ -15,6 +15,8 @@ type FGD struct {
 }
 
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
+	clearCookie(&w, r, "addFriendErr")
+
 	cookie, err := r.Cookie("username")
 	if err != nil {
 		// User is not logged on and cannot access friend groups
