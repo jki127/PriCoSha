@@ -30,7 +30,6 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Create new ContentItem with appropriate data
 	NewContentItem := b.ContentItem{
-		ItemID:   b.GetNewItemID(),
 		Email:    username,
 		FilePath: r.FormValue("filePath"),
 		FileName: r.FormValue("itemName"),
@@ -46,7 +45,8 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 		isPub = 0
 	}
 	// Send info to backend to be inserted into database
-	b.ExecInsertContentItem(NewContentItem, isPub)
+	lastID := b.ExecInsertContentItem(NewContentItem, isPub)
+	log.Println("Inserted a Content_Item into the db!")
 
 	// If the content item is private, need to update Share table for each FriendGroup
 	if isPub == 0 {
@@ -54,14 +54,15 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 		// Create a FriendGroup for each chosen group to share item with
 		for group := range sharedGroups {
 			groupInfo := strings.Split(sharedGroups[group], "_")
-			log.Println(groupInfo)
+			// log.Println(groupInfo)
 			SharedGroup := b.FriendGroup{
 				MemberEmail: username,
 				FGName:      groupInfo[0],
 				OwnerEmail:  groupInfo[1],
 			}
 			// Send info to backend to be inserted into database
-			b.ExecInsertSharedContentItemToGroup(SharedGroup.FGName, SharedGroup.OwnerEmail, NewContentItem.ItemID)
+			b.ExecInsertSharedContentItemToGroup(SharedGroup.FGName,
+				SharedGroup.OwnerEmail, lastID)
 		}
 	}
 	http.Redirect(w, r, "/", http.StatusFound)

@@ -1,7 +1,6 @@
 package backend
 
 import (
-	"database/sql"
 	"log"
 )
 
@@ -19,8 +18,8 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 	// Query DB for data
 	rows, err := db.Query(`SELECT * FROM Belong WHERE member_email=?`, username)
 	if err != nil {
-		log.Println(`post_content_item: GetFriendUserGroup(username string): Could not
-		query user's Friend Groups from DB.`)
+		log.Println(`post_content_item: GetFriendUserGroup(): Could not query user's 
+		Friend Groups from DB.`)
 	}
 	defer rows.Close()
 
@@ -31,8 +30,8 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 		err = rows.Scan(&CurrentGroup.MemberEmail, &CurrentGroup.FGName,
 			&CurrentGroup.OwnerEmail)
 		if err != nil {
-			log.Println(`post_content_item: GetFriendUserGroup(username string): Could not scan row data
-			from public content query.`)
+			log.Println(`post_content_item: GetFriendUserGroup(): Could not scan row 
+			data from public content query.`)
 		}
 		data = append(data, &CurrentGroup)
 	}
@@ -40,59 +39,54 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 }
 
 /*
-GetNewItemID queries database for the last itemID and increments to assign to new content item
+ExecInsertContentItem prepares and executes statement to insert new item into
+Content_Item
 */
-func GetNewItemID() int {
-	// Query DB for current max item ID
-	row := db.QueryRow(`SELECT MAX(item_id) FROM Content_Item`)
-
-	var maxItemID int
-	err := row.Scan(&maxItemID)
-
-	switch {
-	case err == sql.ErrNoRows:
-		log.Println("post_content_item: GetNewItemID(): no item IDs found")
-		return -1 // not sure if I should be returning something else
-	case err != nil:
-		log.Println("post_content_item: GetNewItemID(): non nil Scan() error")
-		return -1 // not sure if I should be returning something else
-	default:
-		return maxItemID + 1
-	}
-}
-
-/*
-ExecInsertContentItem prepares and executes statement to insert new item into Content_Item
-*/
-func ExecInsertContentItem(item ContentItem, isPub int) {
-	log.Println("post_content_item: id:", item.ItemID, "privacy setting:", isPub)
-	statement, err := db.Prepare(`INSERT INTO Content_Item VALUES (?, ?, ?, ?, ?, ?)`)
+func ExecInsertContentItem(item ContentItem, isPub int) int64 {
+	statement, err := db.Prepare(`INSERT INTO Content_Item (poster_email, file_path,
+		file_name, post_time, is_pub) VALUES (?, ?, ?, ?, ?)`)
 	if err != nil {
-		log.Println("post_content_item: execInsertContentItem(): Could not prepare content item insertion")
+		log.Println(`post_content_item: execInsertContentItem(): Could not prepare 
+			content item insertion`)
+		log.Println(err)
 	}
 	defer statement.Close()
 
-	_, err = statement.Exec(item.ItemID, item.Email, item.FilePath, item.FileName, item.PostTime, isPub)
+	row, err := statement.Exec(item.Email, item.FilePath, item.FileName,
+		item.PostTime, isPub)
 	if err != nil {
-		log.Println("post_content_item: execInsertContentItem(): Could not execute content item insertion")
+		log.Println(`post_content_item: execInsertContentItem(): Could not execute 
+			content item insertion`)
 		log.Println(err)
 	}
+
+	id, err := row.LastInsertId()
+	if err != nil {
+		log.Println(`post_content_item: execInsertContentItem(): Could not read
+			id of last insert`)
+	}
+
+	return id
 }
 
 /*
-ExecInsertSharedContentItemToGroup prepares and executes statement to insert info about privately shared content items to Share
+ExecInsertSharedContentItemToGroup prepares and executes statement to insert info
+about privately shared content items to Share
 */
-func ExecInsertSharedContentItemToGroup(FGName string, OwnerEmail string, itemID int) {
-	log.Println("post_content_item: id:", itemID, "privately shared with", FGName, "owned by", OwnerEmail)
+func ExecInsertSharedContentItemToGroup(FGName string, OwnerEmail string, itemID int64) {
+	log.Println("post_content_item: id:", itemID, "privately shared with", FGName,
+		"owned by", OwnerEmail)
 	statement, err := db.Prepare(`INSERT INTO Share VALUES (?, ?, ?)`)
 	if err != nil {
-		log.Println("post_content_item: ExecInsertSharedContentItemToGroup(): Could not prepare shared content insertion")
+		log.Println(`post_content_item: ExecInsertSharedContentItemToGroup(): Could '
+			not prepare shared content insertion`)
 	}
 	defer statement.Close()
 
 	_, err = statement.Exec(FGName, OwnerEmail, itemID)
 	if err != nil {
-		log.Println("post_content_item: ExecInsertSharedContentItemToGroup(): Could not execute shared content insertion")
+		log.Println(`post_content_item: ExecInsertSharedContentItemToGroup(): Could 
+			not execute shared content insertion`)
 		log.Println(err)
 	}
 }
