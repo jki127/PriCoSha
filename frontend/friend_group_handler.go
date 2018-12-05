@@ -9,9 +9,10 @@ import (
 
 //FGD holds Data of Friend Group Page session
 type FGD struct {
-	Logged           bool
-	Username         string
-	UserFriendGroups []*b.FriendGroup
+	Logged             bool
+	Username           string
+	OwnFriendGroups    []*b.FriendGroup
+	BelongFriendGroups []*b.FriendGroup
 }
 
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
@@ -25,10 +26,12 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	username := cookie.Value
+
 	CurrentFGD := FGD{
-		Logged:           true,
-		Username:         cookie.Value,
-		UserFriendGroups: b.GetFriendGroup(cookie.Value),
+		Logged:             true,
+		OwnFriendGroups:    b.GetFriendGroup(username),
+		BelongFriendGroups: b.GetBelongFriendGroup(username),
 	}
 	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html",
 		"../web/template/base.html"))
