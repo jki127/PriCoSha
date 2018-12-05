@@ -17,7 +17,7 @@ type FGD struct {
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("username")
 	if err != nil {
-		// User is not logged on and cannot acces friend groups
+		// User is not logged on and cannot access friend groups
 		log.Println("User was not loggin in and cannot access friend groups.")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
@@ -28,16 +28,6 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 		Username:         cookie.Value,
 		UserFriendGroups: b.GetFriendGroup(cookie.Value),
 	}
-	// username := cookie.Value
-
-	// UserFriendGroups := b.GetFriendGroup(username)
-
-	// t := template.Must(template.ParseFiles("../web/template/friend_groups.html"))
-	// t.Execute(w, UserFriendGroups)
-
-	t, err := template.New("").ParseFiles("../web/template/friend_groups.html", "../web/template/base.html")
-	if err != nil {
-		log.Println("error")
-	}
+	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html", "../web/template/base.html"))
 	t.ExecuteTemplate(w, "base", CurrentFGD)
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"html/template"
-	"log"
 	"net/http"
 	b "pricosha/backend"
 )
@@ -43,9 +42,6 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		PubData:  b.GetPubContent(),
 	}
 
-	t, err := template.New("").ParseFiles("../web/template/main.html", "../web/template/base.html")
-	if err != nil {
-		log.Println("error")
-	}
+	t := template.Must(template.New("").ParseFiles("../web/template/main.html", "../web/template/base.html"))
 	t.ExecuteTemplate(w, "base", CurrentMPD)
 }
