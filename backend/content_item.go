@@ -170,3 +170,29 @@ func GetRatingsByItemId(itemId int) []*Rating {
 
 	return ratings
 }
+
+// validUserSession checks to see if the current user, specified by username,
+// is any friend groups that have access the current content item, specified by
+// itemId
+//
+// The variable `accessCount` in this function refers to the number of friend
+// groups that the user is in that has access to the content item
+func UserHasAccessToItem(username string, itemId int) bool {
+	row := db.QueryRow(`
+	-- Get all the friend groups that the content item is shared in
+	SELECT COUNT(fg_name) FROM Share
+	WHERE item_id = ? AND fg_name IN (
+    -- Get all the friend groups that the user belongs to
+    SELECT fg_name FROM Belong
+    WHERE member_email = ?
+	)
+	`, itemId, username)
+
+	var accessCount int
+	err := row.Scan(&accessCount)
+	if err != nil {
+		log.Println("validUserSession() scan error: ", err)
+	}
+
+	return accessCount > 0
+}
