@@ -74,7 +74,7 @@ func GetBelongFriendGroup(userEmail string) []*FriendGroup {
 	// Query DB for data
 	rows, err := db.Query(`SELECT fg_name, owner_email, description 
 		FROM Friend_Group NATURAL JOIN Belong
-		WHERE member_email =?`, userEmail)
+		WHERE member_email =? AND owner_email !=?`, userEmail, userEmail)
 	if err != nil {
 		log.Println(`backend: GetBelongFriendGroup(): Could not
 		query friend groups from DB.`)
