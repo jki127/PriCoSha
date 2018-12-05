@@ -7,7 +7,7 @@ import (
 )
 
 func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
-	memberEmail := r.Form("memberEmail")
+	memberEmail := r.FormValue("memberEmail")
 
 	url := r.URL
 	redirectStr := "/formDeleteFriend?" + url.RawQuery
