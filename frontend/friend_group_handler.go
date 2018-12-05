@@ -30,6 +30,7 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 
 	CurrentFGD := FGD{
 		Logged:             true,
+		Username:           username,
 		OwnFriendGroups:    b.GetFriendGroup(username),
 		BelongFriendGroups: b.GetBelongFriendGroup(username),
 	}
