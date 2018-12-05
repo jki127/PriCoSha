@@ -90,7 +90,8 @@ func init() {
 	}
 
 	dSN := configData.User + ":" + configData.Pass + "@(localhost" +
-		configData.Port + ")/" + configData.DBName + "?parseTime=true"
+		configData.Port + ")/" + configData.DBName + "?parseTime=true" +
+		"&charset=utf8mb4&collation=utf8mb4_unicode_ci"
 
 	db, err = sql.Open("mysql", dSN)
 	if err != nil {
