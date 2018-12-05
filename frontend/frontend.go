@@ -20,7 +20,7 @@ func main() {
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
-  
+
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
@@ -34,7 +34,7 @@ func main() {
 	http.HandleFunc("/decline", declineTagHandler)
 	http.HandleFunc("/accept", acceptTagHandler)
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
-
+	http.HandleFunc("/profile", profileHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
