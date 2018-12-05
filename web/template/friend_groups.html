@@ -1,63 +1,85 @@
 {{define "content"}}
 <!-- the above line must be present so that the template is passed as content to be imported by the base template which has the sidebar -->
 
-<title>
+<h1>
   Friend Groups
-</title>
-<meta charset="UTF-8">
-<link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
+</h1>
+<!-- defined a row, content in this container will occupy the same horizontal space -->
+<div class="w3-row">
+  <div class="w3-padding">
+      <!-- defined a card that will be used to present the table in -->
+      <div class="w3-card w3-white w3-padding-large ">
+        <h2> Owned Friend Groups: </h2>
 
-<body>
-  <h1>
-    Friend Groups
-  </h1>
-  <hr>
-  <h2>
-    Owned Friend Groups:
-  </h2>
-  <table cellspacing="20">
-    <tr>
-      <th>Name</th>
-      <th>Owner</th>
-      <th>Description</th>
-    </tr>
-    {{ range .OwnFriendGroups }}
-    <tr>
-      <td>{{ .FGName }}</td>
-      <td>{{ .OwnerEmail }}</td>
-      <td>{{ .Description }}</td>
-      <td> <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a> </td>
-    </tr>
-    {{ else }}
-    {{/* if the range is empty show this */}}
-    <tr>
-      <td colspan="5">You don't own any friend groups!<td>
-    </tr>
-    {{ end }}
-  </table>
-  <h3>
-    Friend Groups You Belong To:
-  </h3>
-  <table cellspacing="20">
-    <tr>
-      <th>Name</th>
-      <th>Owner</th>
-      <th>Description</th>
-    </tr>
-    {{ range .BelongFriendGroups }}
-    <tr>
-      <td>{{ .FGName }}</td>
-      <td>{{ .OwnerEmail }}</td>
-      <td>{{ .Description }}</td>
-    </tr>
-    {{ else }}
-    {{/* if the range is empty show this */}}
-    <tr>
-      <td colspan="5">You're not a member of any friend groups!<td>
-    </tr>
-    {{ end }}
-  </table>
-</body>
+        <!-- This adds horiztonal Scrolling -->
+        <div class="w3-responsive">
+          <!-- added a table with alternating colors via w3-striped -->
+          <table class="w3-table w3-striped">
+              <thead>
+                  <!-- Set header row background color to grey -->
+                  <tr class="w3-gray">
+                      <th align="center">Action</th>
+                      <th align="left">Name</th>
+                      <th align="left">Owner</th>
+                      <th align="left">Description</th>
+                  </tr>
+              </thead>
+              {{ range .OwnFriendGroups }}
+              <tr>
+                  <td align="center"><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager"><i
+                              class="fa fa-fw fa-check" style="color:green"></i></a><b>/</b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager"><i
+                              class="fa fa-fw fa-times" style="color:red"></i></a></td>
+                  <td align="left">{{ .FGName }}</td>
+                  <td align="left">{{ .OwnerEmail }}</td>
+                  <td align="left">{{ .Description }}</td>
+              </tr>
+              {{ else }}
+              {{/* if the range is empty show this */}}
+              <tr>
+                  <td colspan="5">No Available Owned Friend Groups!<td>
+              </tr>
+              {{ end }}
+          </table>
+      </div>
+  </div>
+</div>
+</div>
 
-<!-- this ends the definition of the content in the template -->
+
+<div class="w3-row">
+<div class="w3-padding">
+  <!-- defined a card that will be used to present the table in -->
+  <div class="w3-card w3-white w3-padding-large">
+      <h2>Friend Groups You Belong To: </h2>
+
+      <!-- This adds horiztonal Scrolling -->
+      <div class="w3-responsive">
+          <!-- added a table with alternating colors via w3-striped -->
+          <table class="w3-table w3-striped">
+              <thead>
+                  <!-- Set header row background color to grey -->
+                  <tr class="w3-grey">
+                      <th>Name</th>
+                      <th>Owner</th>
+                      <th>Description</th>
+                  </tr>
+              </thead>
+              {{ range .BelongFriendGroups }}
+              <tr>
+                  <td>{{ .FGName }}</td>
+                  <td>{{ .OwnerEmail }}</td>
+                  <td>{{ .Description }}</td>
+              </tr>
+              {{ else }}
+              {{/* if the range is empty show this */}}
+              <tr>
+                  <td colspan="5">No Friend Groups That You Belong To <td>
+              </tr>
+              {{ end }}
+          </table>
+      </div>
+  </div>
+</div>
+</div>
+
 {{end}}
