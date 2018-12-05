@@ -4,12 +4,16 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	b "pricosha/backend"
 )
 
 //ProfileData holds info of a Person in the DB i.e. the user
 type ProfileData struct {
-	Logged   bool
-	Username string
+	Logged       bool
+	Username     string
+	Fname        string
+	Lname        string
+	FriendGroups []*b.FriendGroup
 }
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
@@ -24,9 +28,15 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	logged := true
 	username := cookie.Value
 
+	firstName, lastName := b.GetProfileData(username)
+	fgd := b.GetFriendGroup(username)
+
 	CurrentPD := ProfileData{
-		Logged:   logged,
-		Username: username,
+		Logged:       logged,
+		Username:     username,
+		Fname:        firstName,
+		Lname:        lastName,
+		FriendGroups: fgd,
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))
