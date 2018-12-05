@@ -4,13 +4,6 @@ import (
 	"log"
 )
 
-// FriendGroup holds info of Friend_Group entities in the database
-type FriendGroup struct {
-	MemberEmail string
-	FGName      string
-	OwnerEmail  string
-}
-
 /*
 GetUserFriendGroup receives info from database about FriendGroups that user belongs to
 */

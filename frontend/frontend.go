@@ -27,7 +27,7 @@ func main() {
 
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/postItem", postItemHandler)
-  
+
 	http.HandleFunc("/addtag", addTagHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)

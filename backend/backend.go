@@ -28,6 +28,14 @@ type ContentItem struct {
 	PostTime time.Time
 }
 
+// FriendGroup holds info of Friend_Group entities in the database
+type FriendGroup struct {
+	MemberEmail string
+	FGName      string
+	OwnerEmail  string
+	Description string
+}
+
 var db *sql.DB
 
 // TestDB tries to ping the database and returns the resulting error
