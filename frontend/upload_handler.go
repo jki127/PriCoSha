@@ -6,6 +6,12 @@ import (
 	b "pricosha/backend"
 )
 
+type UPD struct {
+	FriendGroupData []*b.FriendGroup
+	Username        string
+	Logged          bool
+}
+
 // Handles requests to upload content item page
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	// Check and make sure user is logged in
@@ -18,7 +24,18 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username = cookie.Value
 	// Query database for Friend_Group which user belongs to
-	FriendGroupData := b.GetUserFriendGroup(username)
-	t := template.Must(template.ParseFiles("../web/template/upload.html"))
-	t.Execute(w, FriendGroupData)
+	friendGroupData := b.GetUserFriendGroup(username)
+
+	// t := template.Must(template.ParseFiles("../web/template/upload.html"))
+	// t.Execute(w, FriendGroupData)
+
+	CurrentUPD := UPD{
+		FriendGroupData: friendGroupData,
+		Username:        username,
+		Logged:          true,
+	}
+
+	t := template.Must(template.New("").ParseFiles("../web/template/upload.html", "../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", CurrentUPD)
+
 }
