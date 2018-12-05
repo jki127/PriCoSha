@@ -8,16 +8,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// Tag holds info of Tag items, taken from database data
-type Tag struct {
-	TaggerEmail string
-	TaggedEmail string
-	ItemID      int
-	TagTime     string
-	FileName    string
-	FilePath    string
-}
-
 //getTagRows Queries the database to find rows in which the user is tagged and the status matches the given parameter
 func getTagRows(status bool, username string) *sql.Rows {
 	rows, err := db.Query(`SELECT tagger_email, tagged_email, item_id, tag_time, file_name, file_path 
