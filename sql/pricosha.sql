@@ -117,13 +117,15 @@ INSERT INTO Content_Item VALUES (3, "BB@nyu.edu", "/Photos/Pets", "Rover", "2017
 INSERT INTO Share VALUES ("family", "BB@nyu.edu", 3);
 INSERT INTO Content_Item VALUES (4, "CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-02 03:12:10", TRUE);
 INSERT INTO Share VALUES ("family", "AA@nyu.edu", 4);
+INSERT INTO Content_Item VALUES (5, "EE@nyu.edu", "no", "no", "2018-12-02 03:12:11", TRUE);
+INSERT INTO Share VALUES ("family", "BB@nyu.edu", 5);
 INSERT INTO Tag VALUES ("AA@nyu.edu", "GG@nyu.edu", 2, TRUE, "2018-11-21 05:10:30");
 INSERT INTO Tag VALUES ("DD@nyu.edu", "CC@nyu.edu", 4, FALSE, "2018-09-18 03:12:30");
 INSERT INTO Tag VALUES ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:30");
 INSERT INTO Rate VALUES ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "0x1f61a");
 INSERT INTO Rate VALUES ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "0x1f61a");
 INSERT INTO Rate VALUES ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "0x1f61a");
-INSERT INTO content_item
+INSERT INTO Content_Item
   (poster_email, file_path, file_name, post_time, is_pub)
 VALUES
   ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),

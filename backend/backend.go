@@ -55,7 +55,6 @@ func GetPubContent() []*ContentItem {
 		isPub int
 		data  []*ContentItem
 	)
-
 	for rows.Next() {
 		var CurrentItem ContentItem
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
@@ -104,6 +103,7 @@ func init() {
 	if err != nil {
 		log.Println("backend: init(): Could not open config file.")
 	}
+	defer configFile.Close()
 	decoder := json.NewDecoder(configFile)
 	err = decoder.Decode(&configData)
 	if err != nil {

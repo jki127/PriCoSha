@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	b "pricosha/backend"
-	"time"
 )
 
 // Handles requests to validate user data and sets cookies accordingly
@@ -31,15 +30,7 @@ func validateLoginHandler(w http.ResponseWriter, r *http.Request) {
 		cookie := http.Cookie{Name: "username", Value: username}
 		http.SetCookie(w, &cookie)
 		// Delete logErr cookie if it exists
-		_, err := r.Cookie("logErr")
-		if err == nil {
-			c := http.Cookie{
-				Name:    "logErr",
-				Value:   "",
-				Expires: time.Unix(0, 0),
-			}
-			http.SetCookie(w, &c)
-		}
+		clearCookie(&w, r, "logErr")
 
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
