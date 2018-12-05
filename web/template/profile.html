@@ -29,19 +29,33 @@
                     </div>
                 </div> -->
 
-        <!-- Friend Groups Card -->
+        <!-- Friend Groups User Owns Card -->
         <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right" style="color:black"></i>My Groups</header>
+            <header class="w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right" style="color:black"></i>My
+                Groups</header>
             {{range .FriendGroups}}
             <div class="w3-row w3-padding-small">
                 <div class="w3-card w3-gray w3-padding">
-                    <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px">
-                    {{.FGName}}
+                    <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
+                        My {{.FGName}}</p>
                 </div>
             </div>
             {{end}}
         </div>
+        <br>
+        <!-- Friend Groups User is In Card -->
+        <div class="w3-card w3-padding-large w3-white">
+            <header class="w3-padding-16"><i class="fa fa-users fa-fw w3-margin-right" style="color:black"></i>Friend
+                Groups I'm In</header>
+            {{range .BelongFriendGroups}}
+            <div class="w3-row w3-padding-small">
+                <div class="w3-card w3-gray w3-padding">
 
+                    <p><i class="fa fa-users fa-3x"></i> {{.OwnerEmail}}'s {{.FGName}}</p>
+                </div>
+            </div>
+            {{end}}
+        </div>
 
         <!-- End Left Column -->
     </div>
