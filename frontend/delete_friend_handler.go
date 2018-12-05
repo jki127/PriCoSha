@@ -7,12 +7,12 @@ import (
 )
 
 func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
-	memEmail := r.Form("email")
+	memberEmail := r.Form("memberEmail")
 
 	url := r.URL
 	redirectStr := "/formDeleteFriend?" + url.RawQuery
 
-	if memEmail == "" {
+	if memberEmail == "" {
 		cookie := http.Cookie{Name: "deleteFriendErr", Value: "empty"}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, redirectStr, http.StatusFound)
@@ -23,9 +23,9 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
 	fgName := queryData["fgn"][0]
 	ownerEmail := queryData["oe"][0]
 
-	if ok := b.ValidateBelongFriendGroup(memEmail, fgName, ownerEmail); !ok { ///checks to see if member belongs in friend group to delete
-		b.DeleteFriend(memEmail, fgName, ownerEmail)
-		log.Println("Deleted Person with email", memEmail)
+	if ok := b.ValidateBelongFriendGroup(memberEmail, fgName, ownerEmail); !ok { ///checks to see if member belongs in friend group to delete
+		b.DeleteFriend(memberEmail, fgName, ownerEmail)
+		log.Println("Deleted Person with email", memberEmail)
 	}else{
 		cookie := http.Cookie{Name: "deleteFriendErr", Value: "nonexistent"}
 		http.SetCookie(w, &cookie)
