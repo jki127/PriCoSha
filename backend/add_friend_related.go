@@ -36,7 +36,9 @@ func GetEmail(fname string, lname string) []*string {
 AddFriend takes info of a friend entity and inserts the data into the Belong table
 */
 func AddFriend(memberEmail string, fgname string, ownerEmail string) {
-	statement, err := db.Prepare(`INSERT INTO Belong VALUES (?,?,?)`)
+	statement, err := db.Prepare(`INSERT INTO Belong 
+		(member_email, fg_name, owner_email)
+		VALUES (?,?,?)`)
 	if err != nil {
 		log.Println(`add_friend_related: AddFriend(): Could not prepare insertion`)
 	}

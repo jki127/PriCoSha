@@ -9,7 +9,10 @@ GetUserFriendGroup receives info from database about FriendGroups that user belo
 */
 func GetUserFriendGroup(username string) []*FriendGroup {
 	// Query DB for data
-	rows, err := db.Query(`SELECT * FROM Belong WHERE member_email=?`, username)
+	rows, err := db.Query(`SELECT member_email, fg_name, owner_email
+		FROM Belong 
+		WHERE member_email=?`,
+		username)
 	if err != nil {
 		log.Println(`post_content_item: GetFriendUserGroup(): Could not query user's 
 		Friend Groups from DB.`)
@@ -36,8 +39,9 @@ ExecInsertContentItem prepares and executes statement to insert new item into
 Content_Item
 */
 func ExecInsertContentItem(item ContentItem, isPub int) int64 {
-	statement, err := db.Prepare(`INSERT INTO Content_Item (poster_email, file_path,
-		file_name, post_time, is_pub) VALUES (?, ?, ?, ?, ?)`)
+	statement, err := db.Prepare(`INSERT INTO Content_Item 
+		(poster_email, file_path, file_name, post_time, is_pub) 
+		VALUES (?, ?, ?, ?, ?)`)
 	if err != nil {
 		log.Println(`post_content_item: execInsertContentItem(): Could not prepare 
 			content item insertion`)
