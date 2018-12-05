@@ -1,0 +1,19 @@
+<!-- This is the DeleteFriend page for the PriCoSha website. -->
+<!DOCTYPE html>
+<html>
+    <title>
+        Delete Friend!
+    </title>
+    <meta charset="UTF-8">
+    <body>
+        {{if .IsErr}}
+            <div style="color: red">{{.ErrMsg}}</div>
+        {{end}}
+        <form action="/deleteFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}" method="POST">
+            <label for="memberEmail">Member Email:</label>
+            <input type="text" name="fname" required><br>
+            <input type="submit" value="Add">
+        </form>
+        <a href="/friendgroups">Cancel</a>
+    </body>
+</html>
