@@ -15,6 +15,7 @@ type ProfileData struct {
 	Lname              string
 	FriendGroups       []*b.FriendGroup
 	BelongFriendGroups []*b.FriendGroup
+	PendingTags        []*b.Tag
 }
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
@@ -32,6 +33,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	firstName, lastName := b.GetProfileData(username)
 	fgd := b.GetFriendGroup(username)
 	bfgd := b.GetBelongFriendGroup(username)
+	pendingTags := b.GetPendingTags(username)
 
 	CurrentPD := ProfileData{
 		Logged:             logged,
@@ -40,6 +42,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		Lname:              lastName,
 		FriendGroups:       fgd,
 		BelongFriendGroups: bfgd,
+		PendingTags:        pendingTags,
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))
