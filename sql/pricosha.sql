@@ -119,11 +119,11 @@ VALUES
 -- Adds Owners to Friend Groups in Belong
 SELECT "Adding Owners to Belong" as "";
 INSERT INTO Belong 
-    (member_email, fg_name, role, owner_email) 
+    (member_email, fg_name, owner_email, role) 
 VALUES 
-    ("AA@nyu.edu", "family", 0, "AA@nyu.edu"),
-    ("BB@nyu.edu", "family", 0, "BB@nyu.edu"),
-    ("AA@nyu.edu", "roommates", 0, "AA@nyu.edu");
+    ("AA@nyu.edu", "family", "AA@nyu.edu", 0),
+    ("BB@nyu.edu", "family", "BB@nyu.edu", 0),
+    ("AA@nyu.edu", "roommates", "AA@nyu.edu", 0);
 
 -- Adds Members to Friend Groups in Belong
 SELECT "Adding Members to Belong" as "";
@@ -137,6 +137,13 @@ VALUES
     ("EE@nyu.edu", "family", "BB@nyu.edu"),
     ("GG@nyu.edu", "roommates", "AA@nyu.edu"),
     ("HH@nyu.edu", "roommates", "AA@nyu.edu");
+
+-- Adds Mods to Friend Groups in Belong
+SELECT "Adding Mods to Belong" as "";
+INSERT INTO Belong
+    (member_email, fg_name, owner_email, role)
+VALUES
+    ("BB@nyu.edu", "family", "AA@nyu.edu", 1);
 
 -- Adds Content_Items (1, 2, 3, 4, 5)
 SELECT "Adding Content_Items" as "";

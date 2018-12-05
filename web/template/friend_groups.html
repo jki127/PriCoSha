@@ -27,6 +27,7 @@
       <td>{{ .OwnerEmail }}</td>
       <td>{{ .Description }}</td>
       <td> <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a> </td>
+      <td> <a href="/managePrivilege?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Manage Privileges</button></a></td>
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
