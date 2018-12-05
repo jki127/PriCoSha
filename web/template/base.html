@@ -24,13 +24,7 @@
 <body class="w3-theme-l5">
     <div class="w3-sidebar w3-dark-grey w3-card" style="width:160px">
         <a href="/" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-home"></i>Home</a>
-        <!-- <button class="w3-button w3-block w3-left-align" onclick="myAccFunc()">
-            <i class="fa fa-fw fa-address-book"></i>Friends <i class="fa fa-caret-down"></i>
-        </button>
-        <div id="demoAcc" class="w3-bar-block w3-hide w3-white w3-card-4">
-            <a href="/addFriend" class="w3-bar-item w3-button">Add Friend</a>
-            <a href="/friendgroups" class="w3-bar-item w3-button">Friend Groups</a>
-        </div> -->
+
         {{ $iflogged := .Logged}}
         {{if $iflogged}}
         <a href="/profile" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-user"></i>Profile</a>
@@ -41,7 +35,11 @@
         <a href="/upload" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-upload"></i>Upload</a>
         <a href="/logout" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
         {{else}}
+
+        <!-- Old Login Button -->
         <!-- <a href="/login" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-sign-in"></i>Login</a> -->
+
+        <!-- New Login Button -->
         <a onclick="document.getElementById('id01').style.display='block'" class="w3-button w3-block w3-left-align"><i
                 class="fa fa-fw fa-sign-in"></i>Login</a>
         {{end}}
@@ -50,11 +48,15 @@
     <!-- Page Container -->
     <div class="w3-container w3-content w3-padding-large" style="max-width:1400px;margin-left:160px">
 
+        <!-- Check if User is logged in, if Logged in Page does not Require loading of Login Module -->
         {{ $iflogged := .Logged}}
         {{if $iflogged}}
         {{else}}
+
         <!-- Pop-up Login -->
+        <!-- Defines a Modal Container, a dialog box/pop window that is displayed on top of the current page -->
         <div id="id01" class="w3-modal">
+            <!-- Defines Modal Content. In this case, a Card with Zoom effect -->
             <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
 
                 <div class="w3-center"><br>
@@ -62,9 +64,10 @@
                         title="Close Modal">×</span>
                     <img src="https://www.w3schools.com/w3images/avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top">
                 </div>
-
+                <!-- creates form inside of the Card which allows for login, took action and method from andrea's code -->
                 <form class="w3-container" action="/validate" method="POST">
                     <div class="w3-section">
+                        <!-- buttons and labels adapted from andrea's login form -->
                         <label for="username"><b>Username</b></label>
                         <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Username"
                             name="username" required>
