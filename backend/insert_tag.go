@@ -8,15 +8,6 @@ import (
 	"time"
 )
 
-// TagItem holds info of Tag entities in the database
-type TagItem struct {
-	TaggerEmail string
-	TaggedEmail string
-	ItemID      int
-	Status      bool // false = private; true = public
-	TagTime     time.Time
-}
-
 // execInsertTag takes the data for a tag entity and inserts in into the table
 func execInsertTag(id int, uTagger string, uTagged string, pubVal bool) {
 	log.Println("backend: id:", id, "uTagger:", uTagger,

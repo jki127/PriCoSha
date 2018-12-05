@@ -20,10 +20,10 @@ func GetProfileData(username string) (fname string, lname string) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err := rows.Scan(fname, lname)
+		err := rows.Scan(&fname, &lname)
 		if err != nil {
 			log.Println(`backend: getProfileData(): Could not scan row data
-			from Person content query.`)
+			from Person content query.`, username)
 		}
 	}
 	return fname, lname
