@@ -38,8 +38,16 @@
             {{range .FriendGroups}}
             <div class="w3-row w3-padding-small">
                 <div class="w3-card w3-gray w3-padding">
-                    <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
-                        My {{.FGName}}</p>
+                    <!-- <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
+                        My {{.FGName}}</p> -->
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-cell-middle">
+                            <i class="fa fa-users fa-3x"></i>
+                        </div>
+                        <div class="w3-cell w3-cell-middle w3-padding-small">
+                            <p>My {{.FGName}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             {{end}}
@@ -52,8 +60,14 @@
             {{range .BelongFriendGroups}}
             <div class="w3-row w3-padding-small">
                 <div class="w3-card w3-gray w3-padding">
-
-                    <p><i class="fa fa-users fa-3x"></i> {{.OwnerEmail}}'s {{.FGName}}</p>
+                    <div class="w3-cell-row">
+                        <div class="w3-cell w3-cell-middle">
+                            <i class="fa fa-users fa-3x"></i>
+                        </div>
+                        <div class="w3-cell w3-cell-middle w3-padding-small">
+                            <p>{{.OwnerEmail}}'s {{.FGName}}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
             {{end}}
