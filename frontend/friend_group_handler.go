@@ -7,9 +7,11 @@ import (
 	b "pricosha/backend"
 )
 
-type FGD struct { //friend group data including list of friend groups own, and friend group belongs
-	OwnFriendGroups []*b.FriendGroup
-	BelongFriendGroups []*b.FriendGroup
+//FGD holds Data of Friend Group Page session
+type FGD struct {
+	Logged           bool
+	Username         string
+	UserFriendGroups []*b.FriendGroup
 }
 
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
@@ -17,18 +19,18 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("username")
 	if err != nil {
-		// User is not logged on and cannot acces friend groups
+		// User is not logged on and cannot access friend groups
 		log.Println("User was not loggin in and cannot access friend groups.")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	username := cookie.Value
 	CurrentFGD := FGD{
-		OwnFriendGroups:		b.GetFriendGroup(username),
-		BelongFriendGroups:	b.GetBelongFriendGroup(username),
+		Logged:           true,
+		Username:         cookie.Value,
+		UserFriendGroups: b.GetFriendGroup(cookie.Value),
 	}
-	
-	t := template.Must(template.ParseFiles("../web/template/friend_groups.html"))
-	t.Execute(w, CurrentFGD)
+	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html",
+		"../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", CurrentFGD)
 }

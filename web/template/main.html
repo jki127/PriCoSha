@@ -1,100 +1,69 @@
-{{/* This is the landing page for the PriCoSha website. */}}
-<!DOCTYPE html>
-<html>
-
-	<title>
-		PriCoSha
-	</title>
-	<meta charset="UTF-8">
-	<link rel="stylesheet" type="text/css" href="/css/stylesheet.css" title="Default Styles" media="screen">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <div class="sidebar">
-    <a class="active" href="/"><i class="fa fa-fw fa-home"></i>Home</a>
-    <a href=""><i class="fa fa-fw fa-user"></i>Profile</a>
-    <a href="/tag_manager"><i class="fa fa-fw fa-tags"></i>Tag Manager</a>
-    {{ $iflogged := .Logged}}
-    {{if $iflogged}}
-    <a href="/logout"><i class="fa fa-fw fa-sign-out"></i>Logout</a>
-    {{else}}
-    <a href="/login"><i class="fa fa-fw fa-sign-in"></i>Login</a>
-    {{end}}
-  </div>
-
-  <div class="content">
-	  <body>
-		  <h1>
-			  PriCoSha
-        <!-- <meta charset="UTF-8"> 
+{{define "content"}}
+<!-- This is the landing page for the PriCoSha website. -->
+<div class="content">
+	<body>
+		<h1>
+			PriCoSha
+			<!-- <meta charset="UTF-8"> 
         <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" /> -->
-        {{$iflogged := .Logged}}
-        {{if $iflogged}}
-          <a href="/upload">Upload</a>
-        {{end}}
-			  <div style="float:right">
-				  {{if $iflogged}}
-				  Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
-				  {{else}}
-				  <a href="/login">Login!</a>
-				  {{end}}
-  			</div>
-	  	</h1>
-		  <hr>
-      <h2>
-        {{if .Logged}}
-          <a href="/friendgroups">Friend Group</a>
-        {{end}}
-      </h2>
-		  <h3>
-			  Public Content:
-		  </h3>
-		  <table cellspacing="20">
-			  <tr>
-				  <th>Item ID</th>
-				  <th>Item Name</th>
-				  <th>File Path</th>
-				  <th>Author</th>
-				  <th>Time Posted</th>
-			  </tr>
-			  {{ range .PubData }}
-			  <tr>
-				  <td>{{ .ItemID }}</td>
-				  <td>{{ .FileName }}</td>
-				  <td>{{ .FilePath }}</td>
-				  <td>{{ .Email }}</td>
-			    <td>{{ .PostTime }}</td>
-		    </tr>
-			  {{if $iflogged}}
-			  <tr>
-				  <td colspan="5">
-					  <button onclick="openForm({{.ItemID}})" id="tag-button-{{.ItemID}}">Tag someone</button>
-					  <div class="tag-form-popup" id="tag-form-{{.ItemID}}" style="display: none">
-						  <form action="/addtag?id={{.ItemID}}" method="POST">
-							  <label for="username">Username:</label>
-							  <input type="text" name="username" required>
-							  <input type="submit" value="Tag!">
-							  <input type="button" onclick="closeForm({{.ItemID}})" value="Close">
-						  </form>
-					  </div>
-				  </td>
-			  </tr>
-			  {{end}}
-		  {{ else }}
-		  {{/* if the range is empty show this */}}
-		  <tr>
-        <td colspan="5">No Items Available!<td>
-      </tr>
-		  {{ end }}
-      <script>
-			  function openForm(ID) {
-			    document.getElementById("tag-form-"+ID).style.display = "block";
-			    document.getElementById("tag-button-"+ID).style.display = "none";
-			  }
-			  function closeForm(ID) {
-				  document.getElementById("tag-form-"+ID).style.display = "none";
-			    document.getElementById("tag-button-"+ID).style.display = "block";
-		    }
-	    </script>
-    </body>
-  </div>
-</html>
+			<div style="float:right">
+				{{ $iflogged := .Logged}}
+				{{if $iflogged}}
+				Logged in as: <b>{{.Username}}</b>
+				{{end}}
+			</div>
+		</h1>
+
+		<h3>
+			Public Content:
+		</h3>
+		<table cellspacing="20">
+			<tr>
+				<th>Item ID</th>
+				<th>Item Name</th>
+				<th>File Path</th>
+				<th>Author</th>
+				<th>Time Posted</th>
+			</tr>
+			{{ range .PubData }}
+			<tr>
+				<td>{{ .ItemID }}</td>
+				<td>{{ .FileName }}</td>
+				<td>{{ .FilePath }}</td>
+				<td>{{ .Email }}</td>
+				<td>{{ .PostTime }}</td>
+			</tr>
+			{{if $iflogged}}
+			<tr>
+				<td colspan="5">
+					<button onclick="openForm({{.ItemID}})" id="tag-button-{{.ItemID}}">Tag someone</button>
+					<div class="tag-form-popup" id="tag-form-{{.ItemID}}" style="display: none">
+						<form action="/addtag?id={{.ItemID}}" method="POST">
+							<label for="username">Username:</label>
+							<input type="text" name="username" required>
+							<input type="submit" value="Tag!">
+							<input type="button" onclick="closeForm({{.ItemID}})" value="Close">
+						</form>
+					</div>
+				</td>
+			</tr>
+			{{end}}
+			{{ else }}
+			{{/* if the range is empty show this */}}
+			<tr>
+				<td colspan="5">No Items Available!<td>
+			</tr>
+			{{ end }}
+			<script>
+				function openForm(ID) {
+					document.getElementById("tag-form-" + ID).style.display = "block";
+					document.getElementById("tag-button-" + ID).style.display = "none";
+				}
+				function closeForm(ID) {
+					document.getElementById("tag-form-" + ID).style.display = "none";
+					document.getElementById("tag-button-" + ID).style.display = "block";
+				}
+			</script>
+	</body>
+</div>
+{{end}}

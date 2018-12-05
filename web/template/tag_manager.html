@@ -1,0 +1,74 @@
+{{define "content"}}
+<!-- This is the tag management page for the PriCoSha website. -->
+<h1>
+    Tag Manager
+    <div style="float:right">
+        {{if .Logged}}
+        Logged in as: <b>{{.Username}}</b>
+        {{else}}
+        <a href="/login">Login!</a>
+        {{end}}
+    </div>
+</h1>
+<div class="w3-padding">
+    <div class="w3-card w3-white w3-padding-large">
+        <h2>Pending Tags</h2>
+        <table class="w3-table w3-striped">
+            <tr class="w3-grey">
+                <th align="center">Action</th>
+                <th align="left">Name</th>
+                <th align="left">Tagger</th>
+                <th align="left">Tagged On</th>
+                <th align="left">File Path</th>
+            </tr>
+            {{ range .PendingTagData }}
+            <tr>
+                <td align="center"><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i class="fa fa-fw fa-check"
+                            style="color:green"></i></a><b>/</b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i
+                            class="fa fa-fw fa-times" style="color:red"></i></a></td>
+                <td align="left">{{ .FileName }}</td>
+                <td align="left">{{ .TaggerEmail }}</td>
+                <td align="left">{{ .TagTime }}</td>
+                <td align="left">{{ .FilePath }}</td>
+            </tr>
+            {{ else }}
+            {{/* if the range is empty show this */}}
+            <tr>
+                <td colspan="5">No Pending Items!<td>
+            </tr>
+            {{ end }}
+        </table>
+    </div>
+</div>
+
+<div class="w3-padding">
+<div class="w3-card w3-white w3-padding-large">
+    <h2>Accepted Tags</h2>
+    <table class="w3-table w3-striped">
+        <tr class="w3-grey">
+            <th>Name</th>
+            <th>Tagger</th>
+            <th>Tagged On</th>
+            <th>File Path</th>
+            <th>Action</th>
+        </tr>
+        {{ range .AcceptedTagData }}
+        <tr>
+            <td>{{ .FileName }}</td>
+            <td>{{ .TaggerEmail }}</td>
+            <td>{{ .TagTime }}</td>
+            <td>{{ .FilePath }}</td>
+            <td align="center"><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i class="fa fa-fw fa-trash"
+                        style="color:red"></i></a></td>
+        </tr>
+        {{ else }}
+        {{/* if the range is empty show this */}}
+        <tr>
+            <td colspan="5">No Accepted Items!<td>
+        </tr>
+        {{ end }}
+    </table>
+</div>
+</div>
+
+{{end}}

@@ -42,6 +42,6 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 		PubData:  b.GetPubContent(),
 	}
 
-	t := template.Must(template.ParseFiles("../web/template/main.html"))
-	t.Execute(w, CurrentMPD)
+	t := template.Must(template.New("").ParseFiles("../web/template/main.html", "../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", CurrentMPD)
 }

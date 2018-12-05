@@ -37,7 +37,11 @@ func main() {
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)
 	http.HandleFunc("/accept", acceptTagHandler)
+  
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
+
+	http.HandleFunc("/profile", profileHandler)
+
 
 	// Start server
 	log.Println("Frontend spun up!")
