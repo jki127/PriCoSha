@@ -1,6 +1,7 @@
 {{/* This is the landing page for the PriCoSha website. */}}
 <!DOCTYPE html>
 <html>
+
 	<title>
 		PriCoSha
 	</title>
@@ -26,8 +27,11 @@
 			  PriCoSha
         <!-- <meta charset="UTF-8"> 
         <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" /> -->
+        {{$iflogged := .Logged}}
+        {{if $iflogged}}
+          <a href="/upload">Upload</a>
+        {{end}}
 			  <div style="float:right">
-				  {{ $iflogged := .Logged}}
 				  {{if $iflogged}}
 				  Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
 				  {{else}}
