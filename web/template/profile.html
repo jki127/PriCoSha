@@ -45,7 +45,7 @@
                             <i class="fa fa-users fa-3x"></i>
                         </div>
                         <div class="w3-cell w3-cell-middle w3-padding-small">
-                            <p>My {{.FGName}}</p>
+                            <p>{{.FGName}}</p>
                         </div>
                     </div>
                 </div>
@@ -90,8 +90,31 @@
             </div>
         </div> -->
 
-        <!-- This will Show Posts From Groups the User is a Part Of -->
 
+        <!-- prototype show public content, for reuse in showing group items -->
+        {{range .PublicItems}}
+        <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
+                style="width:60px">
+            <span class="w3-right w3-opacity">{{.PostTime}}</span>
+            <h4>{{.Email}}</h4><br>
+            <hr class="w3-clear">
+            <p>{{.FileName}}</p>
+            <div class="w3-row-padding" style="margin:0 -16px">
+                <div class="w3-content" style="max-width:600px">
+                        <img src="https://www.w3schools.com/w3images/lights.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
+                </div>
+            </div>
+            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-star"></i>
+                Rate</button>
+            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
+                Comment</button>
+        </div>
+        <br>
+        {{end}}
+
+
+        <!-- This will Show Posts From Groups the User is a Part Of -->
         <!-- range .BelongGroups -->
         <!-- range .GroupPosts -->
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
