@@ -1,30 +1,6 @@
 <!-- This is the upload content item page for the PriCoSha website. -->
 <!DOCTYPE html>
 <html>
-    <script>
-        function openGroups() {
-            document.getElementById("friend-groups").style.display = "block";
-        }
-        function closeGroups() {
-            document.getElementById("friend-groups").style.display = "none";
-        }
-        function validateInfo() {
-            var private = document.getElementById("private").checked;
-            if (!private) {
-                return true
-            }
-            else {
-                var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-                var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
-                if (!checkedOne) {
-                    alert ("Please choose at least one Friend Group")
-                    return false
-                } else {
-                    return true
-                }
-            }
-        }
-    </script>
     <title>
         Post a Content Item
     </title>
@@ -50,5 +26,29 @@
             <br><input type="submit" value="Post Item">
         </form>
         <a href="/">Cancel</a>
+        <script>
+            function openGroups() {
+                document.getElementById("friend-groups").style.display = "block";
+            }
+            function closeGroups() {
+                document.getElementById("friend-groups").style.display = "none";
+            }
+            function validateInfo() {
+                var private = document.getElementById("private").checked;
+                if (!private) {
+                    return true
+                }
+                else {
+                    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+                    var checkedOne = Array.prototype.slice.call(checkboxes).some(x => x.checked);
+                    if (!checkedOne) {
+                        alert ("Please choose at least one Friend Group")
+                        return false
+                    } else {
+                        return true
+                    }
+                }
+            }
+        </script>
     </body>
 </html>
