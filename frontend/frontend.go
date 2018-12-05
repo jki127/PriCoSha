@@ -20,14 +20,14 @@ func main() {
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
-  
+
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/postItem", postItemHandler)
-  
+
 	http.HandleFunc("/addtag", addTagHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)

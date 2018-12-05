@@ -5,13 +5,6 @@ import (
 	"log"
 )
 
-// FriendGroup holds info of FriendGroup entities
-type FriendGroup struct {
-	FGName      string
-	OwnerEmail  string
-	Description string
-}
-
 /*
 ValidateBelongFriendGroup takes an user's email and a FriendGroup primary key and
 returns whether or not that email is found in the set of members of the FriendGroup
@@ -69,7 +62,10 @@ func GetFriendGroup(userEmail string) []*FriendGroup {
 	return FGData
 }
 
-//GetBelongFriendGroups takess the user's email and returns a list of Friend Groups that the user belongs to (including own)
+/*
+GetBelongFriendGroup takess the user's email and returns a list of Friend Groups
+that the user belongs to (including own)
+*/
 func GetBelongFriendGroup(userEmail string) []*FriendGroup {
 	// Query DB for data
 	rows, err := db.Query(`SELECT fg_name, owner_email, description 
@@ -96,4 +92,3 @@ func GetBelongFriendGroup(userEmail string) []*FriendGroup {
 	}
 	return BFGData
 }
-

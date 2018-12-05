@@ -8,7 +8,6 @@ import (
 
 // Handles requests to upload content item page
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
-
 	// Check and make sure user is logged in
 	cookie, err := r.Cookie("username")
 	var username string
