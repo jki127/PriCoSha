@@ -24,7 +24,7 @@ func manageTagHandler(w http.ResponseWriter, r *http.Request) {
 	var username string
 	if err != nil {
 		log.Println("User was not logged in and cannot manage tags.")
-		http.Redirect(w, r, "/login", http.StatusFound)
+		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 	logged = true
