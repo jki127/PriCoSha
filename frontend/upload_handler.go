@@ -6,6 +6,7 @@ import (
 	b "pricosha/backend"
 )
 
+//UPD holds the necessary data for use in the html handlers
 type UPD struct {
 	FriendGroupData []*b.FriendGroup
 	Username        string
