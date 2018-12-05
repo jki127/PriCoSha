@@ -19,15 +19,6 @@ type Conf struct {
 	Port   string
 }
 
-// ContentItem holds info of Content_Item entities in the database
-type ContentItem struct {
-	ItemID   int
-	Email    string
-	FilePath string
-	FileName string
-	PostTime time.Time
-}
-
 // FriendGroup holds info of Friend_Group entities in the database
 type FriendGroup struct {
 	MemberEmail string
@@ -52,41 +43,6 @@ var db *sql.DB
 // TestDB tries to ping the database and returns the resulting error
 func TestDB() error {
 	return db.Ping()
-}
-
-/*
-GetPubContent queries DB for all Content_Item entities with a public
-status and returns them as an array of ContentItem pointers.
-*/
-func GetPubContent() []*ContentItem {
-	// Query DB for data
-	rows, err := db.Query(`SELECT * FROM Content_Item
-		WHERE is_pub = true
-		AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)`)
-	if err != nil {
-		log.Println(`backend: GetPubContent(): Could not
-		query public content from DB.`)
-	}
-	defer rows.Close()
-
-	// Declare variables for processing data
-	var (
-		isPub int
-		data  []*ContentItem
-	)
-	for rows.Next() {
-		var CurrentItem ContentItem
-		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
-			&CurrentItem.FilePath, &CurrentItem.FileName,
-			&CurrentItem.PostTime, &isPub)
-		if err != nil {
-			log.Println(`backend: GetPubContent(): Could not scan row data
-			from public content query.`)
-		}
-		data = append(data, &CurrentItem)
-	}
-
-	return data
 }
 
 /*
