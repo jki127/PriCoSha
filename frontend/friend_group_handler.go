@@ -7,6 +7,11 @@ import (
 	b "pricosha/backend"
 )
 
+type FGD struct { //friend group data including list of friend groups own, and friend group belongs
+	OwnFriendGroups []*b.FriendGroup
+	BelongFriendGroups []*b.FriendGroup
+}
+
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "addFriendErr")
 
@@ -19,8 +24,11 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	username := cookie.Value
-	UserFriendGroups := b.GetFriendGroup(username)
-
+	CurrentFGD := FGD{
+		OwnFriendGroups:		b.GetFriendGroup(username),
+		BelongFriendGroups:	b.GetBelongFriendGroup(username),
+	}
+	
 	t := template.Must(template.ParseFiles("../web/template/friend_groups.html"))
-	t.Execute(w, UserFriendGroups)
+	t.Execute(w, CurrentFGD)
 }
