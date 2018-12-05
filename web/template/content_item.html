@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Content Info</h2>
+    <table cellspacing="20">
+      <tr>
+        <th>Item ID</th>
+        <th>Item Name</th>
+        <th>File Path</th>
+        <th>Time Posted</th>
+        <th>Author</th>
+        <th>Email</th>
+      </tr>
+      <tr>
+        <td>{{ .Item.ItemID }}</td>
+        <td>{{ .Item.FileName }}</a></td>
+        <td>{{ .Item.FilePath }}</td>
+        <td>{{ .Item.PostTime }}</td>
+        <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
+        <td>{{ .Item.Email }}</td>
+      </tr>
+      {{if .LoggedIn}}
+      <tr>
+        <td colspan="5">
+          <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
+          <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
+            <form action="/addtag?id={{.Item.ItemID}}" method="POST">
+              <label for="username">Username:</label>
+              <input type="text" name="username" required>
+              <input type="submit" value="Tag!">
+              <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
+            </form>
+          </div>
+        </td>
+      </tr>
+      {{end}}
+    </table>
+
+    <h2>Tagged</h2>
+    <ul>
+      {{ range .TaggedNames }}
+      <li>{{ . }}</li>
+      {{ end }}
+    </ul>
+
+    <h2>Ratings</h2>
+    <table cellspacing="20">
+    <thead>
+      <th>Rating</th>
+      <th>Email</th>
+      <th>Rate Time</th>
+    <thead>
+    <tr>
+      {{ range .Ratings }}
+      <td>{{ .Emoji }}</td>
+      <td>{{ .Email }}</td>
+      <td>{{ .Rate_time }}</td>
+      {{ end }}
+    </tr>
+    </table>
+
+
+    <script type="text/javascript">
+      function openForm(ID) {
+        document.getElementById("tag-form-"+ID).style.display = "block";
+        document.getElementById("tag-button-"+ID).style.display = "none";
+      }
+      function closeForm(ID) {
+        document.getElementById("tag-form-"+ID).style.display = "none";
+        document.getElementById("tag-button-"+ID).style.display = "block";
+      }
+    </script>
+  </body>
+</html>
