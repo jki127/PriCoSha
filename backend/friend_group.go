@@ -68,3 +68,32 @@ func GetFriendGroup(userEmail string) []*FriendGroup {
 	}
 	return FGData
 }
+
+//GetBelongFriendGroups takess the user's email and returns a list of Friend Groups that the user belongs to (including own)
+func GetBelongFriendGroup(userEmail string) []*FriendGroup {
+	// Query DB for data
+	rows, err := db.Query(`SELECT fg_name, owner_email, description 
+		FROM Friend_Group NATURAL JOIN Belong
+		WHERE member_email =?`, userEmail)
+	if err != nil {
+		log.Println(`backend: GetBelongFriendGroup(): Could not
+		query friend groups from DB.`)
+	}
+	defer rows.Close()
+
+	// Declare variables for processing data
+	var BFGData []*FriendGroup
+
+	for rows.Next() {
+		var CurrItem FriendGroup
+		err = rows.Scan(&CurrItem.FGName, &CurrItem.OwnerEmail,
+			&CurrItem.Description)
+		if err != nil {
+			log.Println(`backend: GetBelongFriendGroup(): Could not scan row data
+			from friend group query.`)
+		}
+		BFGData = append(BFGData, &CurrItem)
+	}
+	return BFGData
+}
+
