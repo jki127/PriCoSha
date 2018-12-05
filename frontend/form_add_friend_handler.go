@@ -20,6 +20,8 @@ func formAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 			errMsg = "Multiple people have the same name. Please specify."
 		} else if cookie.Value == "nonexistent" {
 			errMsg = "Person you are trying to add does not exist. Please retry."
+		} else if cookie.Value == "alreadyBelongs" {
+			errMsg = "Person you are trying to add already belongs to Friend Group. Please retry."
 		}
 	} else {
 		isErr = false
