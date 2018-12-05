@@ -27,12 +27,12 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
 		b.DeleteFriend(memEmail, fgName, ownerEmail)
 		log.Println("Deleted Person with email", memEmail)
 	}else{
-		cookie := http.Cookie{Name: "addFriendErr", Value: "nonexistent"}
+		cookie := http.Cookie{Name: "deleteFriendErr", Value: "nonexistent"}
 		http.SetCookie(w, &cookie)
 		http.Redirect(w, r, redirectStr, http.StatusFound)
 		return
 	}
-	clearCookie(&w, r, "addFriendErr")
+	clearCookie(&w, r, "deleteFriendErr")
 	http.Redirect(w, r, "/friendgroups", http.StatusFound)
 	return
 
