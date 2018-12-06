@@ -21,13 +21,15 @@ func ValidateBelongFriendGroup(memberEmail string, fgName string,
 
 	switch {
 	case err == sql.ErrNoRows:
-		log.Println("User does not already exist in Friend Group.")
+		log.Println(`friend_group: ValidateBelongFriendGroup(): User does not already 
+			exist in Friend Group.`)
 		return true
 	case err != nil:
-		log.Println("backend: ValidateInfo(): non nil Scan() error")
+		log.Println("friend_group: ValidateBelongFriendGroup(): non nil Scan() error")
 		return false
 	default:
-		log.Println("User exists in friend group.")
+		log.Println(`friend_group: ValidateBelongFriendGroup(): User exists in 
+			friend group.`)
 		return false
 	}
 }
