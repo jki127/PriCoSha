@@ -5,8 +5,6 @@
     <div style="float:right">
         {{if .Logged}}
         Logged in as: <b>{{.Username}}</b>
-        {{else}}
-        <a href="/login">Login!</a>
         {{end}}
     </div>
 </h1>
@@ -34,15 +32,29 @@
                     </thead>
                     {{ range .PendingTagData }}
                     <tr>
-                            <td align="center">
-                                    <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">
-                                        <i class="fa fa-fw fa-check" style="color:green"></i>
-                                    </a>
-                                    <b>/</b>
-                                    <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">
-                                        <i class="fa fa-fw fa-times" style="color:red"></i>
-                                    </a>
-                                </td>
+                        <td align="center">
+                          <!-- HTML left for reference -->
+                          <!-- <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">
+                              <i class="fa fa-fw fa-check" onclick="" style="color:green"></i>
+                          </a> -->
+                          <form action="/accept" method="POST">
+                            <input type="hidden" name="taggerEmail" value="{{.TaggerEmail}}">
+                            <input type="hidden" name="taggedEmail" value="{{.TaggedEmail}}">
+                            <input type="hidden" name="itemID" value="{{.ItemID}}">
+                            <input type="submit" value="Accept">
+                          </form>
+                          <b>/</b>
+                          <!-- HTML left for reference -->
+                          <!-- <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}">
+                              <i class="fa fa-fw fa-times" style="color:red"></i>
+                          </a> -->
+                          <form action="/decline" method="POST">
+                            <input type="hidden" name="taggerEmail" value="{{.TaggerEmail}}">
+                            <input type="hidden" name="taggedEmail" value="{{.TaggedEmail}}">
+                            <input type="hidden" name="itemID" value="{{.ItemID}}">
+                            <input type="submit" value="Decline">
+                          </form>
+                        </td>
                         <td align="left">{{ .FileName }}</td>
                         <td align="left">{{ .TaggerEmail }}</td>
                         <td align="left">{{ .TagTime }}</td>
@@ -83,12 +95,22 @@
                     </thead>
                     {{ range .AcceptedTagData }}
                     <tr>
-                        <td>{{ .FileName }}</td>
-                        <td>{{ .TaggerEmail }}</td>
-                        <td>{{ .TagTime }}</td>
-                        <td>{{ .FilePath }}</td>
-                        <td align="center"><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager"><i
-                                    class="fa fa-fw fa-trash" style="color:red"></i></a></td>
+                      <td>{{ .FileName }}</td>
+                      <td>{{ .TaggerEmail }}</td>
+                      <td>{{ .TagTime }}</td>
+                      <td>{{ .FilePath }}</td>
+                      <td align="center">
+                        <!-- HTML left for reference -->
+                        <!-- <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager">
+                          <i class="fa fa-fw fa-trash" style="color:red"></i>
+                        </a> -->
+                        <form action="/decline" method="POST">
+                          <input type="hidden" name="taggerEmail" value="{{.TaggerEmail}}">
+                          <input type="hidden" name="taggedEmail" value="{{.TaggedEmail}}">
+                          <input type="hidden" name="itemID" value="{{.ItemID}}">
+                          <input type="submit" value="Delete">
+                        </form>
+                      </td>
                     </tr>
                     {{ else }}
                     {{/* if the range is empty show this */}}

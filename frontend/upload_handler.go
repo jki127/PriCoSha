@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 	b "pricosha/backend"
 )
@@ -25,8 +26,10 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	username = cookie.Value
 
+	log.Println("About to call GetUserFriendGroup with:", username)
 	// Query database for Friend_Group which user belongs to
 	friendGroupData := b.GetUserFriendGroup(username)
+	log.Println("Finished calling.")
 
 	CurrentUPD := UPD{
 		FriendGroupData: friendGroupData,

@@ -39,13 +39,13 @@ func getUserSessionInfo(r *http.Request) (bool, string) {
 
 func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 	logged, username := getUserSessionInfo(r)
-	urlParams := r.URL.Query()
-	itemId, err := strconv.Atoi(urlParams["iid"][0])
+	itemID, err := strconv.Atoi(r.PostFormValue("itemID"))
+
 	if err != nil {
 		log.Println(err)
 	}
 
-	if !b.UserHasAccessToItem(username, itemId) {
+	if !b.UserHasAccessToItem(username, itemID) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -53,9 +53,9 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 	pageData := PageData{
 		LoggedIn:    logged,
 		Username:    username,
-		Item:        b.GetContentItemById(itemId),
-		TaggedNames: b.GetTaggedByItemId(itemId),
-		Ratings:     b.GetRatingsByItemId(itemId),
+		Item:        b.GetContentItemById(itemID),
+		TaggedNames: b.GetTaggedByItemId(itemID),
+		Ratings:     b.GetRatingsByItemId(itemID),
 	}
 
 	t := template.Must(template.ParseFiles("../web/template/content_item.html"))

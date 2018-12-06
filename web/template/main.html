@@ -3,23 +3,14 @@
 <div class="content">
   <h1>
     PriCoSha
-    <!-- <meta charset="UTF-8">
-      <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" /> -->
-      <div style="float:right">
-        {{ $iflogged := .Logged}}
-        {{if $iflogged}}
-        Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
-        {{else}}
-        <a href="/login">Login!</a>
-        {{end}}
-      </div>
+    <div style="float:right">
+      {{ $iflogged := .Logged}}
+      {{if $iflogged}}
+      Logged in as: <b>{{.Username}}</b> 
+      {{end}}
+    </div>
   </h1>
   <hr>
-  <h2>
-    {{if .Logged}}
-    <a href="/friendgroups">Friend Group</a>
-    {{end}}
-  </h2>
   <!-- Changed class of table to w3-table to allow easier customization and viewability -->
   <table class="w3-table" cellspacing="20">
     <tr>
@@ -32,7 +23,13 @@
     {{ range .ContentItems }}
     <tr>
       <td>{{ .ItemID }}</td>
-      <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
+      <td>
+        <!-- <a href="/item?iid={{.ItemID}}">{{ .FileName }}</a> -->
+        <form action="/item" method="POST">
+          <input type="hidden" name="itemID" value="{{.ItemID}}">
+          <input type="submit" value="{{.FileName}}">
+        </form>
+      </td>
       <td>{{ .FilePath }}</td>
       <td>{{ .Email }}</td>
       <td>{{ .PostTime }}</td>

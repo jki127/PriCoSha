@@ -9,9 +9,12 @@ GetUserFriendGroup receives info from database about FriendGroups that user belo
 */
 func GetUserFriendGroup(username string) []*FriendGroup {
 	// Query DB for data
-	rows, err := db.Query(`SELECT * FROM Belong WHERE member_email=?`, username)
+	rows, err := db.Query(`SELECT member_email, fg_name, owner_email 
+		FROM Belong 
+		WHERE member_email=?`,
+		username)
 	if err != nil {
-		log.Println(`post_content_item: GetFriendUserGroup(): Could not query user's 
+		log.Println(`post_content_item: GetUserFriendGroup(): Could not query user's 
 		Friend Groups from DB.`)
 	}
 	defer rows.Close()
@@ -23,7 +26,7 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 		err = rows.Scan(&CurrentGroup.MemberEmail, &CurrentGroup.FGName,
 			&CurrentGroup.OwnerEmail)
 		if err != nil {
-			log.Println(`post_content_item: GetFriendUserGroup(): Could not scan row 
+			log.Println(`post_content_item: GetUserFriendGroup(): Could not scan row 
 			data from public content query.`)
 		}
 		data = append(data, &CurrentGroup)
