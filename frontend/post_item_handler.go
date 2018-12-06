@@ -11,7 +11,6 @@ import (
 
 // Handles requests to post content item data
 func postItemHandler(w http.ResponseWriter, r *http.Request) {
-
 	cookie, err := r.Cookie("username")
 	var username string
 	if err != nil {
@@ -54,7 +53,6 @@ func postItemHandler(w http.ResponseWriter, r *http.Request) {
 		// Create a FriendGroup for each chosen group to share item with
 		for group := range sharedGroups {
 			groupInfo := strings.Split(sharedGroups[group], "_")
-			// log.Println(groupInfo)
 			SharedGroup := b.FriendGroup{
 				MemberEmail: username,
 				FGName:      groupInfo[0],
