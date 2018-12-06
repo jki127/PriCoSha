@@ -1,6 +1,8 @@
-{{define "content"}} 
+{{define "content"}}
+<!-- the above line must be present so that the template is passed as content to be imported by the base template which has the sidebar -->
+
 <title>
-    Friend Groups
+  Friend Groups
 </title>
 <meta charset="UTF-8">
 <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
@@ -16,8 +18,8 @@
   <table cellspacing="20">
     <tr>
       <th>Name</th>
-       <th>Owner</th>
-       <th>Description</th>
+      <th>Owner</th>
+      <th>Description</th>
     </tr>
     {{ range .OwnFriendGroups }}
     <tr>
@@ -34,7 +36,9 @@
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
-    <tr><td colspan="5">You don't own any friend groups!<td></tr>
+    <tr>
+      <td colspan="5">You don't own any friend groups!<td>
+    </tr>
     {{ end }}
   </table>
   <h3>
@@ -54,8 +58,12 @@
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
-    <tr><td colspan="5">You're not a member of any friend groups!<td></tr>
-    {{ end }}      
+    <tr>
+      <td colspan="5">You're not a member of any friend groups!<td>
+    </tr>
+    {{ end }}
   </table>
 </body>
+
+<!-- this ends the definition of the content in the template -->
 {{end}}

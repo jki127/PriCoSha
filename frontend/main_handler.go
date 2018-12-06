@@ -11,9 +11,9 @@ MPD stands for MainPageData and holds all data necessary
 for main page to function
 */
 type MPD struct {
-	Logged   bool // true if logged in, false otherwise
-	Username string
-	PubData  []*b.ContentItem
+	Logged       bool // true if logged in, false otherwise
+	Username     string
+	ContentItems []*b.ContentItem
 }
 
 // Handles requests to root page (referred to as both / and main)
@@ -39,7 +39,15 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	CurrentMPD := MPD{
 		Logged:   logged,
 		Username: username,
-		PubData:  b.GetPubContent(),
+	}
+
+	// All users see public content items that have been posted in the past
+	// 24hrs. Logged-in users also see private items that have been shared with
+	// them or that they own
+	if logged {
+		CurrentMPD.ContentItems = b.GetUserContent(username)
+	} else {
+		CurrentMPD.ContentItems = b.GetPubContent()
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/main.html", "../web/template/base.html"))
