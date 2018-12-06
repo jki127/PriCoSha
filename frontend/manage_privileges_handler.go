@@ -20,14 +20,17 @@ func managePrivilegesHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := cookie.Value
 
-	url := r.URL
-	queryData := url.Query()
-	owner := queryData["oe"][0]
-	group := queryData["fgn"][0]
+	owner := r.PostFormValue("ownerEmail")
+	group := r.PostFormValue("fgName")
 	role := b.GetRole(group, owner, username)
 
-	if role == 2 {
-		log.Println(`User is only a member of the group and cannot manage
+	switch role {
+	case 0:
+		// do nothing
+	case 1:
+		// do nothing
+	default:
+		log.Println(`User does not have correct privileges to manage
 			privileges.`)
 		http.Redirect(w, r, "/friendgroups", http.StatusFound)
 		return

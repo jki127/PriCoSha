@@ -62,3 +62,35 @@ func GetRole(fgName string, ownerEmail string, memberEmail string) int {
 		return role
 	}
 }
+
+/*
+ChangePrivilege takes a Belong primary key and demotes or promotes the
+associated member depending on the type of action (0 = demote, 1 = promote)
+*/
+func ChangePrivilege(fgName string, ownerEmail string, memberEmail string,
+	action int) {
+	statement, err := db.Prepare(`UPDATE Belong
+		SET role=?
+		WHERE member_email=?
+		AND fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: ChangePrivilege(): Could not prepare
+			update`)
+	}
+	defer statement.Close()
+
+	var execErr error
+	switch action {
+	case 0:
+		_, execErr = statement.Exec(2, memberEmail, fgName, ownerEmail)
+	case 1:
+		_, execErr = statement.Exec(1, memberEmail, fgName, ownerEmail)
+	}
+
+	if execErr != nil {
+		log.Println(`manage_privileges: ChangePrivilege(): Could not execute
+			update`)
+		log.Println(err)
+	}
+}

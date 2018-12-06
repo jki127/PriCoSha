@@ -30,7 +30,11 @@
         <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a>
       </td>
       <td>
-        <a href="/managePrivilege?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Manage Privileges</button></a>
+        <form action="/managePrivilege" method="POST">
+          <input type="hidden" name="fgName" value="{{.FGName}}">
+          <input type="hidden" name="ownerEmail" value="{{.OwnerEmail}}">
+          <input type="submit" value="Manage Privileges">
+        </form>
       </td>
     </tr>
     {{ else }}
@@ -57,7 +61,11 @@
       <td>{{.FG.Description}}</td>
       {{if $notMember}}
       <td>
-        <a href="/managePrivilege?fgn={{.FG.FGName}}&oe={{.FG.OwnerEmail}}"><button>Manage Privileges</button></a>
+          <form action="/managePrivilege" method="POST">
+            <input type="hidden" name="fgName" value="{{.FG.FGName}}">
+            <input type="hidden" name="ownerEmail" value="{{.FG.OwnerEmail}}">
+            <input type="submit" value="Manage Privileges">
+          </form>
       </td>
       {{end}}
     </tr>

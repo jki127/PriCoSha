@@ -6,7 +6,12 @@
   {{$isAdmin := eq .Role 0}}
   <body>
     <h1>
-      Managing Privileges of {{.FGName}}
+      {{$fgName := .FGName}}
+      {{$ownerEmail := .OwnerEmail}}
+      Managing Privileges of {{$ownerEmail}}'s {{$fgName}} Group
+      <div style="float:right">
+        <a href="/friendgroups">Friend Groups</a>
+      </div>
     </h1>
     <hr>
     <h2>
@@ -15,7 +20,7 @@
     <table cellspacing="20">
       <tr>
         <td>
-          {{.OwnerEmail}}
+          {{$ownerEmail}}
         </td>
       </tr>
     </table>
@@ -30,7 +35,13 @@
         </td>
         {{if $isAdmin}}
         <td>
-          Put link here to demote mods.
+          <form action="/changePrivilege" method="POST">
+            <input type="hidden" name="fgName" value="{{$fgName}}">
+            <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+            <input type="hidden" name="memberEmail" value="{{.}}">
+            <input type="hidden" name="actionType" value=0>
+            <input type="submit" value="Demote">
+          </form>
         </td>
         {{end}}
       </tr>
@@ -53,7 +64,13 @@
         </td>
         {{if $isAdmin}}
         <td>
-          Put link here to promote members.
+            <form action="/changePrivilege" method="POST">
+              <input type="hidden" name="fgName" value="{{$fgName}}">
+              <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+              <input type="hidden" name="memberEmail" value="{{.}}">
+              <input type="hidden" name="actionType" value="1">
+              <input type="submit" value="Promote">
+            </form>
         </td>
         {{end}}
       </tr>

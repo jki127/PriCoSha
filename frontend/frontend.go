@@ -43,6 +43,7 @@ func main() {
 	http.HandleFunc("/profile", profileHandler)
 
 	http.HandleFunc("/managePrivilege", managePrivilegesHandler)
+	http.HandleFunc("/changePrivilege", changePrivilegeHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
