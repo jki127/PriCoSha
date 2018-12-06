@@ -9,9 +9,9 @@ import (
 
 func chooseAddedFriendHandler(w http.ResponseWriter, r *http.Request){
 	url := r.URL
-	queryData := url.Query()
+	redirectStr := r.Header.Get("referer")
 
-	redirectStr := "/duplicateNames?" + url.RawQuery
+	queryData := url.Query()
 
 	fgName := queryData["fgn"][0]
 	ownerEmail := queryData["oe"][0]
@@ -26,5 +26,6 @@ func chooseAddedFriendHandler(w http.ResponseWriter, r *http.Request){
 		http.Redirect(w, r, redirectStr, http.StatusFound)
 		return
 	}
-
+	http.Redirect(w, r, "/friendgroups", http.StatusFound)
+	return
 }
