@@ -14,7 +14,7 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 		WHERE member_email=?`,
 		username)
 	if err != nil {
-		log.Println(`post_content_item: GetFriendUserGroup(): Could not query user's 
+		log.Println(`post_content_item: GetUserFriendGroup(): Could not query user's 
 		Friend Groups from DB.`)
 	}
 	defer rows.Close()
@@ -26,7 +26,7 @@ func GetUserFriendGroup(username string) []*FriendGroup {
 		err = rows.Scan(&CurrentGroup.MemberEmail, &CurrentGroup.FGName,
 			&CurrentGroup.OwnerEmail)
 		if err != nil {
-			log.Println(`post_content_item: GetFriendUserGroup(): Could not scan row 
+			log.Println(`post_content_item: GetUserFriendGroup(): Could not scan row 
 			data from public content query.`)
 		}
 		data = append(data, &CurrentGroup)

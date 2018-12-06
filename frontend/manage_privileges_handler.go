@@ -11,14 +11,13 @@ import (
 func managePrivilegesHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "chngPrivErr")
 
-	cookie, err := r.Cookie("username")
-	if err != nil {
+	logged, username := getUserSessionInfo(r)
+
+	if !logged {
 		log.Println("User was not logged in and cannot manage privileges.")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-
-	username := cookie.Value
 
 	owner := r.PostFormValue("ownerEmail")
 	group := r.PostFormValue("fgName")

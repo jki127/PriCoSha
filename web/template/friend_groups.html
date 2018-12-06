@@ -61,6 +61,9 @@
       <td>{{.FG.Description}}</td>
       {{if $notMember}}
       <td>
+          <a href="/formAddFriend?fgn={{.FG.FGName}}&oe={{.FG.OwnerEmail}}"><button>Add Friend</button></a>
+      </td>
+      <td>
           <form action="/managePrivilege" method="POST">
             <input type="hidden" name="fgName" value="{{.FG.FGName}}">
             <input type="hidden" name="ownerEmail" value="{{.FG.OwnerEmail}}">
