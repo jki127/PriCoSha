@@ -15,7 +15,7 @@ func chooseAddedFriendHandler(w http.ResponseWriter, r *http.Request){
 
 	fgName := queryData["fgn"][0]
 	ownerEmail := queryData["oe"][0]
-	userEmail := queryData["ter"][0]
+	userEmail := queryData["ue"][0]
 
 	if ok := b.ValidateBelongFriendGroup(userEmail, fgName, ownerEmail); ok {
 		b.AddFriend(userEmail, fgName, ownerEmail)
