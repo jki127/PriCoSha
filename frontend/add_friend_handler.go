@@ -32,7 +32,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	redirectStr := "/formAddFriend?" + url.RawQuery
+	redirectStr := r.Header.Get("referer")
 
 	fname := r.FormValue("fname")
 	lname := r.FormValue("lname")
@@ -66,6 +66,11 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	if ok := b.ValidateBelongFriendGroup(userEmail, fgName, ownerEmail); ok {
 		b.AddFriend(userEmail, fgName, ownerEmail)
 		log.Println("Added Person with email", userEmail)
+	} else {
+		cookie := http.Cookie{Name: "addFriendErr", Value: "alreadyBelongs"}
+		http.SetCookie(w, &cookie)
+		http.Redirect(w, r, redirectStr, http.StatusFound)
+		return
 	}
 
 	http.Redirect(w, r, "/friendgroups", http.StatusFound)

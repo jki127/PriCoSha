@@ -49,3 +49,19 @@ func AddFriend(memberEmail string, fgname string, ownerEmail string) {
 		log.Println(`add_friend_related: AddFriend(): Could not execute insertion`)
 	}
 }
+
+func DeleteFriend(memberEmail string, fgname string, ownerEmail string){
+	statement, err := db.Prepare(`DELETE FROM Belong WHERE member_email =? 
+			AND fg_name =? 
+			AND owner_email =?`)
+	if err != nil {
+		log.Println(`add_friend_related: DeleteFriend(): Could not prepare deletion`)
+	}
+	defer statement.Close()
+	_, err = statement.Exec(memberEmail, fgname, ownerEmail)
+
+	if err != nil {
+		log.Println(`add_friend_related: DeleteFriend(): Could not execute deletion`)
+	}
+	log.Println ("Delete friend successfully!")
+}
