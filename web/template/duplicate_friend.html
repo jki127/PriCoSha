@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <title>
+        Duplicate Names
+    </title>
+    <meta charset="UTF-8">
+    <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" />
+    <body>
+        <h1>
+            Duplicate Names... Which username?
+        </h1>
+        <hr>
+        <table cellspacing="20">
+          <tr>
+            <th>Username</th>
+            <th>Action</th>
+          </tr>
+          {{ range .UserEmails }}
+          <tr>
+            <td>{{ . }}</td>
+          </tr>
+          {{ else }}
+          {{/* if the range is empty show this */}}
+          <tr><td colspan="5">No Friend Groups Available!<td></tr>
+          {{ end }}
+        </table>
+    </body>
+</html>
