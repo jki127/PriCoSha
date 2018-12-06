@@ -2,24 +2,7 @@ package backend
 
 import (
 	"log"
-	"time"
 )
-
-type ContentItem struct {
-	ItemID   int
-	Email    string
-	FilePath string
-	FileName string
-	PostTime time.Time
-	Fname    string
-	Lname    string
-}
-
-type Rating struct {
-	Email     string
-	Rate_time time.Time
-	Emoji     string
-}
 
 /*
 GetPubContent queries DB for all Content_Item entities with a public
