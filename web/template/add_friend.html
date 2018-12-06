@@ -9,7 +9,9 @@
         {{if .IsErr}}
             <div style="color: red">{{.ErrMsg}}</div>
         {{end}}
-        <form action="/addFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}" method="POST">
+        <form action="/addFriend" method="POST">
+            <input type="hidden" name="fgName" value="{{.FGName}}">
+            <input type="hidden" name="ownerEmail" value="{{.OwnerEmail}}">
             <label for="fname">First Name:</label>
             <input type="text" name="fname" required><br>
             <label for="lname">Last Name:</label>

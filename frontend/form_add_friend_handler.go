@@ -6,9 +6,6 @@ import (
 )
 
 func formAddFriendHandler(w http.ResponseWriter, r *http.Request) {
-	url := r.URL
-	queryData := url.Query()
-
 	cookie, err := r.Cookie("addFriendErr")
 	var errMsg string
 	var isErr bool
@@ -25,8 +22,8 @@ func formAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 		isErr = false
 	}
 
-	fgName := queryData["fgn"][0]
-	ownerEmail := queryData["oe"][0]
+	fgName := r.PostFormValue("fgName")
+	ownerEmail := r.PostFormValue("ownerEmail")
 	data := struct {
 		IsErr      bool
 		ErrMsg     string

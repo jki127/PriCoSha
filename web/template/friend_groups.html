@@ -24,7 +24,13 @@
       <td>{{ .FGName }}</td>
       <td>{{ .OwnerEmail }}</td>
       <td>{{ .Description }}</td>
-      <td> <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}">Add Friend</a> </td>
+      <td>
+        <form action="/formAddFriend" method="POST">
+          <input type="hidden" name="fgName" value="{{.FGName}}">
+          <input type="hidden" name="ownerEmail" value="{{.OwnerEmail}}">
+          <input type="submit" value="Add Friend">
+        </form>
+      </td>
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
