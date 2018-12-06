@@ -94,3 +94,83 @@ func ChangePrivilege(fgName string, ownerEmail string, memberEmail string,
 		log.Println(err)
 	}
 }
+
+/*
+UserHasRemoveRights takes a FriendGroup primary key and a Share primary key
+*/
+func UserHasRemoveRights(fgName string, ownerEmail string, memberEmail string,
+	itemID int) bool {
+	log.Println("UserHasRemoveRights", fgName, ownerEmail)
+	removes := UserCanRemoveFrom(memberEmail, itemID)
+	for i := range removes {
+		log.Println(removes[i])
+		if removes[i].FGName == fgName && removes[i].OwnerEmail == ownerEmail {
+			return true
+		}
+	}
+	return false
+}
+
+/*
+UserCanRemoveFrom takes a user's email and an item_id and returns a list of the
+Friend_Groups that the user can unshare that item from
+*/
+func UserCanRemoveFrom(memberEmail string, itemID int) []*FriendGroup {
+	/* Returns all groups the user has privileges for unsharing
+	the Content_Item */
+	rows, err := db.Query(`
+	SELECT fg_name, owner_email
+	FROM Share NATURAL JOIN Friend_Group NATURAL JOIN Belong
+	-- Check if the user is the original poster of the Content_Item
+	WHERE (member_email IN (
+		SELECT poster_email
+		FROM Content_Item
+		WHERE item_id=?
+	)
+	-- Or if the user has mod privileges over the Shared Content_Item
+	OR role < 2)
+	AND member_email =?
+	AND item_id = ?`,
+		itemID, memberEmail, itemID)
+	if err != nil {
+		log.Println(`manage_privileges: UserCanRemoveFrom(): Could not query 
+				DB.`)
+	}
+	defer rows.Close()
+
+	var data []*FriendGroup
+
+	for rows.Next() {
+		var Current FriendGroup
+		err = rows.Scan(&Current.FGName, &Current.OwnerEmail)
+		if err != nil {
+			log.Println(`manage_privileges: UserCanRemoveForm(): Could now scan row
+				data`)
+		}
+		data = append(data, &Current)
+	}
+
+	return data
+}
+
+/*
+UnshareItem takes a Share primary key and deletes the entry
+*/
+func UnshareItem(fgName string, ownerEmail string, itemID int) {
+	statement, err := db.Prepare(`DELETE FROM Share
+		WHERE fg_name=?
+		AND owner_email=?
+		AND item_id=?`)
+	if err != nil {
+		log.Println(`manage_privileges: UnshareItem(): Could not prepare
+			delete`)
+	}
+	defer statement.Close()
+
+	_, err = statement.Exec(fgName, ownerEmail, itemID)
+	if err != nil {
+		log.Println(`manage_privileges: UnshareItem(): Could not execute
+			delete`)
+		log.Println(err)
+	}
+}

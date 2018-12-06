@@ -8,15 +8,6 @@ import (
 	"strconv"
 )
 
-// PageData is used for sending data to the template pages
-type PageData struct {
-	LoggedIn    bool
-	Username    string
-	Item        *b.ContentItem
-	TaggedNames []*string
-	Ratings     []*b.Rating
-}
-
 // getUserSession takes in a http.Request, reads the username cookie and
 // returns two values:
 // - a bool representing if the current user is logged in
@@ -36,12 +27,23 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pageData := PageData{
-		LoggedIn:    logged,
-		Username:    username,
-		Item:        b.GetContentItemById(itemID),
-		TaggedNames: b.GetTaggedByItemId(itemID),
-		Ratings:     b.GetRatingsByItemId(itemID),
+	// Gets groups the user can remove this item from
+	removes := b.UserCanRemoveFrom(username, itemID)
+
+	pageData := struct {
+		Logged      bool
+		Username    string
+		Item        *b.ContentItem
+		TaggedNames []*string
+		Ratings     []*b.Rating
+		Removes     []*b.FriendGroup
+	}{
+		logged,
+		username,
+		b.GetContentItemById(itemID),
+		b.GetTaggedByItemId(itemID),
+		b.GetRatingsByItemId(itemID),
+		removes,
 	}
 
 	t := template.Must(template.ParseFiles("../web/template/content_item.html"))
