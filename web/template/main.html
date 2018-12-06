@@ -5,6 +5,14 @@
     PriCoSha
     <!-- <meta charset="UTF-8">
       <link href="assets/css/stylesheet.css" rel="stylesheet" type="text/css" /> -->
+      <div style="float:right">
+        {{ $iflogged := .Logged}}
+        {{if $iflogged}}
+        Logged in as: <b>{{.Username}}</b> <a href="/logout">Logout!</a>
+        {{else}}
+        <a href="/login">Login!</a>
+        {{end}}
+      </div>
   </h1>
   <hr>
   <h2>
