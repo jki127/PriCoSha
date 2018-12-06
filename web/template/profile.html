@@ -18,70 +18,12 @@
             </div>
         </div>
         <br>
-        <!-- Accordion -->
-        <!-- <div class="w3-card w3-round">
-                    <div class="w3-white">
-                        <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align">
-                            <i class="fa fa-users fa-fw w3-margin-right" style="color:black"></i> My Groups</button>
-                        <div id="Demo1" class="w3-hide w3-container">
-                            {{ range .FriendGroups }}
-                            <p>{{ .FGName }}</p>
-                            {{end}}
-                        </div>
-                    </div>
-                </div> -->
-
-        <!-- Friend Groups User Owns Card -->
-        <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-users fa-fw"></i>My
-                Groups</header>
-            {{range .FriendGroups}}
-            <div class="w3-row w3-padding-small">
-                <div class="w3-card w3-gray w3-padding">
-                    <!-- <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
-                        My {{.FGName}}</p> -->
-                    <div class="w3-cell-row">
-                        <div class="w3-cell w3-cell-middle">
-                            <i class="fa fa-users fa-3x"></i>
-                        </div>
-                        <div class="w3-cell w3-cell-middle w3-padding-small">
-                            <p>{{.FGName}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{else}}
-            <p>No Groups Owned!</p>
-            {{end}}
-        </div>
-        <br>
-
-        <!-- Friend Groups User is In Card -->
-        <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-users fa-fw"></i>Friend
-                Groups I'm In</header>
-            {{range .BelongFriendGroups}}
-            <div class="w3-row w3-padding-small">
-                <div class="w3-card w3-gray w3-padding">
-                    <div class="w3-cell-row">
-                        <div class="w3-cell w3-cell-middle">
-                            <i class="fa fa-users fa-3x"></i>
-                        </div>
-                        <div class="w3-cell w3-cell-middle w3-padding-small">
-                            <p>{{.OwnerEmail}}'s {{.FGName}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {{else}}
-            <p>Not In Any Groups!</p>
-            {{end}}
-        </div>
-        <br>
 
         <!-- Accordion -->
         <div class="w3-card w3-round">
             <div class="w3-white">
+
+                <!-- FriendGroups owned display -->
                 <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
                     Friend Groups I Own</button>
                 <div id="Demo1" class="w3-hide w3-container">
@@ -104,6 +46,8 @@
                     <p>No Groups Owned!</p>
                     {{end}}
                 </div>
+
+                <!-- Friend groups in display -->
                 <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
                     Friend Groups I'm In</button>
                 <div id="Demo2" class="w3-hide w3-container">
@@ -124,15 +68,22 @@
                         <p>Not In Any Groups!</p>
                         {{end}}</p>
                 </div>
+
+                <!-- Folders display -->
                 <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
                     My Folders</button>
                 <div id="Demo3" class="w3-hide w3-container">
+                    <br>
                     <div class="w3-row-padding">
-                        <br>
                         {{range .PendingTags}}
-                        <div class="w3-half w3-card w3-padding-small">
-                            <div class="w3-container">
-                                <i class="fa fa-folder-open fa-3x w3-centered w3-margin-bottom"></i>
+                        <div class="w3-half w3-margin-bottom">
+                            <div class="w3-card w3-gray">
+                                <div class="w3-container">
+                                    <i class="fa fa-folder-open fa-3x"></i>
+                                </div>
+                                <div class="w3-container">
+                                    <p>FOLDERNAME</p>
+                                </div>
                             </div>
                         </div>
                         {{end}}
@@ -141,25 +92,6 @@
             </div>
         </div>
         <br>
-
-
-        <!-- Folders Card -->
-        <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-folder fa-fw"></i>Folders</header>
-            <!-- ADD FOLDER RANGE HERE -->
-            {{range .PendingTags}}
-            <div class="w3-col s4 w3-padding-small">
-                <div class="w3-card w3-gray">
-                    <div class="w3-container">
-                        <i class="fa fa-folder-open fa-2x"></i>
-                        <br><span>FOLDERNAME</span>
-                    </div>
-                </div>
-            </div>
-            {{else}}
-            <p>No Folders!</p>
-            {{end}}
-        </div>
 
         <!-- End Left Column -->
     </div>
@@ -179,8 +111,8 @@
         </div> -->
 
 
-        <!-- prototype show public content, for reuse in showing group items -->
-        {{range .PublicItems}}
+        <!-- Show All Content Items that a user can see -->
+        {{range .PrivateItems}}
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
             <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
                 style="width:60px">
@@ -205,7 +137,7 @@
         <!-- This will Show Posts From Groups the User is a Part Of -->
         <!-- range .BelongGroups -->
         <!-- range .GroupPosts -->
-        <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+        <!-- <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
             <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
                 style="width:60px">
             <span class="w3-right w3-opacity">1 min</span>
@@ -227,7 +159,7 @@
                 Like</button>
             <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
                 Comment</button>
-        </div>
+        </div> -->
 
         <!-- keeping for reference -->
         <!-- <div class="w3-container w3-card w3-white w3-round w3-margin"><br>

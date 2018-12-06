@@ -7,17 +7,17 @@ import (
 	b "pricosha/backend"
 )
 
-//ProfileData holds info of a Person in the DB i.e. the user
-type ProfileData struct {
-	Logged             bool
-	Username           string
-	Fname              string
-	Lname              string
-	FriendGroups       []*b.FriendGroup
-	BelongFriendGroups []*b.FriendGroup
-	PendingTags        []*b.Tag
-	PublicItems        []*b.ContentItem
-}
+// ProfileData holds info of a Person in the DB i.e. the user
+// type ProfileData struct {
+// 	Logged             bool
+// 	Username           string
+// 	Fname              string
+// 	Lname              string
+// 	FriendGroups       []*b.FriendGroup
+// 	BelongFriendGroups []*b.FriendGroup
+// 	PendingTags        []*b.Tag
+// 	PublicItems        []*b.ContentItem
+// }
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("username")
@@ -36,16 +36,28 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	bfgd := b.GetBelongFriendGroup(username)
 	pendingTags := b.GetPendingTags(username)
 	pubCont := b.GetPubContent()
+	privCont := b.GetUserContent(username)
 
-	CurrentPD := ProfileData{
-		Logged:             logged,
-		Username:           username,
-		Fname:              firstName,
-		Lname:              lastName,
-		FriendGroups:       fgd,
-		BelongFriendGroups: bfgd,
-		PendingTags:        pendingTags,
-		PublicItems:        pubCont,
+	CurrentPD := struct {
+		Logged             bool
+		Username           string
+		Fname              string
+		Lname              string
+		FriendGroups       []*b.FriendGroup
+		BelongFriendGroups []*b.FriendGroup
+		PendingTags        []*b.Tag
+		PublicItems        []*b.ContentItem
+		PrivateItems       []*b.ContentItem
+	}{
+		logged,
+		username,
+		firstName,
+		lastName,
+		fgd,
+		bfgd,
+		pendingTags,
+		pubCont,
+		privCont,
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))
