@@ -6,6 +6,12 @@ import (
 	"net/http"
 	b "pricosha/backend"
 )
+
+type DFD struct {
+	FGName     string
+	OwnerEmail string
+	UserEmails	[]*string
+}
 func duplicateAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "addFriendErr")
 
@@ -16,17 +22,13 @@ func duplicateAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 	fname := "example"
 	lname := "example"
 
-	data := struct {
-		FGName     string
-		OwnerEmail string
-		UserEmails	[]*string
-	}{
-		fgName,
-		ownerEmail,
-		b.GetEmail(fname, lname),
+	CurrentDFD := DFD{
+		FGName:			fgName,
+		OwnerEmail:		ownerEmail,
+		UserEmails:		b.GetEmail(fname, lname),
 	}
 
 
 	t := template.Must(template.ParseFiles("../web/template/duplicate_friend.html"))
-	t.Execute(w, data)
+	t.Execute(w, CurrentDFD)
 }
