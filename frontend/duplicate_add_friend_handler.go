@@ -27,8 +27,6 @@ func duplicateAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 
-
-	//t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html",
-	//	"../web/template/base.html"))
-	//t.ExecuteTemplate(w, "base", CurrentFGD)
+	t := template.Must(template.ParseFiles("../web/template/duplicate_friend.html"))
+	t.Execute(w, data)
 }
