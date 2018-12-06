@@ -17,9 +17,14 @@ func main() {
 		log.Fatal("Database could not be contacted.")
 	}
 
+	// Serve CSS files from assets/css
+	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
+
 	// Establish functions for handling requests to specific pages
 	http.HandleFunc("/", mainHandler)
 	http.HandleFunc("/favicon.ico", faviconHandler)
+
+	http.HandleFunc("/item", contentItemHandler)
 
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/validate", validateLoginHandler)
@@ -37,8 +42,6 @@ func main() {
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)
 	http.HandleFunc("/accept", acceptTagHandler)
-
-	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
 
 	http.HandleFunc("/profile", profileHandler)
 

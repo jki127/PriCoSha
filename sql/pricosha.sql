@@ -183,10 +183,10 @@ VALUES
 SELECT "Adding Rates" as "";
 INSERT INTO Rate
     (email, item_id, rate_time, emoji)
-VALUES
-    ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "0x1f61a"),
-    ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "0x1f61a"),
-    ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "0x1f61a");
+VALUES 
+    ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍"),
+    ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍"),
+    ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
 
 -- Adds Content_Items in Past 24 Hours
 SELECT "Adding Content_Items in Past 24 Hours" as "";
@@ -196,3 +196,5 @@ VALUES
   ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),
   ("HH@nyu.edu", "/home/data/turkey.jpg", "Turkey", NOW(), 1),
   ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1);
+
+
