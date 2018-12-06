@@ -13,6 +13,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL
 
 	redirectStr := r.Header.Get("referer")
+	redirectStr2 := "/duplicateNames?" + url.RawQuery + "&fname=" + fname + "&lname=" + lname
 
 	if fname == "" || lname == "" {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "empty"}
