@@ -6,80 +6,80 @@
 </h1>
 <!-- defined a row, content in this container will occupy the same horizontal space -->
 <div class="w3-row">
-  <div class="w3-padding">
-      <!-- defined a card that will be used to present the table in -->
-      <div class="w3-card w3-white w3-padding-large ">
-        <h2> Owned Friend Groups: </h2>
+    <div class="w3-padding">
+        <!-- defined a card that will be used to present the table in -->
+        <div class="w3-card w3-white w3-padding-large ">
+            <h2> Owned Friend Groups: </h2>
 
-        <!-- This adds horiztonal Scrolling -->
-        <div class="w3-responsive">
-          <!-- added a table with alternating colors via w3-striped -->
-          <table class="w3-table w3-striped">
-              <thead>
-                  <!-- Set header row background color to grey -->
-                  <tr class="w3-gray">
-                      <th align="center">Action</th>
-                      <th align="left">Name</th>
-                      <th align="left">Owner</th>
-                      <th align="left">Description</th>
-                  </tr>
-              </thead>
-              {{ range .OwnFriendGroups }}
-              <tr>
-                  <td align="center"><a href=href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><i
+            <!-- This adds horiztonal Scrolling -->
+            <div class="w3-responsive">
+                <!-- added a table with alternating colors via w3-striped -->
+                <table class="w3-table w3-striped">
+                    <thead>
+                    <!-- Set header row background color to grey -->
+                        <tr class="w3-gray">
+                            <th align="center">Add/Delete Friend</th>
+                            <th align="left">Name</th>
+                            <th align="left">Owner</th>
+                            <th align="left">Description</th>
+                        </tr>
+                    </thead>
+                    {{ range .OwnFriendGroups }}
+                    <tr>
+                        <td align="center"><a href=href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><i
                               class="fa fa-fw fa-check" style="color:green"></i></a><b>/</b><a href=href="/formDeleteFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><i
                               class="fa fa-fw fa-times" style="color:red"></i></a></td>
-                  <td align="left">{{ .FGName }}</td>
-                  <td align="left">{{ .OwnerEmail }}</td>
-                  <td align="left">{{ .Description }}</td>
-              </tr>
-              {{ else }}
-              {{/* if the range is empty show this */}}
-              <tr>
-                  <td colspan="5">No Available Owned Friend Groups!<td>
-              </tr>
-              {{ end }}
-          </table>
-      </div>
-  </div>
-</div>
+                        <td align="left">{{ .FGName }}</td>
+                        <td align="left">{{ .OwnerEmail }}</td>
+                        <td align="left">{{ .Description }}</td>
+                    </tr>
+                    {{ else }}
+                    {{/* if the range is empty show this */}}
+                    <tr>
+                        <td colspan="5">No Available Owned Friend Groups!<td>
+                    </tr>
+                    {{ end }}
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <div class="w3-row">
-<div class="w3-padding">
-  <!-- defined a card that will be used to present the table in -->
-  <div class="w3-card w3-white w3-padding-large">
-      <h2>Friend Groups You Belong To: </h2>
+    <div class="w3-padding">
+        <!-- defined a card that will be used to present the table in -->
+        <div class="w3-card w3-white w3-padding-large">
+            <h2>Friend Groups You Belong To: </h2>
 
-      <!-- This adds horiztonal Scrolling -->
-      <div class="w3-responsive">
-          <!-- added a table with alternating colors via w3-striped -->
-          <table class="w3-table w3-striped">
-              <thead>
-                  <!-- Set header row background color to grey -->
-                  <tr class="w3-grey">
-                      <th>Name</th>
-                      <th>Owner</th>
-                      <th>Description</th>
-                  </tr>
-              </thead>
-              {{ range .BelongFriendGroups }}
-              <tr>
-                  <td>{{ .FGName }}</td>
-                  <td>{{ .OwnerEmail }}</td>
-                  <td>{{ .Description }}</td>
-              </tr>
-              {{ else }}
-              {{/* if the range is empty show this */}}
-              <tr>
-                  <td colspan="5">No Friend Groups That You Belong To <td>
-              </tr>
-              {{ end }}
-          </table>
-      </div>
-  </div>
-</div>
+            <!-- This adds horiztonal Scrolling -->
+            <div class="w3-responsive">
+                <!-- added a table with alternating colors via w3-striped -->
+                <table class="w3-table w3-striped">
+                    <thead>
+                        <!-- Set header row background color to grey -->
+                        <tr class="w3-grey">
+                            <th>Name</th>
+                            <th>Owner</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    {{ range .BelongFriendGroups }}
+                    <tr>
+                        <td>{{ .FGName }}</td>
+                        <td>{{ .OwnerEmail }}</td>
+                        <td>{{ .Description }}</td>
+                    </tr>
+                    {{ else }}
+                    {{/* if the range is empty show this */}}
+                    <tr>
+                        <td colspan="5">No Friend Groups That You Belong To <td>
+                    </tr>
+                    {{ end }}
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{end}}
