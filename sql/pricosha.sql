@@ -96,6 +96,7 @@ INSERT INTO Person VALUES ("EE@nyu.edu", SHA2("EE",256), "Ellen", "Ellenberg");
 INSERT INTO Person VALUES ("FF@nyu.edu", SHA2("FF",256), "Fred", "Fox");
 INSERT INTO Person VALUES ("GG@nyu.edu", SHA2("GG",256), "Gina", "Gupta");
 INSERT INTO Person VALUES ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
+INSERT INTO Person VALUES ("HMV@nyu.edu", SHA2("HH",256), "Helen", "Harper");
 INSERT INTO Friend_Group VALUES ("family", "AA@nyu.edu", "Ann's Family");
 INSERT INTO Belong VALUES ("AA@nyu.edu", "family", "AA@nyu.edu");
 INSERT INTO Belong VALUES ("CC@nyu.edu", "family", "AA@nyu.edu");
