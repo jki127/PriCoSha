@@ -11,7 +11,7 @@
         {{end}}
         <form action="/deleteFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}" method="POST">
             <label for="memberEmail">Member Email:</label>
-            <input type="text" name="fname" required><br>
+            <input type="text" name="memberEmail" required><br>
             <input type="submit" value="Delete">
         </form>
         <a href="/friendgroups">Cancel</a>
