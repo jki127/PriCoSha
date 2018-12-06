@@ -63,6 +63,13 @@
     </tr>
     </table>
 
+    {{$isMyContent := eq .Item.Email .Username}}
+    {{if $isMyContent}}
+    <form action="/deleteItem" method=POST onsubmit="return verifyDelete({{.Item.ItemID}})">
+      <input type="hidden" name="itemID" value="{{.Item.ItemID}}">
+      <input type="submit" value="Delete Item" style="background-color: red">
+    </form>
+    {{end}}
 
     <script type="text/javascript">
       function openForm(ID) {
@@ -72,6 +79,9 @@
       function closeForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "none";
         document.getElementById("tag-button-"+ID).style.display = "block";
+      }
+      function verifyDelete(ID) {
+        return (confirm("Are you sure you want to delete this content item?"))
       }
     </script>
   </body>
