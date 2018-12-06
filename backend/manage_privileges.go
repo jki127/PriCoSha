@@ -402,3 +402,62 @@ func SwapOwner(fgName string, ownerEmail string, newOwner string) {
 	// Promto new owner to admin
 	ChangePrivilege(fgName, newOwner, newOwner, 1)
 }
+
+/*
+DeleteFG takes a FriendGroup primary key and a string and deletes it and
+the references to it
+*/
+func DeleteFG(fgName string, ownerEmail string) {
+	valid := checkFGExistence(fgName, ownerEmail)
+	if !valid {
+		log.Println(`manage_privileges: DeleteFG(): cannot delete FG
+			that does not exist`)
+		return
+	}
+
+	// Delete all rows in Belong with fg reference
+	belongStatement, err := db.Prepare(`DELETE FROM Belong
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not prepare belong 
+			delete`)
+	}
+	defer belongStatement.Close()
+
+	// Delete all rows in Share with fg reference
+	shareStatement, err := db.Prepare(`DELETE FROM Share
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not prepare share 
+			delete`)
+	}
+	defer shareStatement.Close()
+
+	// Delete Friend_Group
+	delStatement, err := db.Prepare(`DELETE FROM Friend_Group
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not prepare delete`)
+	}
+	defer delStatement.Close()
+
+	_, err = belongStatement.Exec(fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not execute belong
+			delete`)
+	}
+
+	_, err = shareStatement.Exec(fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not execute share
+			delete`)
+	}
+
+	_, err = delStatement.Exec(fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: DeleteFG(): Could not execute delete`)
+	}
+}

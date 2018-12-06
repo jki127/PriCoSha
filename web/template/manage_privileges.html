@@ -117,6 +117,19 @@
           </div>
         </td>
       </tr>
+      <tr>
+          <td>
+            <button onclick="openForm('delete')" id="delete-button">Delete Group</button>
+            <div class="delete-form-popup" id="delete-form" style="display:none">
+              <form action="/deleteGroup" method="POST">
+                <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+                <input type="hidden" name="fgName" value="{{$fgName}}">
+                <input type="submit" value="Delete!">
+                <input type="button" onclick="closeForm('delete')" value="Close">
+              </form>
+            </div>
+          </td>
+        </tr>
     </table>
     {{end}}
     <script>
