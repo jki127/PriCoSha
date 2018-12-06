@@ -7,9 +7,7 @@ import (
 )
 
 func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
-	
 	memberEmail := r.FormValue("memberEmail")
-	log.Println(memberEmail)
 	url := r.URL
 	redirectStr := "/formDeleteFriend?" + url.RawQuery
 
@@ -21,6 +19,8 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request){
 		return
 	} 
 	
+
+	clearCookie(&w, r, "deleteFriendErr")
 	queryData := url.Query()
 	fgName := queryData["fgn"][0]
 	ownerEmail := queryData["oe"][0]
