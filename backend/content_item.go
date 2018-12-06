@@ -161,7 +161,9 @@ func GetRatingsByItemId(itemId int) []*Rating {
 // The variable `accessCount` in this function refers to the number of friend
 // groups that the user is in that has access to the content item
 func UserHasAccessToItem(username string, itemId int) bool {
-	if itemIsPublic(itemId) {
+	// This conditional must be at the top of the function so that users who are
+	// not logged-in can still access the content item page of a public item
+	if itemIsPublic(itemId) || userIsAuthor(username, itemId) {
 		return true
 	}
 	row := db.QueryRow(`
@@ -195,4 +197,18 @@ func itemIsPublic(itemId int) bool {
 	}
 
 	return isPub
+}
+
+func userIsAuthor(username string, itemId int) bool {
+	row := db.QueryRow(`
+	SELECT poster_email FROM Content_Item WHERE item_id = ?
+	`, &itemId)
+
+	var author string
+	err := row.Scan(&author)
+	if err != nil {
+		log.Println("userIsAuthor() scan error: ", err)
+	}
+
+	return author == username
 }
