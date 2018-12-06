@@ -178,6 +178,9 @@ func GetRatingsByItemId(itemId int) []*Rating {
 // The variable `accessCount` in this function refers to the number of friend
 // groups that the user is in that has access to the content item
 func UserHasAccessToItem(username string, itemId int) bool {
+	if itemIsPublic(itemId) {
+		return true
+	}
 	row := db.QueryRow(`
 	-- Get all the friend groups that the content item is shared in
 	SELECT COUNT(fg_name) FROM Share
@@ -195,4 +198,18 @@ func UserHasAccessToItem(username string, itemId int) bool {
 	}
 
 	return accessCount > 0
+}
+
+func itemIsPublic(itemId int) bool {
+	row := db.QueryRow(`
+	SELECT is_pub FROM Content_Item WHERE item_id = ?
+	`, &itemId)
+
+	var isPub bool
+	err := row.Scan(&isPub)
+	if err != nil {
+		log.Println("itemIsPublic() scan error: ", err)
+	}
+
+	return isPub
 }
