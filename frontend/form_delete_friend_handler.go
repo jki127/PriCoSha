@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func formDeleteFriendHandler(w http.ResponseWriter, r *http.Request){
+func formDeleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL
 	queryData := url.Query()
 
@@ -18,7 +18,7 @@ func formDeleteFriendHandler(w http.ResponseWriter, r *http.Request){
 		if cookie.Value == "empty" {
 			errMsg = "Data fields were left empty. Please retry."
 		} else if cookie.Value == "nonexistent" {
-			errMsg = "Person you are trying to add does not exist. Please retry."
+			errMsg = "Person you are trying to delete is not in the friend group. Please retry."
 		}
 	} else {
 		isErr = false

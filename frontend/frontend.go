@@ -38,8 +38,7 @@ func main() {
 	http.HandleFunc("/friendgroups", friendGroupHandler)
 	http.HandleFunc("/formAddFriend", formAddFriendHandler)
 	http.HandleFunc("/addFriend", addFriendHandler)
-	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
-	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
+
 	http.HandleFunc("/deleteFriend", deleteFriendHandler)
 	http.HandleFunc("/formDeleteFriend", formDeleteFriendHandler)
 
@@ -49,6 +48,9 @@ func main() {
 	http.HandleFunc("/accept", acceptTagHandler)
 
 	http.HandleFunc("/profile", profileHandler)
+  
+  http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
+	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")

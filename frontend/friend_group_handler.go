@@ -17,6 +17,7 @@ type FGD struct {
 
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "addFriendErr")
+	clearCookie(&w, r, "deleteFriendErr")
 
 	cookie, err := r.Cookie("username")
 	if err != nil {
