@@ -19,8 +19,8 @@ func duplicateAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 	queryData := url.Query()
 	fgName := queryData["fgn"][0]
 	ownerEmail := queryData["oe"][0]
-	fname := queryData["oe"][1]
-	lname := queryData["oe"][2]
+	fname := queryData["fname"][0]
+	lname := queryData["lname"][0]
 
 	CurrentDFD := DFD{
 		FGName:			fgName,
