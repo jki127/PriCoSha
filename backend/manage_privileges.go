@@ -174,3 +174,86 @@ func UnshareItem(fgName string, ownerEmail string, itemID int) {
 		log.Println(err)
 	}
 }
+
+/*
+RenameFG takes a FriendGroup primary key and a string and renames it to that
+string's value
+*/
+func RenameFG(fgName string, ownerEmail string, newName string) {
+	// Get the description of the Friend_Group
+	row := db.QueryRow(`SELECT description
+		FROM Friend_Group
+		WHERE fg_name=?
+		AND owner_email=?`,
+		fgName, ownerEmail)
+
+	var description string
+	err := row.Scan(&description)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not select group
+			description`)
+	}
+
+	// Insert new Friend_Group with updated name
+	insStatement, err := db.Prepare(`INSERT INTO Friend_Group
+		(fg_name, owner_email, description)
+		VALUES
+		(?, ?, ?)`)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not prepare insert`)
+	}
+	defer insStatement.Close()
+
+	// Update all rows in Belong with new name
+	belongStatement, err := db.Prepare(`UPDATE Belong
+		SET fg_name=?
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not prepare belong 
+			update`)
+	}
+	defer belongStatement.Close()
+
+	// Update all rows in Share with new name
+	shareStatement, err := db.Prepare(`UPDATE Share
+		SET fg_name=?
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not prepare share 
+			update`)
+	}
+	defer shareStatement.Close()
+
+	// Delete old Friend_Group with outdated name
+	delStatement, err := db.Prepare(`DELETE FROM Friend_Group
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not prepare delete`)
+	}
+	defer delStatement.Close()
+
+	_, err = insStatement.Exec(newName, ownerEmail, description)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not execute insert`)
+	}
+
+	_, err = belongStatement.Exec(newName, fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not execute belong
+			update`)
+	}
+
+	_, err = shareStatement.Exec(newName, fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not execute share
+			update`)
+	}
+
+	_, err = delStatement.Exec(fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: RenameFG(): Could not execute delete`)
+	}
+}

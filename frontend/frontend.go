@@ -48,6 +48,7 @@ func main() {
 	http.HandleFunc("/managePrivilege", managePrivilegesHandler)
 	http.HandleFunc("/changePrivilege", changePrivilegeHandler)
 	http.HandleFunc("/unshare", unshareHandler)
+	http.HandleFunc("/renameGroup", renameGroupHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
