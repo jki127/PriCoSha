@@ -20,6 +20,7 @@ func acceptTagHandler(w http.ResponseWriter, r *http.Request) {
 	itemID, _ := strconv.Atoi(r.PostFormValue("itemID"))
 	tagger := r.PostFormValue("taggerEmail")
 	tagged := r.PostFormValue("taggedEmail")
+	location := r.PostFormValue("loc")
 
 	if username == tagged {
 		b.AcceptTag(tagger, tagged, itemID)
@@ -28,6 +29,6 @@ func acceptTagHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("frontend:	acceptTagHandler():	Tagged User must be logged in to Accept Tag")
 	}
 
-	http.Redirect(w, r, "/tag_manager", http.StatusFound)
+	http.Redirect(w, r, "/"+location, http.StatusFound)
 	return
 }

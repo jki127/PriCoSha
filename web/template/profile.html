@@ -163,12 +163,23 @@
                 <span>{{.TaggerEmail}} tagged you on {{.FileName}}</span>
                 <div class="w3-row w3-opacity">
                     <div class="w3-half">
-                        <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
-                                class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button></a>
+                            <form action="/accept" method="POST">
+                                <input type="hidden" name="taggerEmail" value="{{.TaggerEmail}}">
+                                <input type="hidden" name="taggedEmail" value="{{.TaggedEmail}}">
+                                <input type="hidden" name="itemID" value="{{.ItemID}}">
+                                <input type="hidden" name="loc" value="profile">
+                                <button  type="submit" class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button>
+                            </form>
+    
                     </div>
                     <div class="w3-half">
-                        <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
-                                class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button></a>
+                        <form action="/decline" method="POST">
+                            <input type="hidden" name="taggerEmail" value="{{.TaggerEmail}}">
+                            <input type="hidden" name="taggedEmail" value="{{.TaggedEmail}}">
+                            <input type="hidden" name="itemID" value="{{.ItemID}}">
+                            <input type="hidden" name="loc" value="profile">
+                            <button  type="submit" class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button>
+                        </form>
                     </div>
                 </div>
             </div>

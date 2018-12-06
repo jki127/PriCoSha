@@ -20,6 +20,8 @@ func declineTagHandler(w http.ResponseWriter, r *http.Request) {
 	itemID, _ := strconv.Atoi(r.PostFormValue("itemID"))
 	tagger := r.PostFormValue("taggerEmail")
 	tagged := r.PostFormValue("taggedEmail")
+	location := r.PostFormValue("loc")
+
 
 	if username == tagged {
 		b.DeclineTag(tagger, tagged, itemID)
@@ -28,6 +30,6 @@ func declineTagHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("frontend:	declineTagHandler():	Tagged User must be logged in to Decline Tag")
 	}
 
-	http.Redirect(w, r, "/tag_manager", http.StatusFound)
+	http.Redirect(w, r, "/"+location, http.StatusFound)
 	return
 }
