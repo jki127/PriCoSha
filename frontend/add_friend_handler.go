@@ -13,7 +13,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL
 
 	redirectStr := "/formAddFriend?" + url.RawQuery
-	redirectStr2 := "/duplicateNames?" + url.RawQuery +fname + lname
+	redirectStr2 := "/duplicateNames?" + url.RawQuery + "&fname=" + fname + "&lname=" + lname
 
 	if fname == "" || lname == "" {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "empty"}
@@ -29,12 +29,12 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	if len(EmailList) > 1 {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "duplicates"}
 		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, redirectStr, http.StatusFound)
+		http.Redirect(w, r, redirectStr2, http.StatusFound)
 		return
 	} else if len(EmailList) == 0 {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "nonexistent"}
 		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, redirectStr2, http.StatusFound)
+		http.Redirect(w, r, redirectStr, http.StatusFound)
 		return
 	}
 	clearCookie(&w, r, "addFriendErr")
