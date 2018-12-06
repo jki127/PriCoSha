@@ -33,7 +33,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	} else if len(EmailList) == 0 {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "nonexistent"}
 		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, redirectStr, http.StatusFound)
+		http.Redirect(w, r, "/duplicateNames", http.StatusFound)
 		return
 	}
 	clearCookie(&w, r, "addFriendErr")
