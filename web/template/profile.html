@@ -50,9 +50,12 @@
                     </div>
                 </div>
             </div>
+            {{else}}
+            <p>No Groups Owned!</p>
             {{end}}
         </div>
         <br>
+
         <!-- Friend Groups User is In Card -->
         <div class="w3-card w3-padding-large w3-white">
             <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-users fa-fw"></i>Friend
@@ -70,6 +73,91 @@
                     </div>
                 </div>
             </div>
+            {{else}}
+            <p>Not In Any Groups!</p>
+            {{end}}
+        </div>
+        <br>
+
+        <!-- Accordion -->
+        <div class="w3-card w3-round">
+            <div class="w3-white">
+                <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    Friend Groups I Own</button>
+                <div id="Demo1" class="w3-hide w3-container">
+                    {{range .FriendGroups}}
+                    <div class="w3-row w3-padding-small">
+                        <div class="w3-card w3-gray w3-padding">
+                            <!-- <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
+                                    My {{.FGName}}</p> -->
+                            <div class="w3-cell-row">
+                                <div class="w3-cell w3-cell-middle">
+                                    <i class="fa fa-users fa-3x"></i>
+                                </div>
+                                <div class="w3-cell w3-cell-middle w3-padding-small">
+                                    <p>{{.FGName}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{else}}
+                    <p>No Groups Owned!</p>
+                    {{end}}
+                </div>
+                <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    Friend Groups I'm In</button>
+                <div id="Demo2" class="w3-hide w3-container">
+                    <p>{{range .BelongFriendGroups}}
+                        <div class="w3-row w3-padding-small">
+                            <div class="w3-card w3-gray w3-padding">
+                                <div class="w3-cell-row">
+                                    <div class="w3-cell w3-cell-middle">
+                                        <i class="fa fa-users fa-3x"></i>
+                                    </div>
+                                    <div class="w3-cell w3-cell-middle w3-padding-small">
+                                        <p>{{.OwnerEmail}}'s {{.FGName}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <p>Not In Any Groups!</p>
+                        {{end}}</p>
+                </div>
+                <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
+                    My Folders</button>
+                <div id="Demo3" class="w3-hide w3-container">
+                    <div class="w3-row-padding">
+                        <br>
+                        {{range .PendingTags}}
+                        <div class="w3-half w3-card w3-padding-small">
+                            <div class="w3-container">
+                                <i class="fa fa-folder-open fa-3x w3-centered w3-margin-bottom"></i>
+                            </div>
+                        </div>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+
+
+        <!-- Folders Card -->
+        <div class="w3-card w3-padding-large w3-white">
+            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-folder fa-fw"></i>Folders</header>
+            <!-- ADD FOLDER RANGE HERE -->
+            {{range .PendingTags}}
+            <div class="w3-col s4 w3-padding-small">
+                <div class="w3-card w3-gray">
+                    <div class="w3-container">
+                        <i class="fa fa-folder-open fa-2x"></i>
+                        <br><span>FOLDERNAME</span>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <p>No Folders!</p>
             {{end}}
         </div>
 
@@ -94,7 +182,7 @@
         <!-- prototype show public content, for reuse in showing group items -->
         {{range .PublicItems}}
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
+            <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
                 style="width:60px">
             <span class="w3-right w3-opacity">{{.PostTime}}</span>
             <h4>{{.Email}}</h4><br>
@@ -102,7 +190,8 @@
             <p>{{.FileName}}</p>
             <div class="w3-row-padding" style="margin:0 -16px">
                 <div class="w3-content" style="max-width:600px">
-                        <img src="https://www.w3schools.com/w3images/lights.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
+                    <img src="https://www.w3schools.com/w3images/lights.jpg" style="width:100%" alt="Northern Lights"
+                        class="w3-margin-bottom">
                 </div>
             </div>
             <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-star"></i>
@@ -110,7 +199,6 @@
             <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
                 Comment</button>
         </div>
-        <br>
         {{end}}
 
 
@@ -217,4 +305,20 @@
     </div>
 
     <!-- End Grid -->
+
+
+    <script>
+        // Accordion
+        function myFunction(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-theme-d1";
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        }
+    </script>
     {{end}}
