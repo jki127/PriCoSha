@@ -7,14 +7,6 @@ import (
 	b "pricosha/backend"
 )
 
-//FGD holds Data of Friend Group Page session
-type FGD struct {
-	Logged             bool
-	Username           string
-	OwnFriendGroups    []*b.FriendGroup
-	BelongFriendGroups []*b.FriendGroup
-}
-
 func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "addFriendErr")
 
@@ -28,13 +20,19 @@ func friendGroupHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := cookie.Value
 
-	CurrentFGD := FGD{
-		Logged:             true,
-		Username:           username,
-		OwnFriendGroups:    b.GetFriendGroup(username),
-		BelongFriendGroups: b.GetBelongFriendGroup(username),
+	data := struct {
+		Logged          bool
+		Username        string
+		OwnFriendGroups []*b.FriendGroup
+		BFGData         []*b.BFGDataElement
+	}{
+		true,
+		username,
+		b.GetFriendGroup(username),
+		b.GetBelongFriendGroup(username),
 	}
+
 	t := template.Must(template.New("").ParseFiles("../web/template/friend_groups.html",
 		"../web/template/base.html"))
-	t.ExecuteTemplate(w, "base", CurrentFGD)
+	t.ExecuteTemplate(w, "base", data)
 }

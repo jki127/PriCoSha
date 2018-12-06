@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	b "pricosha/backend"
 )
 
 func managePrivilegesHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,24 +23,30 @@ func managePrivilegesHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL
 	queryData := url.Query()
 	owner := queryData["oe"][0]
+	group := queryData["fgn"][0]
+	role := b.GetRole(group, owner, username)
 
-	if username != owner {
-		log.Println(`User is not the owner of the group and cannot manage
+	if role == 2 {
+		log.Println(`User is only a member of the group and cannot manage
 			privileges.`)
 		http.Redirect(w, r, "/friendgroups", http.StatusFound)
 		return
 	}
 
-	group := queryData["fgn"][0]
-
 	data := struct {
 		Logged     bool
 		FGName     string
 		OwnerEmail string
+		Role       int
+		Mods       []*string
+		Members    []*string
 	}{
 		true,
 		group,
 		owner,
+		role,
+		b.GetAtRole(group, owner, 1),
+		b.GetAtRole(group, owner, 2),
 	}
 
 	t := template.Must(template.ParseFiles("../web/template/manage_privileges.html"))

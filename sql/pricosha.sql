@@ -106,6 +106,7 @@ VALUES
     ("FF@nyu.edu", SHA2("FF",256), "Fred", "Fox"),
     ("GG@nyu.edu", SHA2("GG",256), "Gina", "Gupta"),
     ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
+    -- ("NotBB@nyu.edu", SHA2("BB",256), "Bob", "Baker");
 
 -- Adds Friend_Groups
 SELECT "Adding Friend_Groups" as "";
@@ -114,7 +115,8 @@ INSERT INTO Friend_Group
 VALUES 
     ("family", "AA@nyu.edu", "Ann's Family"),
     ("family", "BB@nyu.edu", "Bob's Family"),
-    ("roommates", "AA@nyu.edu", "Ann's Roommates");
+    ("roommates", "AA@nyu.edu", "Ann's Roommates"),
+    ("nomembersnomods", "AA@nyu.edu", "Test case!");
 
 -- Adds Owners to Friend Groups in Belong
 SELECT "Adding Owners to Belong" as "";
@@ -123,7 +125,8 @@ INSERT INTO Belong
 VALUES 
     ("AA@nyu.edu", "family", "AA@nyu.edu", 0),
     ("BB@nyu.edu", "family", "BB@nyu.edu", 0),
-    ("AA@nyu.edu", "roommates", "AA@nyu.edu", 0);
+    ("AA@nyu.edu", "roommates", "AA@nyu.edu", 0),
+    ("AA@nyu.edu", "nomembersnomods", "AA@nyu.edu", 0);
 
 -- Adds Members to Friend Groups in Belong
 SELECT "Adding Members to Belong" as "";

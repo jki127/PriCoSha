@@ -26,8 +26,12 @@
       <td>{{ .FGName }}</td>
       <td>{{ .OwnerEmail }}</td>
       <td>{{ .Description }}</td>
-      <td> <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a> </td>
-      <td> <a href="/managePrivilege?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Manage Privileges</button></a></td>
+      <td>
+        <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a>
+      </td>
+      <td>
+        <a href="/managePrivilege?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Manage Privileges</button></a>
+      </td>
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}
@@ -45,11 +49,17 @@
       <th>Owner</th>
       <th>Description</th>
     </tr>
-    {{ range .BelongFriendGroups }}
+    {{range .BFGData }}
+    {{$notMember := ne .Role 2}}
     <tr>
-      <td>{{ .FGName }}</td>
-      <td>{{ .OwnerEmail }}</td>
-      <td>{{ .Description }}</td>
+      <td>{{ .FG.FGName }}</td>
+      <td>{{.FG.OwnerEmail}}</td>
+      <td>{{.FG.Description}}</td>
+      {{if $notMember}}
+      <td>
+        <a href="/managePrivilege?fgn={{.FG.FGName}}&oe={{.FG.OwnerEmail}}"><button>Manage Privileges</button></a>
+      </td>
+      {{end}}
     </tr>
     {{ else }}
     {{/* if the range is empty show this */}}

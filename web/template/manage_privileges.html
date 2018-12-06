@@ -3,9 +3,10 @@
   <title>
       Manage Privileges
   </title>
+  {{$isAdmin := eq .Role 0}}
   <body>
     <h1>
-      Manage Privileges
+      Managing Privileges of {{.FGName}}
     </h1>
     <hr>
     <h2>
@@ -14,7 +15,7 @@
     <table cellspacing="20">
       <tr>
         <td>
-          Admin name here
+          {{.OwnerEmail}}
         </td>
       </tr>
     </table>
@@ -22,21 +23,47 @@
       Mods:
     </h2>
     <table cellspacing="20">
+      {{range .Mods}}
       <tr>
         <td>
-          Mod names here
+          {{.}}
+        </td>
+        {{if $isAdmin}}
+        <td>
+          Put link here to demote mods.
+        </td>
+        {{end}}
+      </tr>
+      {{else}}
+      <tr>
+        <td>
+          No current mods
         </td>
       </tr>
+      {{end}}
     </table>
     <h2>
       Members:
     </h2>
     <table cellspacing="20">
+      {{range .Members}}
       <tr>
         <td>
-          Member names here
+          {{.}}
+        </td>
+        {{if $isAdmin}}
+        <td>
+          Put link here to promote members.
+        </td>
+        {{end}}
+      </tr>
+      {{else}}
+      <tr>
+        <td>
+          No current members
         </td>
       </tr>
+      {{end}}
     </table>
   </body>
 </html>
