@@ -40,7 +40,6 @@ GetRole takes a FriendGroup primary key and a member_email string and returns
 the role status of the member
 */
 func GetRole(fgName string, ownerEmail string, memberEmail string) int {
-	log.Println("GetRoleData:", fgName, ownerEmail, memberEmail)
 	row := db.QueryRow(`SELECT role
 		FROM Belong
 		WHERE fg_name=?
@@ -85,7 +84,13 @@ func ChangePrivilege(fgName string, ownerEmail string, memberEmail string,
 	case 0:
 		_, execErr = statement.Exec(2, memberEmail, fgName, ownerEmail)
 	case 1:
-		_, execErr = statement.Exec(1, memberEmail, fgName, ownerEmail)
+		// If member being updated is owner of group, make them admin
+		if memberEmail == ownerEmail {
+			_, execErr = statement.Exec(0, memberEmail, fgName, ownerEmail)
+		} else {
+			// Otherwise, promote them normally
+			_, execErr = statement.Exec(1, memberEmail, fgName, ownerEmail)
+		}
 	}
 
 	if execErr != nil {
@@ -100,10 +105,8 @@ UserHasRemoveRights takes a FriendGroup primary key and a Share primary key
 */
 func UserHasRemoveRights(fgName string, ownerEmail string, memberEmail string,
 	itemID int) bool {
-	log.Println("UserHasRemoveRights", fgName, ownerEmail)
 	removes := UserCanRemoveFrom(memberEmail, itemID)
 	for i := range removes {
-		log.Println(removes[i])
 		if removes[i].FGName == fgName && removes[i].OwnerEmail == ownerEmail {
 			return true
 		}
@@ -256,4 +259,146 @@ func RenameFG(fgName string, ownerEmail string, newName string) {
 	if err != nil {
 		log.Println(`manage_privileges: RenameFG(): Could not execute delete`)
 	}
+}
+
+func checkPersonExistence(email string) bool {
+	row := db.QueryRow(`SELECT email
+		FROM Person
+		WHERE email=?`,
+		email)
+
+	var temp string
+	err := row.Scan(&temp)
+
+	switch {
+	case err == sql.ErrNoRows:
+		return false
+	case err == nil:
+		return true
+	default:
+		return false
+	}
+}
+
+func checkFGExistence(fgName string, ownerEmail string) bool {
+	row := db.QueryRow(`SELECT fg_name
+		FROM Friend_Group
+		Where fg_name=?
+		AND owner_email=?`,
+		fgName, ownerEmail)
+
+	var temp string
+	err := row.Scan(&temp)
+
+	switch {
+	case err == sql.ErrNoRows:
+		return false
+	case err == nil:
+		return true
+	default:
+		return false
+	}
+}
+
+/*
+SwapOwner takes a FriendGroup primary key and a string and swaps the owner
+of the FriendGroup to that string
+*/
+func SwapOwner(fgName string, ownerEmail string, newOwner string) {
+	// TO-DO:
+	// Have to check that new owner doesn't have a group with the same name
+	// Have to check the owner exists?
+
+	valid := checkPersonExistence(newOwner)
+	if !valid {
+		log.Println(`manage_privileges: SwapOwner(): named newOwner does
+			not exist (handle this later)`)
+		return
+	} else if checkFGExistence(fgName, newOwner) {
+		log.Println(`manage_privileges: SwapOwner(): named newOwner already
+			has a friend group of the same name (handle this later)`)
+		return
+	}
+
+	// Get the description of the Friend_Group
+	row := db.QueryRow(`SELECT description
+		FROM Friend_Group
+		WHERE fg_name=?
+		AND owner_email=?`,
+		fgName, ownerEmail)
+
+	var description string
+	err := row.Scan(&description)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not select group
+			description`)
+	}
+
+	// Insert new Friend_Group with updated name
+	insStatement, err := db.Prepare(`INSERT INTO Friend_Group
+		(fg_name, owner_email, description)
+		VALUES
+		(?, ?, ?)`)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not prepare insert`)
+	}
+	defer insStatement.Close()
+
+	// Update all rows in Belong with new name
+	belongStatement, err := db.Prepare(`UPDATE Belong
+		SET owner_email=?
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not prepare belong 
+			update`)
+	}
+	defer belongStatement.Close()
+
+	// Update all rows in Share with new name
+	shareStatement, err := db.Prepare(`UPDATE Share
+		SET owner_email=?
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not prepare share 
+			update`)
+	}
+	defer shareStatement.Close()
+
+	// Delete old Friend_Group with outdated name
+	delStatement, err := db.Prepare(`DELETE FROM Friend_Group
+		WHERE fg_name=?
+		AND owner_email=?`)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not prepare delete`)
+	}
+	defer delStatement.Close()
+
+	_, err = insStatement.Exec(fgName, newOwner, description)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not execute insert`)
+	}
+
+	_, err = belongStatement.Exec(newOwner, fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not execute belong
+			update`)
+	}
+
+	_, err = shareStatement.Exec(newOwner, fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not execute share
+			update`)
+	}
+
+	_, err = delStatement.Exec(fgName, ownerEmail)
+	if err != nil {
+		log.Println(`manage_privileges: SwapOwner(): Could not execute delete`)
+	}
+
+	// Demote old owner to mod
+	ChangePrivilege(fgName, newOwner, ownerEmail, 1)
+	// Promto new owner to admin
+	ChangePrivilege(fgName, newOwner, newOwner, 1)
 }
