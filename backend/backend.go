@@ -38,6 +38,22 @@ type Tag struct {
 	FilePath    string
 }
 
+type ContentItem struct {
+	ItemID   int
+	Email    string
+	FilePath string
+	FileName string
+	PostTime time.Time
+	Fname    string
+	Lname    string
+}
+
+type Rating struct {
+	Email     string
+	Rate_time time.Time
+	Emoji     string
+}
+
 var db *sql.DB
 
 // TestDB tries to ping the database and returns the resulting error
