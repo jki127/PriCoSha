@@ -16,8 +16,8 @@
         <div class="friend-group-popup" id="friend-groups" style="display: none">
             <label for="friendGroups">Select Applicable Friend Groups:</label>
             {{ range .FriendGroupData }}
-            <input type="checkbox" name=friendGroup value={{.FGName}} _{{.OwnerEmail}}>{{.FGName}} owned by
-            {{.OwnerEmail}}
+            <input type="checkbox" name=friendGroup value={{.FGName}}_{{.OwnerEmail}}>
+            <label>{{.FGName}} owned by {{.OwnerEmail}}</label>
             {{end}}
         </div>
         <br><input type="submit" value="Post Item">
