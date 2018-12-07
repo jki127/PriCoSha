@@ -71,6 +71,28 @@
                         <p>Not In Any Groups!</p>
                         {{end}}</p>
                 </div>
+                <!-- Friendlist display -->
+                <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    My Friends</button>
+                <div id="Demo4" class="w3-hide w3-container">
+                    <p>{{range .FriendsList}}
+                        <div class="w3-row w3-padding-small">
+                            <div class="w3-card w3-gray w3-padding">
+                                <div class="w3-cell-row">
+                                    <div class="w3-cell w3-cell-middle">
+                                        <img src="https://avatars1.githubusercontent.com/u/5100933?s=400&v=4" alt="Avatar"
+                                            class="w3-left w3-circle w3-margin-right" style="width:60px">
+                                    </div>
+                                    <div class="w3-cell w3-cell-middle w3-padding-small">
+                                            <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <p>No Friends</p>
+                        {{end}}</p>
+                </div>
 
 
                 <!-- Folders display -->
@@ -94,28 +116,6 @@
                     </div>
                 </div>
 
-                <!-- Friendlist display -->
-                <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
-                    My Friends</button>
-                <div id="Demo4" class="w3-hide w3-container">
-                    <p>{{range .FriendsList}}
-                        <div class="w3-row w3-padding-small">
-                            <div class="w3-card w3-gray w3-padding">
-                                <div class="w3-cell-row">
-                                    <div class="w3-cell w3-cell-middle">
-                                        <img src="https://avatars1.githubusercontent.com/u/5100933?s=400&v=4" alt="Avatar"
-                                            class="w3-left w3-circle w3-margin-right" style="width:60px">
-                                    </div>
-                                    <div class="w3-cell w3-cell-middle w3-padding-small">
-                                            <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
-                                        </div>
-                                </div>
-                            </div>
-                        </div>
-                        {{else}}
-                        <p>No Friends</p>
-                        {{end}}</p>
-                </div>
 
 
             </div>
