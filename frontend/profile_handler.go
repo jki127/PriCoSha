@@ -3,20 +3,10 @@ package main
 import (
 	"html/template"
 	"log"
+	"math/rand"
 	"net/http"
 	b "pricosha/backend"
 )
-
-//ProfileData holds info of a Person in the DB i.e. the user
-type ProfileData struct {
-	Logged             bool
-	Username           string
-	Fname              string
-	Lname              string
-	FriendGroups       []*b.FriendGroup
-	BelongFriendGroups []*b.BFGDataElement
-	PendingTags        []*b.Tag
-}
 
 func profileHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("username")
@@ -30,19 +20,42 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	logged := true
 	username := cookie.Value
 
-	firstName, lastName := b.GetProfileData(username)
+	firstName, lastName, bio, bioBool := b.GetProfileData(username)
 	fgd := b.GetFriendGroup(username)
 	bfgd := b.GetBelongFriendGroup(username)
 	pendingTags := b.GetPendingTags(username)
+	// pubCont := b.GetPubContent()
+	privCont := b.GetUserContent(username)
+	friends := b.GetFriendsList(username)
 
-	CurrentPD := ProfileData{
-		Logged:             logged,
-		Username:           username,
-		Fname:              firstName,
-		Lname:              lastName,
-		FriendGroups:       fgd,
-		BelongFriendGroups: bfgd,
-		PendingTags:        pendingTags,
+	CurrentPD := struct {
+		Logged             bool
+		Username           string
+		Fname              string
+		Lname              string
+		Bio                string
+		FriendGroups       []*b.FriendGroup
+		BelongFriendGroups []*b.BFGDataElement
+		PendingTags        []*b.Tag
+		// PublicItems        []*b.ContentItem
+		PrivateItems []*b.ContentItem
+		FriendsList  []*b.FriendStruct
+		HasBio       bool
+		UserAvatar   int
+	}{
+		logged,
+		username,
+		firstName,
+		lastName,
+		bio,
+		fgd,
+		bfgd,
+		pendingTags,
+		// pubCont,
+		privCont,
+		friends,
+		bioBool,
+		rand.Intn(24),
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))

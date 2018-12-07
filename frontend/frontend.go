@@ -59,6 +59,7 @@ func main() {
 
 	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
 	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
+	http.HandleFunc("/addBio",addBioHandler)
 
 	http.HandleFunc("/addVote", addVoteHandler)
 

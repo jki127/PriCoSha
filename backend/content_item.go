@@ -2,6 +2,7 @@ package backend
 
 import (
 	"log"
+	"math/rand"
 )
 
 /*
@@ -36,6 +37,8 @@ func GetPubContent() []*ContentItem {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
+		CurrentItem.RandImg = rand.Intn(8)
+
 		if CheckPoll(CurrentItem.ItemID) {
 			CurrentItem.IsPoll = true
 			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
@@ -54,8 +57,8 @@ func GetPubContent() []*ContentItem {
 // The items are ordered in reverse chronological order
 func GetUserContent(email string) []*ContentItem {
 	rows, err := db.Query(`
-	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub
-	FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub, f_name, l_name 
+	FROM Content_Item JOIN Person ON Content_Item.poster_email=Person.email
 	WHERE item_id IN (
 		-- All item ids shared in a user's friendgroups
 		SELECT item_id FROM Share
@@ -83,11 +86,15 @@ func GetUserContent(email string) []*ContentItem {
 		var CurrentItem ContentItem
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
 			&CurrentItem.FilePath, &CurrentItem.FileName,
-			&CurrentItem.PostTime, &isPub)
+			&CurrentItem.PostTime, &isPub, &CurrentItem.Fname, &CurrentItem.Lname)
 		if err != nil {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
+		CurrentItem.RandImg = rand.Intn(8)
+		CurrentItem.Comments = GetCommentsByItemId(CurrentItem.ItemID)
+		CurrentItem.Ratings = GetRatingsByItemId(CurrentItem.ItemID)
+
 		if CheckPoll(CurrentItem.ItemID) {
 			CurrentItem.IsPoll = true
 			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
@@ -145,7 +152,7 @@ func GetTaggedByItemId(itemId int) []*string {
 
 func GetCommentsByItemId(itemId int) []*Comment {
 	rows, err := db.Query(`
-	SELECT email, comment_time, body FROM Comment WHERE item_id=?
+	SELECT Comment.email, comment_time, body, f_name, l_name FROM Comment JOIN Person ON Comment.email=Person.email WHERE item_id=?
 	ORDER BY comment_time DESC`, itemId)
 
 	defer rows.Close()
@@ -156,7 +163,7 @@ func GetCommentsByItemId(itemId int) []*Comment {
 	var comments []*Comment
 	for rows.Next() {
 		var comment Comment
-		rows.Scan(&comment.Email, &comment.CommentTime, &comment.Body)
+		rows.Scan(&comment.Email, &comment.CommentTime, &comment.Body, &comment.Fname, &comment.Lname)
 		comments = append(comments, &comment)
 	}
 

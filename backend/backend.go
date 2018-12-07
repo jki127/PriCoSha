@@ -38,6 +38,13 @@ type Tag struct {
 	FilePath    string
 }
 
+//FriendStruct holds info on a Friend
+type FriendStruct struct {
+	FriendFirstName string
+	FriendLastName  string
+	FriendUsername  string
+	FaceID          int
+}
 // ContentItem holds info related to ContentItem management
 type ContentItem struct {
 	ItemID   int
@@ -45,8 +52,11 @@ type ContentItem struct {
 	FilePath string
 	FileName string
 	PostTime time.Time
-	Fname    string
+	Fname    string 
 	Lname    string
+	RandImg  int
+	Comments []*Comment
+	Ratings  []*Rating
 	IsPoll   bool    // 0 = not poll, 1 = poll
 	Votes    []*Vote // holds related votes if
 }
@@ -64,6 +74,8 @@ type Comment struct {
 	Email       string
 	Body        string
 	CommentTime time.Time
+	Fname       string
+	Lname       string
 }
 
 var db *sql.DB

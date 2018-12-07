@@ -12,6 +12,7 @@ create table Person
     password char(64) not null,
     f_name varchar(32),
     l_name varchar(32),
+    bio varchar(280) DEFAULT "",
     primary key (email)
     );
 
@@ -130,7 +131,6 @@ SELECT "Adding Persons" as "";
 INSERT INTO Person
     (email, password, f_name, l_name)
 VALUES
-    ("AA@nyu.edu", SHA2("AA",256), "Ann", "Anderson"),
     ("BB@nyu.edu", SHA2("BB",256),"Bob", "Baker"),
     ("CC@nyu.edu", SHA2("CC",256), "Cathy", "Chang"),
     ("DD@nyu.edu", SHA2("DD",256), "David", "Davidson"),
@@ -140,6 +140,13 @@ VALUES
     ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper"),
     ("HMH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
     -- ("NotBB@nyu.edu", SHA2("BB",256), "Bob", "Baker");
+
+SELECT "Adding Persons With Bio" as "";
+INSERT INTO Person
+    (email, password, f_name, l_name, bio)
+VALUES
+    ("AA@nyu.edu", SHA2("AA",256), "Ann", "Anderson", "Mother, Aspiring Trapeze Artist, Dog-lover");
+
 
 -- Adds Friend_Groups
 SELECT "Adding Friend_Groups" as "";
