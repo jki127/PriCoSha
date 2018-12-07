@@ -16,6 +16,10 @@ create table Person
     );
 
 SELECT "Adding Content_Item Table" as "";
+/* With the addition of format (0 = regular item, 1 = poll):
+    If format = 1:
+        file_name = question asked in poll
+*/
 create table Content_Item
     (item_id  int not null AUTO_INCREMENT,
     poster_email varchar(64),
@@ -23,6 +27,7 @@ create table Content_Item
     file_name  varchar(64),
     post_time timestamp,
     is_pub boolean,
+    format int,
     primary key (item_id),
     foreign key (poster_email) references Person(email)
         on delete set null
@@ -88,6 +93,18 @@ create table Belong
     foreign key (member_email) references Person(email)
         on delete cascade,
     foreign key (fg_name, owner_email) references Friend_Group(fg_name, owner_email)
+        on delete cascade
+    );
+
+SELECT "Adding Vote Table" as "";
+create table Vote
+    (voter_email varchar(64),
+    item_id int,
+    choice varchar(64),
+    primary key (voter_email, item_id, choice),
+    foreign key (voter_email) references Person(email)
+        on delete cascade,
+    foreign key (item_id) references Content_Item(item_id)
         on delete cascade
     );
 
@@ -189,13 +206,41 @@ VALUES
     ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍"),
     ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
 
--- Adds Content_Items in Past 24 Hours
+-- Adds Content_Items in Past 24 Hours (6, 7, 8)
 SELECT "Adding Content_Items in Past 24 Hours" as "";
 INSERT INTO Content_Item
-  (poster_email, file_path, file_name, post_time, is_pub)
+    (poster_email, file_path, file_name, post_time, is_pub)
 VALUES
-  ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),
-  ("HH@nyu.edu", "/home/data/turkey.jpg", "Turkey", NOW(), 1),
-  ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1);
+    ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),
+    ("HH@nyu.edu", "/home/data/turkey.jpg", "Turkey", NOW(), 1),
+    ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1);
 
+-- Add Poll Content_Items in Past 24 Hours (9, 10, 11)
+SELECT "Adding Poll Content_Items in Past 24 Hours" as "";
+INSERT INTO Content_Item
+    (poster_email, file_path, file_name, post_time, is_pub, format)
+VALUES
+    ("BB@nyu.edu", "nothing", "Do you like apples?", NOW(), 1, 1),
+    ("CC@nyu.edu", "nothing", "Best yoghurt?", NOW(), 0, 1),
+    ("CC@nyu.edu", "nothing", "What should I do with my Friday night?", NOW(), 0, 1);
 
+-- Shares Polls
+SELECT "Adding Shares of Polls" as "";
+INSERT INTO Share
+    (fg_name, owner_email, item_id)
+VALUES
+    ("family", "AA@nyu.edu", 9),
+    ("family", "AA@nyu.edu", 10),
+    ("family", "AA@nyu.edu", 11);
+
+-- Add Votes
+SELECT "Adding Votes to Polls" as "";
+INSERT INTO Vote
+    (voter_email, item_id, choice)
+VALUES
+    ("BB@nyu.edu", 9, "I LOVE APPLES"),
+    ("AA@nyu.edu", 9, "Yes"),
+    ("CC@nyu.edu", 9, "YES"),
+    ("CC@nyu.edu", 11, "Party!"),
+    ("BB@nyu.edu", 11, "Sleep!"),
+    ("AA@nyu.edu", 11, "Work on databases :(");
