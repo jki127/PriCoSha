@@ -36,12 +36,7 @@ func GetProfileData(username string) (fname string, lname string) {
 	// return fname, lname, bio
 }
 
-type FriendStruct struct {
-	FriendFirstName string
-	FriendLastName  string
-	FriendUsername  string
-}
-
+//GetFriendsList queries the data base and returns an array of friends of the given user
 func GetFriendsList(username string) []*FriendStruct {
 	rows, err := db.Query(`SELECT DISTINCT member_email, f_name, l_name 
 	FROM Belong JOIN Person ON Belong.member_email=Person.email

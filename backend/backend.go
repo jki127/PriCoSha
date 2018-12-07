@@ -38,6 +38,12 @@ type Tag struct {
 	FilePath    string
 }
 
+//FriendStruct holds info on a Friend
+type FriendStruct struct {
+	FriendFirstName string
+	FriendLastName  string
+	FriendUsername  string
+}
 type ContentItem struct {
 	ItemID   int
 	Email    string
