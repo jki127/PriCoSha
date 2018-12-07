@@ -27,7 +27,7 @@ create table Content_Item
     file_name  varchar(64),
     post_time timestamp,
     is_pub boolean,
-    format int,
+    format int DEFAULT 0,
     primary key (item_id),
     foreign key (poster_email) references Person(email)
         on delete set null
@@ -101,7 +101,7 @@ create table Vote
     (voter_email varchar(64),
     item_id int,
     choice varchar(64),
-    primary key (voter_email, item_id, choice),
+    primary key (voter_email, item_id),
     foreign key (voter_email) references Person(email)
         on delete cascade,
     foreign key (item_id) references Content_Item(item_id)
