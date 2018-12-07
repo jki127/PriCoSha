@@ -76,7 +76,7 @@ func RemoveInvalidTags(memberEmail string) {
 	statement, err := db.Prepare(`DELETE FROM Tag WHERE 
 				(tagger_email=? OR tagged_email=?) 
 				AND item_id NOT IN (
-					SELECT item_id, poster_email, file_path, file_name, post_time, is_pub 
+					SELECT item_id
 					FROM Content_Item
 					WHERE item_id IN (
 						-- All item ids shared in a user's friendgroups
