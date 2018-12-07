@@ -42,14 +42,13 @@ func main() {
 	http.HandleFunc("/deleteFriend", deleteFriendHandler)
 	http.HandleFunc("/formDeleteFriend", formDeleteFriendHandler)
 
-
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)
 	http.HandleFunc("/accept", acceptTagHandler)
 
 	http.HandleFunc("/profile", profileHandler)
-  
-  http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
+
+	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
 	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
 
 	// Start server

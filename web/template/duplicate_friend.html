@@ -14,10 +14,16 @@
             <th align="left">Username</th>
             <th align="center">Action</th>
           </tr>
+          {{$fgName := .FGName}}
+          {{$ownerEmail := .OwnerEmail}}
           {{ range .UserEmails }}
           <tr>
             <td align="left">{{ . }}</td>
-            <td><a href="/chooseName"></a><button> Add! </button></td>
+            <td>
+                <form action="/chooseName?fgn={{$fgName}}&oe={{$ownerEmail}}&ue={{.}}" method="POST">
+                    <input type="submit" value="Add">
+                </form>
+            </td>
           </tr>
           {{ else }}
           {{/* if the range is empty show this */}}
