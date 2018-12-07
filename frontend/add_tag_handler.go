@@ -39,6 +39,6 @@ func addTagHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("received failed error from b.InsertTag()")
 	}
 
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
 	return
 }

@@ -45,6 +45,7 @@ type FriendStruct struct {
 	FriendUsername  string
 	FaceID          int
 }
+// ContentItem holds info related to ContentItem management
 type ContentItem struct {
 	ItemID   int
 	Email    string
@@ -53,12 +54,14 @@ type ContentItem struct {
 	PostTime time.Time
 	Fname    string 
 	Lname    string
-	IsPoll   bool
 	RandImg  int
 	Comments []*Comment
 	Ratings  []*Rating
+	IsPoll   bool    // 0 = not poll, 1 = poll
+	Votes    []*Vote // holds related votes if
 }
 
+// Rating holds info related to Rating management
 type Rating struct {
 	Email     string
 	Rate_time time.Time // WHO DID THIS // NO UNDERSCORES

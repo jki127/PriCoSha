@@ -6,6 +6,7 @@
         <a href="/">Return!</a>
       </div>
     </h2>
+    <!-- Handles Content Info Display -->
     <table cellspacing="20">
       <tr>
         <th>Item ID</th>
@@ -17,22 +18,74 @@
       </tr>
       <tr>
         {{$itemID := .Item.ItemID}}
-        <td>{{$itemID}}</td>
-        <td>{{ .Item.FileName }}</a></td>
-        <td>{{ .Item.FilePath }}</td>
+        {{$fileName := .Item.FileName}}
+        {{$isPoll := .Item.IsPoll}}
+        {{$email := .Item.Email}}
+        <td align="center">{{$itemID}}</td>
+        <td align="center">{{$fileName}}</td>
+        {{if $isPoll}}
+        <td align="center">n/a</td>
+        {{else}}
+        <td align="center">{{ .Item.FilePath }}</td>
+        {{end}}
         <td>{{ .Item.PostTime }}</td>
         <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
-        <td>{{ .Item.Email }}</td>
+        <td>{{$email}}</td>
       </tr>
-
-      {{$isMyContent := eq .Item.Email .Username}}
+      {{$isMyContent := eq $email .Username}}
       {{if $isMyContent}}
       <form action="/deleteItem" method=POST onsubmit="return verifyDelete({{.Item.ItemID}})">
         <input type="hidden" name="itemID" value="{{.Item.ItemID}}">
         <input type="submit" value="Delete Item" style="background-color: red">
       </form>
       {{end}}
-
+      {{$logged := .Logged}}
+      {{if $isPoll}}
+        <tr>
+          <th colspan="2" align="center">
+            {{$fileName}}
+          </th>
+        </tr>
+        <tr>
+          <th align="left">Choice</th>
+          <th align="center"># Votes</th>
+        </tr>
+        {{range .Item.Votes}}
+        <tr>
+          {{$choice := .Choice}}
+          <td align="left">{{.Choice}}</td>
+          <td align="center">{{.Count}}</td>
+          {{if $logged}}
+          <td>
+            <form action="/addVote" method="POST">
+              <input type="hidden" name="itemID" value="{{$itemID}}">
+              <input type="hidden" name="choice" value="{{$choice}}">
+              <input type="submit" value="Vote!">
+            </form>
+          </td>
+          {{end}}
+        </tr>
+        {{end}}
+        {{if $logged}}
+        <tr>
+          <td colspan="2">
+            <!-- 
+              Javascript needs to be updated to take more generic class names.
+              Avoding this problem currently to prevent merge conflicts.
+             -->
+            <button onclick="openVoteForm({{$fileName}})" id="vote-button-{{$fileName}}">Write-in Vote!</button>
+            <div class="vote-form-popup" id="vote-form-{{$fileName}}" style="display: none">
+            <form action="/addVote" method="POST">
+              <input type="hidden" name="itemID" value="{{$itemID}}">
+              <input type="text" name="choice" required>
+              <input type="submit" value="Vote!">
+              <input type="button" onclick="closeVoteForm({{$fileName}})" value="Close">
+            </form>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      {{end}}
       {{range $i := .Removes}}
         {{$owner := $i.OwnerEmail}}
         {{$fgName := $i.FGName}}
@@ -47,11 +100,11 @@
           </td>
         </tr>
       {{end}}
-
     </table>
+    <!-- Handles tagging -->
     <h2>Tagged</h2>
     <table>
-      {{if .Logged}}
+      {{if $logged}}
         <tr>
           <td colspan="5">
             <button onclick="openTagForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
@@ -74,10 +127,10 @@
       <p>No Tags Yet!</p>
       {{ end }}
     </ul>
-
+    <!-- Handles comments -->
     <h2>Comments</h2>
     <table>
-        {{if .Logged}}
+        {{if $logged}}
           <tr>
             <td colspan="5">
               {{$id := .Item.ItemID}}
@@ -111,7 +164,7 @@
         {{ end }}
       </tr>
     </table>
-
+    <!-- Handles ratings -->
     <h2>Ratings</h2>
     <table cellspacing="20">
     <thead>
@@ -137,6 +190,14 @@
       function closeTagForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "none";
         document.getElementById("tag-button-"+ID).style.display = "block";
+      }
+      function openVoteForm(ID) {
+        document.getElementById("vote-form-"+ID).style.display = "block";
+        document.getElementById("vote-button-"+ID).style.display = "none";
+      }
+      function closeVoteForm(ID) {
+        document.getElementById("vote-form-"+ID).style.display = "none";
+        document.getElementById("vote-button-"+ID).style.display = "block";
       }
       function openCommentForm(ID) {
         document.getElementById("comment-form-"+ID).style.display = "block";

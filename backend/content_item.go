@@ -38,6 +38,11 @@ func GetPubContent() []*ContentItem {
 			from public content query.`)
 		}
 		CurrentItem.RandImg = rand.Intn(8)
+
+		if CheckPoll(CurrentItem.ItemID) {
+			CurrentItem.IsPoll = true
+			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
+		}
 		data = append(data, &CurrentItem)
 	}
 
@@ -89,6 +94,11 @@ func GetUserContent(email string) []*ContentItem {
 		CurrentItem.RandImg = rand.Intn(8)
 		CurrentItem.Comments = GetCommentsByItemId(CurrentItem.ItemID)
 		CurrentItem.Ratings = GetRatingsByItemId(CurrentItem.ItemID)
+
+		if CheckPoll(CurrentItem.ItemID) {
+			CurrentItem.IsPoll = true
+			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
+		}
 		data = append(data, &CurrentItem)
 	}
 
@@ -110,7 +120,10 @@ func GetContentItemById(itemId int) *ContentItem {
 	if err != nil {
 		log.Println("GetContentItemById() scan error:", err)
 	}
-
+	if CheckPoll(item.ItemID) {
+		item.IsPoll = true
+		item.Votes = GetVotes(item.ItemID)
+	}
 	return &item
 }
 
@@ -177,7 +190,7 @@ func GetRatingsByItemId(itemId int) []*Rating {
 	return ratings
 }
 
-// validUserSession checks to see if the current user, specified by username,
+// UserHasAccessToItem checks to see if the current user, specified by username,
 // is any friend groups that have access the current content item, specified by
 // itemId
 //
@@ -202,7 +215,7 @@ func UserHasAccessToItem(username string, itemId int) bool {
 	var accessCount int
 	err := row.Scan(&accessCount)
 	if err != nil {
-		log.Println("validUserSession() scan error: ", err)
+		log.Println("content_item: UserHasAccessToItem() scan error: ", err)
 	}
 
 	return accessCount > 0
@@ -216,7 +229,7 @@ func itemIsPublic(itemId int) bool {
 	var isPub bool
 	err := row.Scan(&isPub)
 	if err != nil {
-		log.Println("itemIsPublic() scan error: ", err)
+		log.Println("content_item: itemIsPublic() scan error: ", err)
 	}
 
 	return isPub
@@ -230,7 +243,7 @@ func userIsAuthor(username string, itemId int) bool {
 	var author string
 	err := row.Scan(&author)
 	if err != nil {
-		log.Println("userIsAuthor() scan error: ", err)
+		log.Println("content_item: userIsAuthor() scan error: ", err)
 	}
 
 	return author == username
