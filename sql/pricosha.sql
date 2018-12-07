@@ -29,6 +29,7 @@ create table Content_Item
     post_time timestamp,
     is_pub boolean,
     format int DEFAULT 0,
+    location varchar(128),
     primary key (item_id),
     foreign key (poster_email) references Person(email)
         on delete set null
@@ -149,9 +150,9 @@ VALUES
 
 -- Adds Friend_Groups
 SELECT "Adding Friend_Groups" as "";
-INSERT INTO Friend_Group 
+INSERT INTO Friend_Group
     (fg_name, owner_email, description)
-VALUES 
+VALUES
     ("family", "AA@nyu.edu", "Ann's Family"),
     ("family", "BB@nyu.edu", "Bob's Family"),
     ("roommates", "AA@nyu.edu", "Ann's Roommates"),
@@ -159,9 +160,9 @@ VALUES
 
 -- Adds Owners to Friend Groups in Belong
 SELECT "Adding Owners to Belong" as "";
-INSERT INTO Belong 
-    (member_email, fg_name, owner_email, role) 
-VALUES 
+INSERT INTO Belong
+    (member_email, fg_name, owner_email, role)
+VALUES
     ("AA@nyu.edu", "family", "AA@nyu.edu", 0),
     ("BB@nyu.edu", "family", "BB@nyu.edu", 0),
     ("AA@nyu.edu", "roommates", "AA@nyu.edu", 0),
@@ -169,9 +170,9 @@ VALUES
 
 -- Adds Members to Friend Groups in Belong
 SELECT "Adding Members to Belong" as "";
-INSERT INTO Belong 
-    (member_email, fg_name, owner_email) 
-VALUES 
+INSERT INTO Belong
+    (member_email, fg_name, owner_email)
+VALUES
     ("CC@nyu.edu", "family", "AA@nyu.edu"),
     ("DD@nyu.edu", "family", "AA@nyu.edu"),
     ("EE@nyu.edu", "family", "AA@nyu.edu"),
@@ -191,14 +192,14 @@ VALUES
 
 -- Adds Content_Items (1, 2, 3, 4, 5)
 SELECT "Adding Content_Items" as "";
-INSERT INTO Content_Item 
-    (poster_email, file_path, file_name, post_time, is_pub)
-VALUES 
-    ("AA@nyu.edu", "/Photos/Animals", "Whiskers", "2010-12-01 03:39:01", TRUE), 
-    ("AA@nyu.edu", "/Photos/Room21", "leftovers in fridge", "2014-06-10 04:00:30", FALSE),
-    ("BB@nyu.edu", "/Photos/Pets", "Rover", "2017-04-02 07:17:02", FALSE),
-    ("CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-02 03:12:10", TRUE),
-    ("EE@nyu.edu", "no", "no", "2018-12-02 03:12:11", TRUE);
+INSERT INTO Content_Item
+    (poster_email, file_path, file_name, post_time, is_pub, location)
+VALUES
+    ("AA@nyu.edu", "/Photos/Animals", "Whiskers", "2010-12-01 03:39:01", TRUE, "Astoria"),
+    ("AA@nyu.edu", "/Photos/Room21", "leftovers in fridge", "2014-06-10 04:00:30", FALSE, "Astoria"),
+    ("BB@nyu.edu", "/Photos/Pets", "Rover", "2017-04-02 07:17:02", FALSE, "East Flatbush"),
+    ("CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-02 03:12:10", TRUE, "East Flatbush"),
+    ("EE@nyu.edu", "no", "no", "2018-12-02 03:12:11", TRUE, "DUMBO");
 
 -- Shares Content_Items
 SELECT "Adding Shares of Content_Items" as "";
@@ -237,7 +238,7 @@ VALUES
     ("family", "AA@nyu.edu", 9),
     ("family", "AA@nyu.edu", 10),
     ("family", "AA@nyu.edu", 11);
-   
+
 -- END OF CONTENT_ITEM SHARING AND ADDING SECTION
 
 -- Add Votes
@@ -270,7 +271,7 @@ VALUES
 SELECT "Adding Comments" as "";
 INSERT INTO Comment
     (email, item_id, comment_time, body)
-VALUES 
+VALUES
     ("EE@nyu.edu", 10, NOW(), "TEST CASE FOR CLEANUP"),
     -- Above insert is for testing the CleanUp() function
     ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "this is a comment"),
@@ -281,7 +282,7 @@ VALUES
 SELECT "Adding Rates" as "";
 INSERT INTO Rate
     (email, item_id, rate_time, emoji)
-VALUES 
+VALUES
     ("EE@nyu.edu", 10, NOW(), "👍"),
     -- Above insert is for testing the CleanUp() function
     ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍"),

@@ -63,6 +63,8 @@ func main() {
 
 	http.HandleFunc("/addVote", addVoteHandler)
 
+	http.HandleFunc("/location", contentLocationHandler)
+
 	// Start server
 	log.Println("Frontend spun up!")
 	err := http.ListenAndServe(httpPort, nil)

@@ -12,8 +12,8 @@ status and returns them as an array of ContentItem pointers.
 func GetPubContent() []*ContentItem {
 	// Query DB for data
 	rows, err := db.Query(`
-	SELECT item_id, poster_email, file_path, file_name, post_time,
-	is_pub FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub
+	FROM Content_Item
 	WHERE is_pub = true
 	AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
 	`)

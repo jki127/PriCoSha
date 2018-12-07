@@ -10,7 +10,7 @@
         <div class="w3-card w3-round w3-white">
             <div class="w3-container">
                 <h4 class="w3-center">{{.Fname}} {{.Lname}}</h4>
-                <p class="w3-center"><img src="/css/faces/{{.UserAvatar}}.jpg" class="w3-circle" style="height:106px;width:106px"
+                <p class="w3-center"><img src="/css/faces/ggmf.png" class="w3-circle" style="height:106px;width:106px"
                         alt="Avatar"></p>
                 <hr>
                 <h5 class="w3-margin-right w3-text-theme"><i class="fa fa-user fa-fw "></i>Bio</h5>
@@ -39,7 +39,7 @@
                     <div class="w3-section">
                         <label><b>Add your bio</b></label>
                         <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a bio" name="biography"
-                            required>
+                            maxlength="280" required>
                         <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Submit</button>
                     </div>
                 </form>
@@ -185,7 +185,7 @@
 
             <!-- Ratings Display -->
             <div id="Ratings{{.ItemID}}" class="w3-hide w3-container w3-white">
-                <p>Ratings: {{range .Ratings}}
+                <p><b>Ratings:</b> {{range .Ratings}}
                     {{.Emoji}}
                     {{else}}
                     <p>No Ratings!</p>
@@ -197,15 +197,15 @@
             <div id="Comments{{.ItemID}}" class="w3-hide w3-container">
                 <h4>Comments</h4>
                 <p>{{range .Comments}}
-                <div class="w3-row w3-padding-small">
-                    <hr class="w3-clear">
-                    <span class="w3-right w3-opacity">{{.CommentTime}}</span>
-                    <h5>{{.Fname}} {{.Lname}}</h5>
-                    {{.Body}}
-                </div>
-                {{else}}
-                <p>No Comments!</p>
-                {{end}}</p>
+                    <div class="w3-row w3-padding-small">
+                        <hr class="w3-clear">
+                        <span class="w3-right w3-opacity">{{.CommentTime}}</span>
+                        <h5>{{.Fname}} {{.Lname}}</h5>
+                        {{.Body}}
+                    </div>
+                    {{else}}
+                    <p>No Comments!</p>
+                    {{end}}</p>
                 <form action="/addComment" method="POST">
                     <label for="comment"></label>
                     <input class="w3-input w3-border" type="text" placeholder="Add a comment" name="body" required>
@@ -268,7 +268,7 @@
                 x.previousElementSibling.className =
                     x.previousElementSibling.className.replace(" w3-theme-d1", "");
             }
-        }function myFunction2(id) {
+        } function myFunction2(id) {
             var x = document.getElementById(id);
             if (x.className.indexOf("w3-show") == -1) {
                 x.className += " w3-show";

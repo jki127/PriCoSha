@@ -1,62 +1,51 @@
-/* This is a placeholder css file. */
-.comment {
-    font-size: 20px
+html, body, h1, h2, h3, h4,h5, p, div, span {
+  font-family: -apple-system,BlinkMacSystemFont, 'Open Sans', "Segoe UI",
+  Roboto, Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif
 }
 
-/* The side navigation menu */
-.sidebar {
-    margin: 0;
-    padding: 0;
-    width: 200px;
-    background-color: #f1f1f1;
-    position: fixed;
-    height: 100%;
-    overflow: auto;
-  }
-  
-  /* Sidebar links */
-  .sidebar a {
-    font-family: "Lato", sans-serif;
-    display: block;
-    color: black;
-    padding: 16px;
-    text-decoration: none;
-  }
-  
-  /* Active/current link */
-  .sidebar a.active {
-    background-color: #4286f4;
-    color: white;
-  }
-  
-  /* Links on mouse-over */
-  .sidebar a:hover:not(.active) {
-    background-color: #555;
-    color: white;
-  }
+.w3-sidebar .w3-bar-item {
+  padding-left: 10px;
+  margin-top: 10px;
+}
 
-  
+.w3-sidebar .fa{
+  margin-right: 10px;
+  font-size: 1.2em;
+}
 
-/* Page content. The value of the margin-left property should match the value of the sidebar's width property */
-div.content {
-    margin-left: 200px;
-    padding: 1px 16px;
-    height: 1000px;
-  }
+.location-list {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 15px;
+}
 
-  @media screen and (max-width: 700px) {
-    .sidebar {
-      width: 100%;
-      height: auto;
-      position: relative;
-    }
-    .sidebar a {float: left;}
-    div.content {margin-left: 0;}
-  }
-  
-  @media screen and (max-width: 400px) {
-    .sidebar a {
-      text-align: center;
-      float: none;
-    }
-  }
+.location-list .location-pill {
+  background: #FFFFFF;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 20px;
+  padding: 5px 5px 5px 14px;
+  line-height: 30px;
+  margin-right: 20px;
+  color: #3c4043;
+  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.302),
+  0 1px 3px 1px rgba(60,64,67,0.149);
+  transition: box-shadow .08s linear,min-width .15s cubic-bezier(0.4,0.0,0.2,1)
+}
+
+.location-list .location-pill .location-count{
+  background: #000000;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  margin-left: 5px;
+  text-align: center;
+  color: #FFFFFF;
+  border-radius: 100%;
+}
+
+.location-pill:hover, .location-pill:focus{
+  box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302),
+  0 4px 8px 3px rgba(60,64,67,0.149)
+}
