@@ -19,8 +19,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	logged := true
 	username := cookie.Value
 
-	firstName, lastName := b.GetProfileData(username)
-	// firstName, lastName, bio := b.GetProfileData(username)
+	firstName, lastName, bio, bioBool := b.GetProfileData(username)
 	fgd := b.GetFriendGroup(username)
 	bfgd := b.GetBelongFriendGroup(username)
 	pendingTags := b.GetPendingTags(username)
@@ -29,29 +28,31 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	friends := b.GetFriendsList(username)
 
 	CurrentPD := struct {
-		Logged   bool
-		Username string
-		Fname    string
-		Lname    string
-		//Bio                string
+		Logged             bool
+		Username           string
+		Fname              string
+		Lname              string
+		Bio                string
 		FriendGroups       []*b.FriendGroup
 		BelongFriendGroups []*b.BFGDataElement
 		PendingTags        []*b.Tag
 		// PublicItems        []*b.ContentItem
 		PrivateItems []*b.ContentItem
 		FriendsList  []*b.FriendStruct
+		HasBio       bool
 	}{
 		logged,
 		username,
 		firstName,
 		lastName,
-		// bio,
+		bio,
 		fgd,
 		bfgd,
 		pendingTags,
 		// pubCont,
 		privCont,
 		friends,
+		bioBool,
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))

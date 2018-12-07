@@ -9,16 +9,11 @@ import (
 )
 
 //GetProfileData queries DB for data of user
-func GetProfileData(username string) (fname string, lname string) {
-	// func GetProfileData(username string) (fname string, lname string, bio string) {
-	rows, err := db.Query(`SELECT f_name, l_name 
-	FROM Person 
+func GetProfileData(username string) (fname string, lname string, bio string, bioBool bool) {
+	rows, err := db.Query(`SELECT f_name, l_name, bio
+	FROM Person
 	WHERE email=?`,
 		username)
-	// rows, err := db.Query(`SELECT f_name, l_name, bio
-	// FROM Person
-	// WHERE email=?`,
-	// 	username)
 	if err != nil {
 		log.Println(`backend: getProfileData(): Could not
 		query Profile Data from DB.`, username)
@@ -26,15 +21,19 @@ func GetProfileData(username string) (fname string, lname string) {
 	defer rows.Close()
 
 	for rows.Next() {
-		err := rows.Scan(&fname, &lname)
-		// err := rows.Scan(&fname, &lname, &bio)
+		err := rows.Scan(&fname, &lname, &bio)
 		if err != nil {
 			log.Println(`backend: getProfileData(): Could not scan row data
 			from Person content query.`, username)
 		}
 	}
-	return fname, lname
-	// return fname, lname, bio
+
+	bioBool = false
+	if bio != "" {
+		bioBool = true
+	}
+
+	return fname, lname, bio, bioBool
 }
 
 //GetFriendsList queries the data base and returns an array of friends of the given user

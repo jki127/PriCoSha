@@ -14,10 +14,12 @@
                         alt="Avatar"></p>
                 <hr>
                 <h5 class="w3-margin-right w3-text-theme"><i class="fa fa-user fa-fw "></i>Bio</h5>
-                <p>Insert Bio Here Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                    incididunt ut
-                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                    laboris nisi ut aliquip ex ea commodo consequat</p>
+                {{$ifbio := .HasBio}}
+                {{if $ifbio}}
+                <p>{{.Bio}}</p>
+                {{else}}
+                <p>No Bio</p>
+                {{end}}
             </div>
         </div>
         <br>
@@ -33,8 +35,6 @@
                     {{range .FriendGroups}}
                     <div class="w3-row w3-padding-small">
                         <div class="w3-card w3-gray w3-padding">
-                            <!-- <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
-                                    My {{.FGName}}</p> -->
                             <div class="w3-cell-row">
                                 <div class="w3-cell w3-cell-middle">
                                     <i class="fa fa-users fa-3x"></i>
