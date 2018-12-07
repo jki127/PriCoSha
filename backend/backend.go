@@ -53,6 +53,7 @@ type ContentItem struct {
 	PostTime time.Time
 	Fname    string
 	Lname    string
+	IsPoll   bool
 	RandImg  int
 }
 

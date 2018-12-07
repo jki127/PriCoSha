@@ -123,12 +123,12 @@
 
 
                 <!-- Folders display -->
-                <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
+                <!-- <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
                     My Folders</button>
                 <div id="Demo3" class="w3-hide w3-container">
                     <br>
                     <div class="w3-row-padding">
-                        {{range .PendingTags}}
+                        {{/*range .PendingTags*/}}
                         <div class="w3-half w3-margin-bottom">
                             <div class="w3-card w3-gray">
                                 <div class="w3-container">
@@ -139,11 +139,11 @@
                                 </div>
                             </div>
                         </div>
-                        {{else}}
+                        {{/*else*/}}
                         <p>No Folders</p>
-                        {{end}}
+                        {{/*end*/}}
                     </div>
-                </div>
+                </div> -->
 
 
 
@@ -159,22 +159,26 @@
 
         <!-- Show All Content Items that a user can see -->
         {{range .PrivateItems}}
+        {{ $ifPoll := .IsPoll}}
+        {{if $ifPoll}}
+        {{else}}
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
             <img src="/css/faces/{{.RandImg}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
             <span class="w3-right w3-opacity">{{.PostTime}}</span>
             <h4>{{.Fname}} {{.Lname}}</h4><br>
             <hr class="w3-clear">
-            <p>{{.FileName}}</p>
+            <p class="w3-margin-left">{{.FileName}}</p>
             <div class="w3-row-padding" style="margin:0 -16px">
                 <div class="w3-content" style="max-width:600px">
                     <img src="/css/images/{{.RandImg}}.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
                 </div>
             </div>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-star"></i>
-                Rate</button>
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
-                Comment</button>
+            <!-- <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-star"></i>
+                Rate</button> -->
+            <!-- <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
+                Comment</button> -->
         </div>
+        {{end}}
         {{end}}
 
 
