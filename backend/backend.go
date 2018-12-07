@@ -55,6 +55,7 @@ type Rating struct {
 }
 
 type Comment struct {
+	ItemID      int
 	Email       string
 	Body        string
 	CommentTime time.Time

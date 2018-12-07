@@ -34,13 +34,13 @@ func main() {
 	http.HandleFunc("/postItem", postItemHandler)
 
 	http.HandleFunc("/addtag", addTagHandler)
+	http.HandleFunc("/addComment", addCommentHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)
 	http.HandleFunc("/formAddFriend", formAddFriendHandler)
 	http.HandleFunc("/addFriend", addFriendHandler)
 	http.HandleFunc("/deleteFriend", deleteFriendHandler)
 	http.HandleFunc("/formDeleteFriend", formDeleteFriendHandler)
-
 
 	http.HandleFunc("/tag_manager", manageTagHandler)
 	http.HandleFunc("/decline", declineTagHandler)

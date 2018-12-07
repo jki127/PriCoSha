@@ -135,18 +135,16 @@ func GetTaggedByItemId(itemId int) []*string {
 func GetCommentsByItemId(itemId int) []*Comment {
 	rows, err := db.Query(`
 	SELECT email, comment_time, body FROM Comment WHERE item_id=?
-	`, itemId)
+	ORDER BY comment_time DESC`, itemId)
 
 	defer rows.Close()
 	if err != nil {
 		log.Println("GetCommentsByItemId() query error: ", err)
 	}
 
-	var (
-		comment  Comment
-		comments []*Comment
-	)
+	var comments []*Comment
 	for rows.Next() {
+		var comment Comment
 		rows.Scan(&comment.Email, &comment.CommentTime, &comment.Body)
 		comments = append(comments, &comment)
 	}
@@ -157,18 +155,16 @@ func GetCommentsByItemId(itemId int) []*Comment {
 func GetRatingsByItemId(itemId int) []*Rating {
 	rows, err := db.Query(`
 	SELECT email, rate_time, emoji FROM Rate WHERE item_id=?
-	`, itemId)
+	ORDER BY rate_time DESC`, itemId)
 
 	defer rows.Close()
 	if err != nil {
 		log.Println("GetRatingsByItemId() query error: ", err)
 	}
 
-	var (
-		rating  Rating
-		ratings []*Rating
-	)
+	var ratings []*Rating
 	for rows.Next() {
+		var rating Rating
 		rows.Scan(&rating.Email, &rating.Rate_time, &rating.Emoji)
 		ratings = append(ratings, &rating)
 	}

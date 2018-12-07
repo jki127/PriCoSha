@@ -12,13 +12,12 @@ import (
 // Handles requests to post content item data
 func postItemHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("username")
-	var username string
 	if err != nil {
 		// User is not logged in, redirect
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	username = cookie.Value
+	username := cookie.Value
 
 	// Parse HTML form for user-entered data about content item
 	r.ParseForm()

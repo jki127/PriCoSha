@@ -19,24 +19,26 @@
         <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
         <td>{{ .Item.Email }}</td>
       </tr>
-      {{if .LoggedIn}}
-      <tr>
-        <td colspan="5">
-          <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
-          <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
-            <form action="/addtag?id={{.Item.ItemID}}" method="POST">
-              <label for="username">Username:</label>
-              <input type="text" name="username" required>
-              <input type="submit" value="Tag!">
-              <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
-            </form>
-          </div>
-        </td>
-      </tr>
-      {{end}}
     </table>
 
     <h2>Tagged</h2>
+    <table>
+      {{if .Logged}}
+        <tr>
+          <td colspan="5">
+            <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
+            <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
+              <form action="/addtag?id={{.Item.ItemID}}" method="POST">
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+                <input type="submit" value="Tag!">
+                <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
+              </form>
+            </div>
+          </td>
+        </tr>
+      {{end}}
+    </table>
     <ul>
       {{ range .TaggedNames }}
       <li>{{ . }}</li>
@@ -46,21 +48,40 @@
     </ul>
 
     <h2>Comments</h2>
+    <table>
+        {{if .Logged}}
+          <tr>
+            <td colspan="5">
+              {{$id := .Item.ItemID}}
+              <button onclick="openCommentForm({{$id}})" id="comment-button-{{$id}}">Add a comment</button>
+              <div class="comment-form-popup" id="comment-form-{{$id}}" style="display: none">
+                <form action="/addComment" method="POST">
+                  <label for="comment">Comment:</label>
+                  <input type="text" name="body" required>
+                  <input type="hidden" name="itemID" value="{{$id}}">
+                  <input type="submit" value="Submit">
+                  <input type="button" onclick="closeCommentForm({{$id}})" value="Close">
+                </form>
+              </div>
+            </td>
+          </tr>
+        {{end}}
+    </table>
     <table cellspacing="20">
       <thead>
         <th>Comment</th>
         <th>Email</th>
         <th>Comment Time</th>
       </thead>
+      {{ range .Comments }}
       <tr>
-          {{ range .Comments }}
-            <td>{{ .Body }}</td>
-            <td>{{ .Email }}</td>
-            <td>{{ .CommentTime }}</td>
-          {{ else }}
+          <td>{{ .Body }}</td>
+          <td>{{ .Email }}</td>
+          <td>{{ .CommentTime }}</td>
+        {{ else }}
           <td colspan="3">No Comments Yet!</td>
-          {{ end }}
-        </tr>
+        {{ end }}
+      </tr>
     </table>
 
     <h2>Ratings</h2>
@@ -70,25 +91,33 @@
       <th>Email</th>
       <th>Rate Time</th>
     <thead>
-    <tr>
       {{ range .Ratings }}
-      <td>{{ .Emoji }}</td>
-      <td>{{ .Email }}</td>
-      <td>{{ .Rate_time }}</td>
+      <tr>
+        <td>{{ .Emoji }}</td>
+        <td>{{ .Email }}</td>
+        <td>{{ .Rate_time }}</td>
       {{ else }}
-      <td colspan="3">No Ratings Yet!</td>
-      {{ end }}
-    </tr>
+        <td colspan="3">No Ratings Yet!</td>
+      </tr>
+    {{ end }}
     </table>
 
     <script type="text/javascript">
-      function openForm(ID) {
+      function openTagForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "block";
         document.getElementById("tag-button-"+ID).style.display = "none";
       }
-      function closeForm(ID) {
+      function closeTagForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "none";
         document.getElementById("tag-button-"+ID).style.display = "block";
+      }
+      function openCommentForm(ID) {
+        document.getElementById("comment-form-"+ID).style.display = "block";
+        document.getElementById("comment-button-"+ID).style.display = "none";
+      }
+      function closeCommentForm(ID) {
+        document.getElementById("comment-form-"+ID).style.display = "none";
+        document.getElementById("comment-button-"+ID).style.display = "block";
       }
     </script>
   </body>
