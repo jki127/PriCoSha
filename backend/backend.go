@@ -55,6 +55,7 @@ type ContentItem struct {
 	Lname    string
 	IsPoll   bool
 	RandImg  int
+	Comments []*Comment
 }
 
 type Rating struct {
@@ -68,6 +69,8 @@ type Comment struct {
 	Email       string
 	Body        string
 	CommentTime time.Time
+	Fname       string
+	Lname       string
 }
 
 var db *sql.DB

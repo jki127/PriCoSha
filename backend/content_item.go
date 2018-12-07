@@ -87,6 +87,7 @@ func GetUserContent(email string) []*ContentItem {
 			from public content query.`)
 		}
 		CurrentItem.RandImg = rand.Intn(8)
+		CurrentItem.Comments = GetCommentsByItemId(CurrentItem.ItemID)
 		data = append(data, &CurrentItem)
 	}
 
@@ -137,7 +138,7 @@ func GetTaggedByItemId(itemId int) []*string {
 
 func GetCommentsByItemId(itemId int) []*Comment {
 	rows, err := db.Query(`
-	SELECT email, comment_time, body FROM Comment WHERE item_id=?
+	SELECT Comment.email, comment_time, body, f_name, l_name FROM Comment JOIN Person ON Comment.email=Person.email WHERE item_id=?
 	ORDER BY comment_time DESC`, itemId)
 
 	defer rows.Close()
@@ -148,7 +149,7 @@ func GetCommentsByItemId(itemId int) []*Comment {
 	var comments []*Comment
 	for rows.Next() {
 		var comment Comment
-		rows.Scan(&comment.Email, &comment.CommentTime, &comment.Body)
+		rows.Scan(&comment.Email, &comment.CommentTime, &comment.Body, &comment.Fname, &comment.Lname)
 		comments = append(comments, &comment)
 	}
 
