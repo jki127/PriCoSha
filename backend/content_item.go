@@ -49,13 +49,14 @@ func GetPubContent() []*ContentItem {
 // The items are ordered in reverse chronological order
 func GetUserContent(email string) []*ContentItem {
 	rows, err := db.Query(`
-	SELECT * FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub 
+	FROM Content_Item
 	WHERE item_id IN (
 		-- All item ids shared in a user's friendgroups
 		SELECT item_id FROM Share
-		WHERE fg_name IN (
+		WHERE (fg_name, owner_email) IN (
 			-- All friend groups the user belongs to
-			SELECT fg_name FROM Belong
+			SELECT fg_name, owner_email FROM Belong
 			WHERE member_email=?
 		)
 	)  OR (is_pub = 1 AND post_time > DATE_SUB(NOW(), INTERVAL 24 HOUR))
