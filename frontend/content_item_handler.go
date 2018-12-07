@@ -8,58 +8,47 @@ import (
 	"strconv"
 )
 
-// PageData is used for sending data to the template pages
-type PageData struct {
-	Logged      bool
-	Username    string
-	Item        *b.ContentItem
-	TaggedNames []*string
-	Ratings     []*b.Rating
-	Comments    []*b.Comment
-}
-
 // getUserSession takes in a http.Request, reads the username cookie and
 // returns two values:
 // - a bool representing if the current user is logged in
 // - a string representing the current user's username
 //
-// If the user is not logged in then it will return the values (false, "")
-func getUserSessionInfo(r *http.Request) (bool, string) {
-	cookie, err := r.Cookie("username")
-	var logged bool
-	var username string
-	if err != nil {
-		logged = false
-		username = ""
-	} else {
-		logged = true
-		username = cookie.Value
-	}
-	return logged, username
-}
 
 func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 	logged, username := getUserSessionInfo(r)
 	urlParams := r.URL.Query()
-	itemId, err := strconv.Atoi(urlParams["iid"][0])
+	itemID, err := strconv.Atoi(urlParams["iid"][0])
 	if err != nil {
 		log.Println(err)
 	}
 
-	if !b.UserHasAccessToItem(username, itemId) {
+	if !b.UserHasAccessToItem(username, itemID) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
-	pageData := PageData{
-		Logged:      logged,
-		Username:    username,
-		Item:        b.GetContentItemById(itemId),
-		TaggedNames: b.GetTaggedByItemId(itemId),
-		Ratings:     b.GetRatingsByItemId(itemId),
-		Comments:    b.GetCommentsByItemId(itemId),
+	// Gets groups the user can remove this item from
+	removes := b.UserCanRemoveFrom(username, itemID)
+
+	pageData := struct {
+		Logged      bool
+		Username    string
+		Item        *b.ContentItem
+		TaggedNames []*string
+		Ratings     []*b.Rating
+    Comments    []*b.Comment
+		Removes     []*b.FriendGroup
+	}{
+		logged,
+		username,
+		b.GetContentItemById(itemID),
+		b.GetTaggedByItemId(itemID),
+		b.GetRatingsByItemId(itemID),
+    b.GetCommentsByItemId(itemId),
+		removes,
+
 	}
 
-	t := template.Must(template.ParseFiles("../web/template/content_item.html"))
-	t.Execute(w, pageData)
+	t := template.Must(template.New("").ParseFiles("../web/template/content_item.html", "../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", pageData)
 }

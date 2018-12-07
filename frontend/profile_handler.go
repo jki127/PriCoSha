@@ -14,7 +14,7 @@ type ProfileData struct {
 	Fname              string
 	Lname              string
 	FriendGroups       []*b.FriendGroup
-	BelongFriendGroups []*b.FriendGroup
+	BelongFriendGroups []*b.BFGDataElement
 	PendingTags        []*b.Tag
 }
 

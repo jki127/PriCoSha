@@ -7,9 +7,32 @@ import (
 )
 
 func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
-	memberEmail := r.FormValue("memberEmail")
+	logged, username := getUserSessionInfo(r)
+
+	if !logged {
+		log.Println("User is not logged in and cannot remove friends.")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
 
 	url := r.URL
+	queryData := url.Query()
+	fgName := queryData["fgn"][0]
+	ownerEmail := queryData["oe"][0]
+	role := b.GetRole(fgName, ownerEmail, username)
+
+	switch role {
+	case 0:
+		// do nothing
+	case 1:
+		// do nothing
+	default:
+		log.Println(`User does not have correct privileges to delete friends.`)
+		http.Redirect(w, r, "/friendgroups", http.StatusFound)
+		return
+	}
+
+	memberEmail := r.FormValue("memberEmail")
 	redirectStr := r.Header.Get("referer")
 
 	if memberEmail == "" {
@@ -18,10 +41,6 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, redirectStr, http.StatusFound)
 		return
 	}
-
-	queryData := url.Query()
-	fgName := queryData["fgn"][0]
-	ownerEmail := queryData["oe"][0]
 
 	if ok := b.ValidateBelongFriendGroup(memberEmail, fgName, ownerEmail); !ok { ///checks to see if member belongs in friend group to delete
 		b.DeleteFriend(memberEmail, fgName, ownerEmail)
@@ -38,3 +57,4 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/friendgroups", http.StatusFound)
 	return
 }
+
