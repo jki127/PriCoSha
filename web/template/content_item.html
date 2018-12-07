@@ -17,9 +17,11 @@
       </tr>
       <tr>
         {{$itemID := .Item.ItemID}}
+        {{$fileName := .Item.FileName}}
         {{$isPoll := .Item.IsPoll}}
+        {{$email := .Item.Email}}
         <td>{{$itemID}}</td>
-        <td>{{ .Item.FileName }}</a></td>
+        <td>{{$fileName}}</a></td>
         {{if $isPoll}}
         <td>n/a</td>
         {{else}}
@@ -27,16 +29,51 @@
         {{end}}
         <td>{{ .Item.PostTime }}</td>
         <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
-        <td>{{ .Item.Email }}</td>
+        <td>{{$email}}</td>
       </tr>
-      {{$isMyContent := eq .Item.Email .Username}}
+      {{$isMyContent := eq $email .Username}}
       {{if $isMyContent}}
       <form action="/deleteItem" method=POST onsubmit="return verifyDelete({{.Item.ItemID}})">
         <input type="hidden" name="itemID" value="{{.Item.ItemID}}">
         <input type="submit" value="Delete Item" style="background-color: red">
       </form>
       {{end}}
-
+      {{if $isPoll}}
+        <tr>
+          <th colspan="2" align="left">
+            {{$fileName}}
+          </th>
+        </tr>
+        <tr>
+          <th align="left">Choice</th>
+          <th align="center"># Votes</th>
+        </tr>
+        {{range .Item.Votes}}
+        <tr>
+          <td align="left">{{.Choice}}</td>
+          <td align="center">{{.Count}}</td>
+        </tr>
+        {{end}}
+        {{if .Logged}}
+        <tr>
+          <td colspan="2">
+            <!-- 
+              Javascript needs to be updated to take more generic class names.
+              Avoding this problem currently to prevent merge conflicts.
+             -->
+            <button onclick="openForm({{$fileName}})" id="tag-button-{{$fileName}}">Vote On Poll</button>
+            <div class="tag-form-popup" id="tag-form-{{$fileName}}" style="display: none">
+            <form action="/addVote" method="POST">
+              <input type="hidden" name="itemID" value="{{$itemID}}">
+              <input type="text" name="choice" required>
+              <input type="submit" value="Vote!">
+              <input type="button" onclick="closeForm({{$fileName}})" value="Close">
+            </form>
+            </div>
+          </td>
+        </tr>
+        {{end}}
+      {{end}}
       {{if .Logged}}
       <tr>
         <td colspan="5">

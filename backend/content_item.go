@@ -192,7 +192,7 @@ func UserHasAccessToItem(username string, itemId int) bool {
 	var accessCount int
 	err := row.Scan(&accessCount)
 	if err != nil {
-		log.Println("validUserSession() scan error: ", err)
+		log.Println("content_item: UserHasAccessToItem() scan error: ", err)
 	}
 
 	return accessCount > 0
@@ -206,7 +206,7 @@ func itemIsPublic(itemId int) bool {
 	var isPub bool
 	err := row.Scan(&isPub)
 	if err != nil {
-		log.Println("itemIsPublic() scan error: ", err)
+		log.Println("content_item: itemIsPublic() scan error: ", err)
 	}
 
 	return isPub
@@ -220,7 +220,7 @@ func userIsAuthor(username string, itemId int) bool {
 	var author string
 	err := row.Scan(&author)
 	if err != nil {
-		log.Println("userIsAuthor() scan error: ", err)
+		log.Println("content_item: userIsAuthor() scan error: ", err)
 	}
 
 	return author == username

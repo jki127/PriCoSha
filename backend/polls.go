@@ -63,20 +63,54 @@ func GetVotes(itemID int) []*Vote {
 	return data
 }
 
+// checkVote returns whether vote has already been cast
+func checkVote(voterEmail string, itemID int) bool {
+	row := db.QueryRow(`SELECT item_id
+		FROM Vote
+		WHERE voter_email=?
+		AND item_id=?`,
+		voterEmail, itemID)
+
+	var temp int
+	err := row.Scan(&temp)
+
+	if err == nil {
+		return true
+	}
+	return false
+}
+
 /*
 AddVote takes a Vote primary key and add a row to the Vote table
 */
 func AddVote(voterEmail string, itemID int, choice string) {
-	statement, err := db.Prepare(`INSERT INTO Vote
+	// If user has voted in poll already, update choice
+	if checkVote(voterEmail, itemID) {
+		statement, err := db.Prepare(`UPDATE Vote
+			SET choice=?
+			WHERE voter_email=?
+			AND item_id=?`)
+		if err != nil {
+			log.Println(`polls: AddVote(): Could not prepare update`)
+		}
+
+		_, err = statement.Exec(choice, voterEmail, itemID)
+		if err != nil {
+			log.Println(`polls: AddVote(): Could not execute update`)
+		}
+	} else {
+		// Otherwise, add vote to poll
+		statement, err := db.Prepare(`INSERT INTO Vote
 		(voter_email, item_id, choice)
 		VALUES
 		(?, ?, ?)`)
-	if err != nil {
-		log.Println(`polls: AddVote(): Could not prepare insert`)
-	}
+		if err != nil {
+			log.Println(`polls: AddVote(): Could not prepare insert`)
+		}
 
-	_, err = statement.Exec(voterEmail, itemID, choice)
-	if err != nil {
-		log.Println(`polls: AddVote(): Could not execute insert`)
+		_, err = statement.Exec(voterEmail, itemID, choice)
+		if err != nil {
+			log.Println(`polls: AddVote(): Could not execute insert`)
+		}
 	}
 }
