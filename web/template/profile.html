@@ -173,83 +173,111 @@
                     <img src="/css/images/{{.RandImg}}.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
                 </div>
             </div>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-star"></i>
-                Rate</button>
-            <button onclick="myFunction('Item{{.ItemID}}')" type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i
+
+            <!-- Ratings Button -->
+            <button onclick="myFunction2('Ratings{{.ItemID}}')" type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i
+                    class="fa fa-star"></i>
+                Ratings</button>
+            <!-- Comments Button -->
+            <button onclick="myFunction2('Comments{{.ItemID}}')" type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i
                     class="fa fa-comment"></i>
                 Comments</button>
-            <div id="Item{{.ItemID}}" class="w3-hide w3-container">
-                <p>{{range .Comments}}
-                    <div class="w3-row w3-padding-small">
-                        <hr class="w3-clear">
-                        <span class="w3-right w3-opacity">{{.CommentTime}}</span>
-                        <h5>{{.Fname}} {{.Lname}}</h5>
-                        <p></p>{{.Body}}</p>
+
+            <!-- Ratings Display -->
+            <div id="Ratings{{.ItemID}}" class="w3-hide w3-container w3-white">
+                <p>{{range .Ratings}}
+                    {{.Emoji}}
+                    {{else}}
+                    <p>No Ratings!</p>
+                    {{end}}</p>
             </div>
-            {{else}}
-            <p>No Comments!</p>
-            {{end}}</p>
-            <form action="/addComment" method="POST">
-                <label for="comment"></label>
-                <input class="w3-input w3-border" type="text" placeholder="Add a comment" name="body" required>
-                <input type="hidden" name="itemID" value="{{.ItemID}}">
-                <input type="hidden" name="loc" value="profile">
-                <input class="w3-button w3-blue w3-padding" type="submit" value="Add Comment">
-            </form>
-            <br>
-        </div>
-
-    </div>
-    {{end}}
-    {{end}}
 
 
-
-    <!-- End Middle Column -->
-</div>
-<!-- Right Column -->
-<div class="w3-col m2">
-
-    <!-- Show Tag Requests here -->
-    {{range .PendingTags}}
-    <div class="w3-card w3-round w3-white w3-center">
-        <div class="w3-container">
-            <p>Tag Request</p>
-            <i class="fa fa-fw fa-tag fa-3x"></i><br>
-            <span>{{.TaggerEmail}} tagged you on {{.FileName}}</span>
-            <div class="w3-row w3-opacity">
-                <div class="w3-half">
-                    <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
-                            class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button></a>
+            <!-- Comments Display -->
+            <div id="Comments{{.ItemID}}" class="w3-hide w3-container">
+                <h4>Comments</h4>
+                {{range .Comments}}
+                <div class="w3-row w3-padding-small">
+                    <hr class="w3-clear">
+                    <span class="w3-right w3-opacity">{{.CommentTime}}</span>
+                    <h5>{{.Fname}} {{.Lname}}</h5>
+                    {{.Body}}
                 </div>
-                <div class="w3-half">
-                    <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
-                            class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button></a>
+                {{else}}
+                <p>No Comments!</p>
+                {{end}}
+                <form action="/addComment" method="POST">
+                    <label for="comment"></label>
+                    <input class="w3-input w3-border" type="text" placeholder="Add a comment" name="body" required>
+                    <input type="hidden" name="itemID" value="{{.ItemID}}">
+                    <input type="hidden" name="loc" value="profile">
+                    <input class="w3-button w3-blue w3-padding" type="submit" value="Add Comment">
+                </form>
+                <br>
+
+            </div>
+
+        </div>
+        {{end}}
+        {{end}}
+
+
+
+        <!-- End Middle Column -->
+    </div>
+    <!-- Right Column -->
+    <div class="w3-col m2">
+
+        <!-- Show Tag Requests here -->
+        {{range .PendingTags}}
+        <div class="w3-card w3-round w3-white w3-center">
+            <div class="w3-container">
+                <p>Tag Request</p>
+                <i class="fa fa-fw fa-tag fa-3x"></i><br>
+                <span>{{.TaggerEmail}} tagged you on {{.FileName}}</span>
+                <div class="w3-row w3-opacity">
+                    <div class="w3-half">
+                        <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
+                                class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button></a>
+                    </div>
+                    <div class="w3-half">
+                        <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
+                                class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button></a>
+                    </div>
                 </div>
             </div>
         </div>
+        <br>
+        {{end}}
+
+        <!-- End Right Column -->
     </div>
-    <br>
-    {{end}}
 
-    <!-- End Right Column -->
-</div>
-
-<!-- End Grid -->
+    <!-- End Grid -->
 
 
-<script>
-    // Accordion
-    function myFunction(id) {
-        var x = document.getElementById(id);
-        if (x.className.indexOf("w3-show") == -1) {
-            x.className += " w3-show";
-            x.previousElementSibling.className += " w3-theme-d1";
-        } else {
-            x.className = x.className.replace("w3-show", "");
-            x.previousElementSibling.className =
-                x.previousElementSibling.className.replace(" w3-theme-d1", "");
+    <script>
+        // Accordion
+        function myFunction(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-theme-d1";
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        }function myFunction2(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className;
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
         }
-    }
-</script>
-{{end}}
+    </script>
+    {{end}}

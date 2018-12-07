@@ -88,6 +88,7 @@ func GetUserContent(email string) []*ContentItem {
 		}
 		CurrentItem.RandImg = rand.Intn(8)
 		CurrentItem.Comments = GetCommentsByItemId(CurrentItem.ItemID)
+		CurrentItem.Ratings = GetRatingsByItemId(CurrentItem.ItemID)
 		data = append(data, &CurrentItem)
 	}
 

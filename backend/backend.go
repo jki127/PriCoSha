@@ -51,11 +51,12 @@ type ContentItem struct {
 	FilePath string
 	FileName string
 	PostTime time.Time
-	Fname    string
+	Fname    string 
 	Lname    string
 	IsPoll   bool
 	RandImg  int
 	Comments []*Comment
+	Ratings  []*Rating
 }
 
 type Rating struct {
