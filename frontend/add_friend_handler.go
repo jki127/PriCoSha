@@ -7,12 +7,35 @@ import (
 )
 
 func addFriendHandler(w http.ResponseWriter, r *http.Request) {
-	fname := r.FormValue("fname")
-	lname := r.FormValue("lname")
+	logged, username := getUserSessionInfo(r)
+
+	if !logged {
+		log.Println("User is not logged in and cannot add friends.")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
 
 	url := r.URL
+	queryData := url.Query()
+	fgName := queryData["fgn"][0]
+	ownerEmail := queryData["oe"][0]
+	role := b.GetRole(fgName, ownerEmail, username)
+
+	switch role {
+	case 0:
+		// do nothing
+	case 1:
+		// do nothing
+	default:
+		log.Println(`User does not have correct privileges to add friends.`)
+		http.Redirect(w, r, "/friendgroups", http.StatusFound)
+		return
+	}
 
 	redirectStr := r.Header.Get("referer")
+
+	fname := r.FormValue("fname")
+	lname := r.FormValue("lname")
 
 	if fname == "" || lname == "" {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "empty"}
@@ -39,10 +62,6 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "addFriendErr")
 
 	userEmail = *EmailList[0]
-
-	queryData := url.Query()
-	fgName := queryData["fgn"][0]
-	ownerEmail := queryData["oe"][0]
 
 	if ok := b.ValidateBelongFriendGroup(userEmail, fgName, ownerEmail); ok {
 		b.AddFriend(userEmail, fgName, ownerEmail)

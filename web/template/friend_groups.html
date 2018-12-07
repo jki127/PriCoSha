@@ -9,78 +9,110 @@
 
 <!-- defined a row, content in this container will occupy the same horizontal space -->
 <div class="w3-row">
-    <div class="w3-padding">
-        <!-- defined a card that will be used to present the table in -->
-        <div class="w3-card w3-white w3-padding-large ">
-            <h2>Friend Groups Owned</h2>
-
-            <!-- This adds horiztonal Scrolling -->
-            <div class="w3-responsive">
-                <!-- added a table with alternating colors via w3-striped -->
-                <table class="w3-table w3-striped">
-                    <thead>
-                        <!-- Set header row background color to grey -->
-                        <tr class="w3-gray">
-                            <th align="left">Name</th>
-                            <th align="left">Owner</th>
-                            <th align="left">Description</th>
-                            <th align="center">Add</th>
-                            <th align="center">Delete</th>
-                        </tr>
-                    </thead>
-                    {{ range .OwnFriendGroups }}
-                    <tr>
-                        <td align="left">{{ .FGName }}</td>
-                        <td align="left">{{ .OwnerEmail }}</td>
-                        <td align="left">{{ .Description }}</td>
-                        <td align="center"><a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a></td>
-                        <td align="center"><a href="/formDeleteFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Delete Friend</button></a></td>
-                    </tr>
-                    {{ else }}
-                    {{/* if the range is empty show this */}}
-                    <tr>
-                        <td colspan="5">No Friend Groups!<td>
-                    </tr>
-                    {{ end }}
-                </table>
-            </div>
-        </div>
+  <div class="w3-padding">
+    <!-- defined a card that will be used to present the table in -->
+    <div class="w3-card w3-white w3-padding-large ">
+      <h2>Friend Groups Owned</h2>
+      <!-- This adds horiztonal Scrolling -->
+      <div class="w3-responsive">
+        <!-- added a table with alternating colors via w3-striped -->
+        <table class="w3-table w3-striped">
+          <thead>
+            <!-- Set header row background color to grey -->
+            <tr class="w3-gray">
+              <th align="left">Name</th>
+              <th align="left">Owner</th>
+              <th align="left">Description</th>
+              <th align="center">Add</th>
+              <th align="center">Delete</th>
+              <th align="center">Manage Privileges</th>
+            </tr>
+          </thead>
+          {{ range .OwnFriendGroups }}
+          <tr>
+            <td align="left">{{ .FGName }}</td>
+            <td align="left">{{ .OwnerEmail }}</td>
+            <td align="left">{{ .Description }}</td>
+            <td align="center">
+              <a href="/formAddFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Add Friend</button></a>
+            </td>
+            <td align="center">
+              <a href="/formDeleteFriend?fgn={{.FGName}}&oe={{.OwnerEmail}}"><button>Delete Friend</button></a>
+            </td>
+            <td align="center">
+              <form action="/managePrivilege" method="POST">
+                <input type="hidden" name="fgName" value="{{.FGName}}">
+                <input type="hidden" name="ownerEmail" value="{{.OwnerEmail}}">
+                <input type="submit" value="Manage Privileges">
+              </form>
+            </td>
+          </tr>
+          {{ else }}
+          {{/* if the range is empty show this */}}
+          <tr>
+            <td colspan="5">You don't own any friend groups!<td>
+          </tr>
+          {{ end }}
+        </table>
+      </div>
     </div>
+  </div>
 </div>
 
 <div class="w3-row">
-    <div class="w3-padding">
-        <!-- defined a card that will be used to present the table in -->
-        <div class="w3-card w3-white w3-padding-large">
-            <h2>Friend Groups You Belong To</h2>
-            <!-- This adds horiztonal Scrolling -->
-            <div class="w3-responsive">
-                <!-- added a table with alternating colors via w3-striped -->
-                <table class="w3-table w3-striped">
-                    <thead>
-                        <!-- Set header row background color to grey -->
-                        <tr class="w3-grey">
-                            <th>Name</th>
-                            <th>Owner</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    {{ range .BelongFriendGroups }}
-                    <tr>
-                        <td>{{ .FGName }}</td>
-                        <td>{{ .OwnerEmail }}</td>
-                        <td>{{ .Description }}</td>
-                    </tr>
-                    {{ else }}
-                    {{/* if the range is empty show this */}}
-                    <tr>
-                        <td colspan="5">No Friend Groups!<td>
-                    </tr>
-                    {{ end }}
-                </table>
-            </div>
+  <div class="w3-padding">
+    <!-- defined a card that will be used to present the table in -->
+    <div class="w3-card w3-white w3-padding-large">
+        <h2>Friend Groups You Belong To</h2>
+        <!-- This adds horiztonal Scrolling -->
+        <div class="w3-responsive">
+          <!-- added a table with alternating colors via w3-striped -->
+          <table class="w3-table w3-striped">
+            <thead>
+              <!-- Set header row background color to grey -->
+              <tr class="w3-grey">
+                <th align="left">Name</th>
+                <th align="left">Owner</th>
+                <th align="left">Description</th>
+                <th align="center">Add</th>
+                <th align="center">Delete</th>
+                <th align="center">Manage Privileges</th>
+              </tr>
+            </thead>
+            {{range .BFGData }}
+            {{$notMember := ne .Role 2}}
+            <tr>
+              {{$fgName := .FG.FGName}}
+              {{$ownerEmail := .FG.OwnerEmail}}
+              <td align="left">{{$fgName}}</td>
+              <td align="left">{{$ownerEmail}}</td>
+              <td align="left">{{ .FG.Description }}</td>
+              {{if $notMember}}
+              <td align="center">
+                <a href="/formAddFriend?fgn={{$fgName}}&oe={{$ownerEmail}}"><button>Add Friend</button></a>
+              </td>
+              <td align="center">
+                <a href="/formDeleteFriend?fgn={{$fgName}}&oe={{$ownerEmail}}"><button>Delete Friend</button></a>
+              </td>
+              <td align="center">
+                <form action="/managePrivilege" method="POST">
+                  <input type="hidden" name="fgName" value="{{$fgName}}">
+                  <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+                  <input type="submit" value="Manage Privileges">
+                </form>
+              </td>
+              {{end}}
+            </tr>
+            {{ else }}
+            {{/* if the range is empty show this */}}
+            <tr>
+              <td colspan="5">No Friend Groups!<td>
+            </tr>
+            {{ end }}
+          </table>
         </div>
     </div>
+  </div>
 </div>
 <!-- this ends the definition of the content in the template -->
 {{end}}

@@ -1,0 +1,146 @@
+<html>
+  <meta charset="UTF-8">
+  <title>
+      Manage Privileges
+  </title>
+  {{$isAdmin := eq .Role 0}}
+  <body>
+    <h1>
+      {{$fgName := .FGName}}
+      {{$ownerEmail := .OwnerEmail}}
+      Managing Privileges of {{$ownerEmail}}'s {{$fgName}} Group
+      <div style="float:right">
+        <a href="/friendgroups">Friend Groups</a>
+      </div>
+    </h1>
+    <hr>
+    <h2>
+      Admin:
+    </h2>
+    <table cellspacing="20">
+      <tr>
+        <td>
+          {{$ownerEmail}}
+        </td>
+      </tr>
+    </table>
+    <h2>
+      Mods:
+    </h2>
+    <table cellspacing="20">
+      {{range .Mods}}
+      <tr>
+        <td>
+          {{.}}
+        </td>
+        {{if $isAdmin}}
+        <td>
+          <form action="/changePrivilege" method="POST">
+            <input type="hidden" name="fgName" value="{{$fgName}}">
+            <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+            <input type="hidden" name="memberEmail" value="{{.}}">
+            <input type="hidden" name="actionType" value=0>
+            <input type="submit" value="Demote">
+          </form>
+        </td>
+        {{end}}
+      </tr>
+      {{else}}
+      <tr>
+        <td>
+          No current mods
+        </td>
+      </tr>
+      {{end}}
+    </table>
+    <h2>
+      Members:
+    </h2>
+    <table cellspacing="20">
+      {{range .Members}}
+      <tr>
+        <td>
+          {{.}}
+        </td>
+        {{if $isAdmin}}
+        <td>
+            <form action="/changePrivilege" method="POST">
+              <input type="hidden" name="fgName" value="{{$fgName}}">
+              <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+              <input type="hidden" name="memberEmail" value="{{.}}">
+              <input type="hidden" name="actionType" value="1">
+              <input type="submit" value="Promote">
+            </form>
+        </td>
+        {{end}}
+      </tr>
+      {{else}}
+      <tr>
+        <td>
+          No current members
+        </td>
+      </tr>
+      {{end}}
+    </table>
+    {{if $isAdmin}}
+    <h2>
+      Admin Options:
+    </h2>
+    <table cellspacing="20">
+      <tr>
+        <td>
+          <button onclick="openForm('rename')" id="rename-button">Rename Group</button>
+          <div class="rename-form-popup" id="rename-form" style="display:none">
+            <form action="/renameGroup" method="POST">
+              <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+              <input type="hidden" name="fgName" value="{{$fgName}}">
+              <label for="newName">Enter new name:</label>
+              <input type="text" name="newName" required>
+              <input type="submit" value="Rename!">
+              <input type="button" onclick="closeForm('rename')" value="Close">
+            </form>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button onclick="openForm('swap')" id="swap-button">Swap Owner</button>
+          <div class="swap-form-popup" id="swap-form" style="display:none">
+            <form action="/changeOwner" method="POST">
+              <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+              <input type="hidden" name="fgName" value="{{$fgName}}">
+              <label for="newOwner">Enter username:</label>
+              <input type="text" name="newOwner" required>
+              <input type="submit" value="Swap!">
+              <input type="button" onclick="closeForm('swap')" value="Close">
+            </form>
+          </div>
+        </td>
+      </tr>
+      <tr>
+          <td>
+            <button onclick="openForm('delete')" id="delete-button">Delete Group</button>
+            <div class="delete-form-popup" id="delete-form" style="display:none">
+              <form action="/deleteGroup" method="POST">
+                <input type="hidden" name="ownerEmail" value="{{$ownerEmail}}">
+                <input type="hidden" name="fgName" value="{{$fgName}}">
+                <input type="submit" value="Delete!">
+                <input type="button" onclick="closeForm('delete')" value="Close">
+              </form>
+            </div>
+          </td>
+        </tr>
+    </table>
+    {{end}}
+    <script>
+        function openForm(name) {
+          document.getElementById(name + "-form").style.display = "block";
+          document.getElementById(name + "-button").style.display = "none";
+        }
+        function closeForm(name) {
+          document.getElementById(name + "-form").style.display = "none";
+          document.getElementById(name + "-button").style.display = "block";
+        }
+      </script>
+  </body>
+</html>

@@ -66,10 +66,19 @@ func GetFriendGroup(userEmail string) []*FriendGroup {
 }
 
 /*
-GetBelongFriendGroup takess the user's email and returns a list of Friend Groups
-that the user belongs to (including own)
+BFGDataElement is designed to return the users role within the friend
+group and the friendgroup info the role corresponds to
 */
-func GetBelongFriendGroup(userEmail string) []*FriendGroup {
+type BFGDataElement struct {
+	Role int
+	FG   FriendGroup
+}
+
+/*
+GetBelongFriendGroup takess the user's email and returns a list of Friend Groups
+that the user belongs to and does not own
+*/
+func GetBelongFriendGroup(userEmail string) []*BFGDataElement {
 	// Query DB for data
 	rows, err := db.Query(`SELECT fg_name, owner_email, description 
 		FROM Friend_Group NATURAL JOIN Belong
@@ -81,17 +90,24 @@ func GetBelongFriendGroup(userEmail string) []*FriendGroup {
 	defer rows.Close()
 
 	// Declare variables for processing data
-	var BFGData []*FriendGroup
+	var BFGData []*BFGDataElement
 
 	for rows.Next() {
-		var CurrItem FriendGroup
-		err = rows.Scan(&CurrItem.FGName, &CurrItem.OwnerEmail,
-			&CurrItem.Description)
+		var CurrFG FriendGroup
+		var CurrRole int
+		err = rows.Scan(&CurrFG.FGName, &CurrFG.OwnerEmail,
+			&CurrFG.Description)
 		if err != nil {
 			log.Println(`backend: GetBelongFriendGroup(): Could not scan row data
 			from friend group query.`)
 		}
-		BFGData = append(BFGData, &CurrItem)
+
+		CurrRole = GetRole(CurrFG.FGName, CurrFG.OwnerEmail, userEmail)
+		BFGData = append(BFGData, &BFGDataElement{
+			Role: CurrRole,
+			FG:   CurrFG,
+		})
 	}
+
 	return BFGData
 }

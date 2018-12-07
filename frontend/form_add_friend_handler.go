@@ -2,12 +2,38 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
+
+	b "pricosha/backend"
 )
 
 func formAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 	url := r.URL
 	queryData := url.Query()
+
+	logged, username := getUserSessionInfo(r)
+
+	if !logged {
+		log.Println("User is not logged in and cannot add friends.")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	fgName := queryData["fgn"][0]
+	ownerEmail := queryData["oe"][0]
+	role := b.GetRole(fgName, ownerEmail, username)
+
+	switch role {
+	case 0:
+		// do nothing
+	case 1:
+		// do nothing
+	default:
+		log.Println(`User does not have correct privileges to add friends.`)
+		http.Redirect(w, r, "/friendgroups", http.StatusFound)
+		return
+	}
 
 	cookie, err := r.Cookie("addFriendErr")
 	var errMsg string
@@ -27,8 +53,6 @@ func formAddFriendHandler(w http.ResponseWriter, r *http.Request) {
 		isErr = false
 	}
 
-	fgName := queryData["fgn"][0]
-	ownerEmail := queryData["oe"][0]
 	data := struct {
 		IsErr      bool
 		ErrMsg     string

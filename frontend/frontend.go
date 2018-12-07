@@ -48,6 +48,13 @@ func main() {
 
 	http.HandleFunc("/profile", profileHandler)
 
+	http.HandleFunc("/managePrivilege", managePrivilegesHandler)
+	http.HandleFunc("/changePrivilege", changePrivilegeHandler)
+	http.HandleFunc("/unshare", unshareHandler)
+	http.HandleFunc("/renameGroup", renameGroupHandler)
+	http.HandleFunc("/changeOwner", changeOwnerHandler)
+	http.HandleFunc("/deleteGroup", deleteGroupHandler)
+
 	// Start server
 	log.Println("Frontend spun up!")
 	err := http.ListenAndServe(httpPort, nil)
