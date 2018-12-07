@@ -11,8 +11,8 @@ status and returns them as an array of ContentItem pointers.
 func GetPubContent() []*ContentItem {
 	// Query DB for data
 	rows, err := db.Query(`
-	SELECT item_id, poster_email, file_path, file_name, post_time,
-	is_pub FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub
+	FROM Content_Item
 	WHERE is_pub = true
 	AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
 	`)
@@ -54,7 +54,7 @@ func GetPubContent() []*ContentItem {
 // The items are ordered in reverse chronological order
 func GetUserContent(email string) []*ContentItem {
 	rows, err := db.Query(`
-	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub 
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub
 	FROM Content_Item
 	WHERE item_id IN (
 		-- All item ids shared in a user's friendgroups

@@ -12,18 +12,8 @@
   </h1>
   <hr>
   <h2>
-    Content Items:
+    Content Items from {{ .Location }}:
   </h2>
-  {{ if .Locations }}
-  <div class="location-list">
-  {{ range $location, $locationCount := .Locations }}
-    <a class="location-pill" href="/location?loc={{ $location }}">
-      {{ $location }}
-      <span class="location-count">{{ $locationCount }}</span>
-    </a>
-  {{ end }}
-  </div>
-  {{ end }}
   <!-- Changed class of table to w3-table to allow easier customization and viewability -->
   <table class="w3-table" cellspacing="20">
     <tr>
@@ -37,13 +27,7 @@
     <tr>
       <td>{{ .ItemID }}</td>
       <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
-      {{if .IsPoll}}
-      <td>
-        n/a
-      </td>
-      {{else}}
       <td>{{ .FilePath }}</td>
-      {{end}}
       <td>{{ .Email }}</td>
       <td>{{ .PostTime }}</td>
     </tr>

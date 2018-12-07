@@ -8,12 +8,6 @@ import (
 	"strconv"
 )
 
-// getUserSession takes in a http.Request, reads the username cookie and
-// returns two values:
-// - a bool representing if the current user is logged in
-// - a string representing the current user's username
-//
-
 func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 	logged, username := getUserSessionInfo(r)
 	urlParams := r.URL.Query()
