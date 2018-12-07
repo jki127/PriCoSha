@@ -9,18 +9,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
 <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    html,
-    body,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5 {
-        font-family: "Open Sans", sans-serif
-    }
-</style>
-
+<link href="/css/stylesheet.css" rel="stylesheet">
 <!-- This is code for the Side Bar -->
 
 <body class="w3-theme-l5">
@@ -31,7 +20,7 @@
 
         <!-- buttons that require a user be logged in -->
         {{if $iflogged}}
-        <!-- Format of Button is as follows: w3-bar-item (provides proper positionining, spacing and padding), w3-button 
+        <!-- Format of Button is as follows: w3-bar-item (provides proper positionining, spacing and padding), w3-button
             (gives the hover effect of turning grey), w3-left-align (aligns left) -->
         <!-- <i class="fa fa-fw fa-user"> displays an icon, from font awesome 4.7, in this case it is the user icon -->
         <a href="/profile" class="w3-bar-item w3-button w3-block w3-left-align"><i class="fa fa-fw fa-user"></i>Profile</a>
