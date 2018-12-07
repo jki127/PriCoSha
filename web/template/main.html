@@ -27,7 +27,13 @@
     <tr>
       <td>{{ .ItemID }}</td>
       <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
+      {{if .IsPoll}}
+      <td>
+        n/a
+      </td>
+      {{else}}
       <td>{{ .FilePath }}</td>
+      {{end}}
       <td>{{ .Email }}</td>
       <td>{{ .PostTime }}</td>
     </tr>

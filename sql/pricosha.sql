@@ -255,7 +255,7 @@ VALUES
     ("family", "AA@nyu.edu", 9),
     ("family", "AA@nyu.edu", 10),
     ("family", "AA@nyu.edu", 11);
-
+   
 -- Add Votes
 SELECT "Adding Votes to Polls" as "";
 INSERT INTO Vote
