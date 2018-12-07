@@ -32,19 +32,6 @@
       </form>
       {{end}}
 
-      <script type="text/javascript">
-        function openForm(ID) {
-          document.getElementById("tag-form-"+ID).style.display = "block";
-          document.getElementById("tag-button-"+ID).style.display = "none";
-        }
-        function closeForm(ID) {
-          document.getElementById("tag-form-"+ID).style.display = "none";
-          document.getElementById("tag-button-"+ID).style.display = "block";
-        }
-        function verifyDelete(ID) {
-          return (confirm("Are you sure you want to delete this content item?"))
-        }
-      </script>
       {{if .Logged}}
       <tr>
         <td colspan="5">
@@ -75,5 +62,43 @@
       {{end}}
       {{end}}
     </table>
+    <h2>Tagged</h2>
+    <ul>
+      {{ range .TaggedNames }}
+      <li>{{ . }}</li>
+      {{ else }}
+      <p>No Tags Yet!</p>
+      {{ end }}
+    </ul>
+    <h2>Ratings</h2>
+    <table cellspacing="20">
+    <thead>
+      <th>Rating</th>
+      <th>Email</th>
+      <th>Rate Time</th>
+    <thead>
+    <tr>
+      {{ range .Ratings }}
+      <td>{{ .Emoji }}</td>
+      <td>{{ .Email }}</td>
+      <td>{{ .Rate_time }}</td>
+      {{ else }}
+      <td colspan="3">No Ratings Yet!</td>
+      {{ end }}
+    </tr>
+    </table>
+    <script type="text/javascript">
+      function openForm(ID) {
+        document.getElementById("tag-form-"+ID).style.display = "block";
+        document.getElementById("tag-button-"+ID).style.display = "none";
+      }
+      function closeForm(ID) {
+        document.getElementById("tag-form-"+ID).style.display = "none";
+        document.getElementById("tag-button-"+ID).style.display = "block";
+      }
+      function verifyDelete(ID) {
+        return (confirm("Are you sure you want to delete this content item?"))
+      }
+    </script>
 </body>
 {{end}}
