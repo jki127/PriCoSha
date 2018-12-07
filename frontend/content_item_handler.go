@@ -36,6 +36,7 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		Item        *b.ContentItem
 		TaggedNames []*string
 		Ratings     []*b.Rating
+		Comments    []*b.Comment
 		Removes     []*b.FriendGroup
 	}{
 		logged,
@@ -43,6 +44,7 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		b.GetContentItemById(itemID),
 		b.GetTaggedByItemId(itemID),
 		b.GetRatingsByItemId(itemID),
+		b.GetCommentsByItemId(itemID),
 		removes,
 	}
 

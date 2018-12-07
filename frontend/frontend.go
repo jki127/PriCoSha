@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/deleteItem", deleteItemHandler)
 
 	http.HandleFunc("/addtag", addTagHandler)
+	http.HandleFunc("/addComment", addCommentHandler)
 
 	http.HandleFunc("/friendgroups", friendGroupHandler)
 	http.HandleFunc("/formAddFriend", formAddFriendHandler)
