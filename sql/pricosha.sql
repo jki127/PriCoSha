@@ -135,6 +135,8 @@ INSERT INTO Tag VALUES ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:3
 INSERT INTO Rate VALUES ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍");
 INSERT INTO Rate VALUES ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
 INSERT INTO Rate VALUES ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍");
+INSERT INTO Comment VALUES ("GG@nyu.edu", 1, "2018-03-23 12:22:30", "dis is a comment");
+INSERT INTO Comment VALUES ("HH@nyu.edu", 5, "2018-03-23 12:22:30", "dis is another comment");
 INSERT INTO Content_Item
   (poster_email, file_path, file_name, post_time, is_pub)
 VALUES

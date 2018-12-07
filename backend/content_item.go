@@ -151,7 +151,7 @@ func GetCommentsByItemId(itemId int) []*Comment {
 		comments = append(comments, &comment)
 	}
 
-	return ratings
+	return comments
 }
 
 func GetRatingsByItemId(itemId int) []*Rating {
