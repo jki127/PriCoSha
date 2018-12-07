@@ -185,7 +185,7 @@
 
             <!-- Ratings Display -->
             <div id="Ratings{{.ItemID}}" class="w3-hide w3-container w3-white">
-                <p>{{range .Ratings}}
+                <p>Ratings: {{range .Ratings}}
                     {{.Emoji}}
                     {{else}}
                     <p>No Ratings!</p>
@@ -196,7 +196,7 @@
             <!-- Comments Display -->
             <div id="Comments{{.ItemID}}" class="w3-hide w3-container">
                 <h4>Comments</h4>
-                {{range .Comments}}
+                <p>{{range .Comments}}
                 <div class="w3-row w3-padding-small">
                     <hr class="w3-clear">
                     <span class="w3-right w3-opacity">{{.CommentTime}}</span>
@@ -205,7 +205,7 @@
                 </div>
                 {{else}}
                 <p>No Comments!</p>
-                {{end}}
+                {{end}}</p>
                 <form action="/addComment" method="POST">
                     <label for="comment"></label>
                     <input class="w3-input w3-border" type="text" placeholder="Add a comment" name="body" required>
