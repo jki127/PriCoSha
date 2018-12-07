@@ -1,88 +1,88 @@
-<!DOCTYPE html>
-<html>
-  <body>
-    <h2>Content Info</h2>
-    <table cellspacing="20">
-      <tr>
-        <th>Item ID</th>
-        <th>Item Name</th>
-        <th>File Path</th>
-        <th>Time Posted</th>
-        <th>Author</th>
-        <th>Email</th>
-      </tr>
-      <tr>
-        <td>{{ .Item.ItemID }}</td>
-        <td>{{ .Item.FileName }}</a></td>
-        <td>{{ .Item.FilePath }}</td>
-        <td>{{ .Item.PostTime }}</td>
-        <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
-        <td>{{ .Item.Email }}</td>
-      </tr>
-      {{if .LoggedIn}}
-      <tr>
-        <td colspan="5">
-          <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
-          <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
-            <form action="/addtag?id={{.Item.ItemID}}" method="POST">
-              <label for="username">Username:</label>
-              <input type="text" name="username" required>
-              <input type="submit" value="Tag!">
-              <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
-            </form>
-          </div>
-        </td>
-      </tr>
-      {{end}}
-    </table>
+{{define "content"}}
 
-    <h2>Tagged</h2>
-    <ul>
-      {{ range .TaggedNames }}
-      <li>{{ . }}</li>
-      {{ else }}
-      <p>No Tags Yet!</p>
-      {{ end }}
-    </ul>
-
-    <h2>Ratings</h2>
-    <table cellspacing="20">
-    <thead>
-      <th>Rating</th>
-      <th>Email</th>
-      <th>Rate Time</th>
-    <thead>
+<body>
+  <h2>Content Info</h2>
+  <table cellspacing="20">
     <tr>
-      {{ range .Ratings }}
-      <td>{{ .Emoji }}</td>
-      <td>{{ .Email }}</td>
-      <td>{{ .Rate_time }}</td>
-      {{ else }}
-      <td colspan="3">No Ratings Yet!</td>
-      {{ end }}
+      <th>Item ID</th>
+      <th>Item Name</th>
+      <th>File Path</th>
+      <th>Time Posted</th>
+      <th>Author</th>
+      <th>Email</th>
     </tr>
-    </table>
-
-    {{$isMyContent := eq .Item.Email .Username}}
-    {{if $isMyContent}}
-    <form action="/deleteItem" method=POST onsubmit="return verifyDelete({{.Item.ItemID}})">
-      <input type="hidden" name="itemID" value="{{.Item.ItemID}}">
-      <input type="submit" value="Delete Item" style="background-color: red">
-    </form>
+    <tr>
+      <td>{{ .Item.ItemID }}</td>
+      <td>{{ .Item.FileName }}</a></td>
+      <td>{{ .Item.FilePath }}</td>
+      <td>{{ .Item.PostTime }}</td>
+      <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
+      <td>{{ .Item.Email }}</td>
+    </tr>
+    {{if .Logged}}
+    <tr>
+      <td colspan="5">
+        <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
+        <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
+          <form action="/addtag?id={{.Item.ItemID}}" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" name="username" required>
+            <input type="submit" value="Tag!">
+            <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
+          </form>
+        </div>
+      </td>
+    </tr>
     {{end}}
+  </table>
 
-    <script type="text/javascript">
-      function openForm(ID) {
-        document.getElementById("tag-form-"+ID).style.display = "block";
-        document.getElementById("tag-button-"+ID).style.display = "none";
-      }
-      function closeForm(ID) {
-        document.getElementById("tag-form-"+ID).style.display = "none";
-        document.getElementById("tag-button-"+ID).style.display = "block";
-      }
-      function verifyDelete(ID) {
-        return (confirm("Are you sure you want to delete this content item?"))
-      }
-    </script>
-  </body>
-</html>
+  <h2>Tagged</h2>
+  <ul>
+    {{ range .TaggedNames }}
+    <li>{{ . }}</li>
+    {{ else }}
+    <p>No Tags Yet!</p>
+    {{ end }}
+  </ul>
+
+  <h2>Ratings</h2>
+  <table cellspacing="20">
+  <thead>
+    <th>Rating</th>
+    <th>Email</th>
+    <th>Rate Time</th>
+  <thead>
+  <tr>
+    {{ range .Ratings }}
+    <td>{{ .Emoji }}</td>
+    <td>{{ .Email }}</td>
+    <td>{{ .Rate_time }}</td>
+    {{ else }}
+    <td colspan="3">No Ratings Yet!</td>
+    {{ end }}
+  </tr>
+  </table>
+
+  {{$isMyContent := eq .Item.Email .Username}}
+  {{if $isMyContent}}
+  <form action="/deleteItem" method=POST onsubmit="return verifyDelete({{.Item.ItemID}})">
+    <input type="hidden" name="itemID" value="{{.Item.ItemID}}">
+    <input type="submit" value="Delete Item" style="background-color: red">
+  </form>
+  {{end}}
+
+  <script type="text/javascript">
+    function openForm(ID) {
+      document.getElementById("tag-form-"+ID).style.display = "block";
+      document.getElementById("tag-button-"+ID).style.display = "none";
+    }
+    function closeForm(ID) {
+      document.getElementById("tag-form-"+ID).style.display = "none";
+      document.getElementById("tag-button-"+ID).style.display = "block";
+    }
+    function verifyDelete(ID) {
+      return (confirm("Are you sure you want to delete this content item?"))
+    }
+  </script>
+</body>
+{{end}}

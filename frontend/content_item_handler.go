@@ -10,7 +10,7 @@ import (
 
 // PageData is used for sending data to the template pages
 type PageData struct {
-	LoggedIn    bool
+	Logged      bool
 	Username    string
 	Item        *b.ContentItem
 	TaggedNames []*string
@@ -51,13 +51,13 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageData := PageData{
-		LoggedIn:    logged,
+		Logged:      logged,
 		Username:    username,
 		Item:        b.GetContentItemById(itemId),
 		TaggedNames: b.GetTaggedByItemId(itemId),
 		Ratings:     b.GetRatingsByItemId(itemId),
 	}
 
-	t := template.Must(template.ParseFiles("../web/template/content_item.html"))
-	t.Execute(w, pageData)
+	t := template.Must(template.New("").ParseFiles("../web/template/content_item.html", "../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", pageData)
 }
