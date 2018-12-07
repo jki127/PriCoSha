@@ -32,6 +32,7 @@ func main() {
 
 	http.HandleFunc("/upload", uploadHandler)
 	http.HandleFunc("/postItem", postItemHandler)
+	http.HandleFunc("/deleteItem", deleteItemHandler)
 
 	http.HandleFunc("/addtag", addTagHandler)
 

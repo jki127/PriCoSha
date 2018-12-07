@@ -46,6 +46,6 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		removes,
 	}
 
-	t := template.Must(template.ParseFiles("../web/template/content_item.html"))
-	t.Execute(w, pageData)
+	t := template.Must(template.New("").ParseFiles("../web/template/content_item.html", "../web/template/base.html"))
+	t.ExecuteTemplate(w, "base", pageData)
 }
