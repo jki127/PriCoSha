@@ -22,7 +22,6 @@ func acceptTagHandler(w http.ResponseWriter, r *http.Request) {
 	itemID, _ := strconv.Atoi(queryData["iid"][0])
 	tagger := queryData["ter"][0]
 	tagged := queryData["ted"][0]
-	location := queryData["loc"][0]
 
 	if username == queryData["ted"][0] {
 		b.AcceptTag(tagger, tagged, itemID)
@@ -31,6 +30,6 @@ func acceptTagHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("frontend:	acceptTagHandler():	Tagged User must be logged in to Accept Tag")
 	}
 
-	http.Redirect(w, r, "/"+location, http.StatusFound)
+	http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
 	return
 }
