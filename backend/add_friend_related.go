@@ -75,16 +75,19 @@ RemoveInvalidTags removes tags that no longer pertain because User got removed f
 func RemoveInvalidTags(memberEmail string) {
 	statement, err := db.Prepare(`DELETE FROM Tag WHERE 
 				(tagger_email=? OR tagged_email=?) 
-				AND item_id NOT IN
-				(SELECT item_id FROM Content_Item
-					WHERE item_id IN
-					(SELECT item_id FROM Share
-					WHERE (fg_name, owner_email) IN (
-						SELECT fg_name, owner_email FROM Belong
-						WHERE member_email=?)
-					)
-				)
-				)`)
+				AND item_id NOT IN (
+					SELECT item_id, poster_email, file_path, file_name, post_time, is_pub 
+					FROM Content_Item
+					WHERE item_id IN (
+						-- All item ids shared in a user's friendgroups
+						SELECT item_id FROM Share
+						WHERE (fg_name, owner_email) IN (
+							-- All friend groups the user belongs to
+							SELECT fg_name, owner_email FROM Belong
+							WHERE member_email=?
+						)
+					) 
+					)`)
 	if err != nil {
 		log.Println(`add_friend_related: RemoveInvalidTags(): Could not prepare deletion`)
 	}
