@@ -93,7 +93,7 @@ func cleanVotes(email string) {
 }
 
 /*
-cleanComments checks for invalid votes and deletes them. Please see comment at
+cleanComments checks for invalid comments and deletes them. Please see comment at
 top of file before editing.
 */
 func cleanComments(email string) {
