@@ -23,6 +23,13 @@ func addCommentHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	valid := b.UserHasAccessToItem(username, ID)
+	if !valid {
+		log.Println("User cannot comment on a post they cannot view.")
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
 	NewComment := b.Comment{
 		ItemID:      ID,
 		Email:       username,

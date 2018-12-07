@@ -54,13 +54,13 @@
       {{if .Logged}}
         <tr>
           <td colspan="5">
-            <button onclick="openForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
+            <button onclick="openTagForm({{.Item.ItemID}})" id="tag-button-{{.Item.ItemID}}">Tag someone</button>
             <div class="tag-form-popup" id="tag-form-{{.Item.ItemID}}" style="display: none">
               <form action="/addtag?id={{.Item.ItemID}}" method="POST">
                 <label for="username">Username:</label>
                 <input type="text" name="username" required>
                 <input type="submit" value="Tag!">
-                <input type="button" onclick="closeForm({{.Item.ItemID}})" value="Close">
+                <input type="button" onclick="closeTagForm({{.Item.ItemID}})" value="Close">
               </form>
             </div>
           </td>
