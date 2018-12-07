@@ -68,6 +68,7 @@ type Rating struct {
 	Emoji     string
 }
 
+// Comment holds info related to Comment management
 type Comment struct {
 	ItemID      int
 	Email       string
