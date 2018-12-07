@@ -11,7 +11,8 @@ status and returns them as an array of ContentItem pointers.
 func GetPubContent() []*ContentItem {
 	// Query DB for data
 	rows, err := db.Query(`
-	SELECT * FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time,
+	is_pub FROM Content_Item
 	WHERE is_pub = true
 	AND post_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
 	`)
@@ -34,6 +35,10 @@ func GetPubContent() []*ContentItem {
 		if err != nil {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
+		}
+		if CheckPoll(CurrentItem.ItemID) {
+			CurrentItem.IsPoll = true
+			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
 		}
 		data = append(data, &CurrentItem)
 	}
@@ -83,6 +88,10 @@ func GetUserContent(email string) []*ContentItem {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
+		if CheckPoll(CurrentItem.ItemID) {
+			CurrentItem.IsPoll = true
+			CurrentItem.Votes = GetVotes(CurrentItem.ItemID)
+		}
 		data = append(data, &CurrentItem)
 	}
 
@@ -104,7 +113,10 @@ func GetContentItemById(itemId int) *ContentItem {
 	if err != nil {
 		log.Println("GetContentItemById() scan error:", err)
 	}
-
+	if CheckPoll(item.ItemID) {
+		item.IsPoll = true
+		item.Votes = GetVotes(item.ItemID)
+	}
 	return &item
 }
 
@@ -155,7 +167,7 @@ func GetRatingsByItemId(itemId int) []*Rating {
 	return ratings
 }
 
-// validUserSession checks to see if the current user, specified by username,
+// UserHasAccessToItem checks to see if the current user, specified by username,
 // is any friend groups that have access the current content item, specified by
 // itemId
 //

@@ -17,9 +17,14 @@
       </tr>
       <tr>
         {{$itemID := .Item.ItemID}}
+        {{$isPoll := .Item.IsPoll}}
         <td>{{$itemID}}</td>
         <td>{{ .Item.FileName }}</a></td>
+        {{if $isPoll}}
+        <td>n/a</td>
+        {{else}}
         <td>{{ .Item.FilePath }}</td>
+        {{end}}
         <td>{{ .Item.PostTime }}</td>
         <td>{{ .Item.Fname }} {{ .Item.Lname }}</td>
         <td>{{ .Item.Email }}</td>
