@@ -137,7 +137,7 @@ func GetCommentsByItemId(itemId int) []*Comment {
 
 	defer rows.Close()
 	if err != nil {
-		log.Println("GetCommentsByItemId() query error: ", err)
+		log.Println("content_item: GetCommentsByItemId() query error: ", err)
 	}
 
 	var comments []*Comment
@@ -157,7 +157,7 @@ func GetRatingsByItemId(itemId int) []*Rating {
 
 	defer rows.Close()
 	if err != nil {
-		log.Println("GetRatingsByItemId() query error: ", err)
+		log.Println("content_item: GetRatingsByItemId() query error: ", err)
 	}
 
 	var ratings []*Rating

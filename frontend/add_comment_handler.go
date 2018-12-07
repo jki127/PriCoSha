@@ -10,13 +10,11 @@ import (
 )
 
 func addCommentHandler(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("username")
-	if err != nil {
-		// User is not logged in, redirect
+	logged, username := getUserSessionInfo(r)
+	if !logged {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	username := cookie.Value
 
 	ID, err := strconv.Atoi(r.FormValue("itemID"))
 	if err != nil {
