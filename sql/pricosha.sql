@@ -4,7 +4,9 @@ drop database pricosha;
 create database pricosha;
 use pricosha;
 
+SELECT "------------------------- Adding Tables -------------------------" as "";
 -- Populate database with tables.
+SELECT "Adding Person Table" as "";
 create table Person
     (email  varchar(64),
     password char(64) not null,
@@ -13,6 +15,7 @@ create table Person
     primary key (email)
     );
 
+SELECT "Adding Content_Item Table" as "";
 create table Content_Item
     (item_id  int not null AUTO_INCREMENT,
     poster_email varchar(64),
@@ -25,7 +28,7 @@ create table Content_Item
         on delete set null
     );
 
-
+SELECT "Adding Friend_Group Table" as "";
 create table Friend_Group
     (fg_name varchar(32),
     owner_email varchar(64),
@@ -35,7 +38,7 @@ create table Friend_Group
         on delete cascade
     );
 
-
+SELECT "Adding Tag Table" as "";
 create table Tag
     (tagger_email varchar(64),
     tagged_email varchar(64),
@@ -50,7 +53,7 @@ create table Tag
     foreign key (item_id) references Content_Item(item_id)
         on delete cascade
     );
-
+SELECT "Adding Rate Table" as "";
 create table Rate
     (email varchar(64),
     item_id int,
@@ -63,7 +66,7 @@ create table Rate
         on delete cascade
     );
 
-
+SELECT "Adding Share Table" as "";
 create table Share
     (fg_name varchar(32),
     owner_email varchar(64),
@@ -75,11 +78,12 @@ create table Share
         on delete cascade
     );
 
-
+SELECT "Adding Belong Table" as "";
 create table Belong
     (member_email varchar(64),
     fg_name varchar(32),
     owner_email varchar(64),
+    role int DEFAULT 2,
     primary key (member_email, fg_name, owner_email),
     foreign key (member_email) references Person(email)
         on delete cascade,
@@ -87,48 +91,111 @@ create table Belong
         on delete cascade
     );
 
+SELECT "------------------------- Adding Data -------------------------" as "";
 -- Insert dummy data
-INSERT INTO Person VALUES ("AA@nyu.edu", SHA2("AA",256), "Ann", "Anderson");
-INSERT INTO Person VALUES ("BB@nyu.edu", SHA2("BB",256),"Bob", "Baker");
-INSERT INTO Person VALUES ("CC@nyu.edu", SHA2("CC",256), "Cathy", "Chang");
-INSERT INTO Person VALUES ("DD@nyu.edu", SHA2("DD",256), "David", "Davidson");
-INSERT INTO Person VALUES ("EE@nyu.edu", SHA2("EE",256), "Ellen", "Ellenberg");
-INSERT INTO Person VALUES ("FF@nyu.edu", SHA2("FF",256), "Fred", "Fox");
-INSERT INTO Person VALUES ("GG@nyu.edu", SHA2("GG",256), "Gina", "Gupta");
-INSERT INTO Person VALUES ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
-INSERT INTO Person VALUES ("HMV@nyu.edu", SHA2("HH",256), "Helen", "Harper");
-INSERT INTO Friend_Group VALUES ("family", "AA@nyu.edu", "Ann's Family");
-INSERT INTO Belong VALUES ("AA@nyu.edu", "family", "AA@nyu.edu");
-INSERT INTO Belong VALUES ("CC@nyu.edu", "family", "AA@nyu.edu");
-INSERT INTO Belong VALUES ("DD@nyu.edu", "family", "AA@nyu.edu");
-INSERT INTO Belong VALUES ("EE@nyu.edu", "family", "AA@nyu.edu");
-INSERT INTO Friend_Group VALUES ("family", "BB@nyu.edu", "Bob's Family");
-INSERT INTO Belong VALUES ("BB@nyu.edu", "family", "BB@nyu.edu");
-INSERT INTO Belong VALUES ("FF@nyu.edu", "family", "BB@nyu.edu");
-INSERT INTO Belong VALUES ("EE@nyu.edu", "family", "BB@nyu.edu");
-INSERT INTO Friend_Group VALUES ("roommates", "AA@nyu.edu", "Ann's Roommates");
-INSERT INTO Belong VALUES ("AA@nyu.edu", "roommates", "AA@nyu.edu");
-INSERT INTO Belong VALUES ("GG@nyu.edu", "roommates", "AA@nyu.edu");
-INSERT INTO Belong VALUES ("HH@nyu.edu", "roommates", "AA@nyu.edu");
-INSERT INTO Content_Item VALUES (1, "AA@nyu.edu", "/Photos/Animals", "Whiskers", "2010-12-01 03:39:01", TRUE);
-INSERT INTO Share VALUES ("family", "AA@nyu.edu", 1);
-INSERT INTO Content_Item VALUES (2, "AA@nyu.edu", "/Photos/Room21", "leftovers in fridge", "2014-06-10 04:00:30", FALSE);
-INSERT INTO Share VALUES ("roommates", "AA@nyu.edu", 2);
-INSERT INTO Content_Item VALUES (3, "BB@nyu.edu", "/Photos/Pets", "Rover", "2017-04-02 07:17:02", FALSE);
-INSERT INTO Share VALUES ("family", "BB@nyu.edu", 3);
-INSERT INTO Content_Item VALUES (4, "CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-02 03:12:10", TRUE);
-INSERT INTO Share VALUES ("family", "AA@nyu.edu", 4);
-INSERT INTO Content_Item VALUES (5, "EE@nyu.edu", "no", "no", "2018-12-02 03:12:11", TRUE);
-INSERT INTO Share VALUES ("family", "BB@nyu.edu", 5);
-INSERT INTO Tag VALUES ("AA@nyu.edu", "GG@nyu.edu", 2, TRUE, "2018-11-21 05:10:30");
-INSERT INTO Tag VALUES ("DD@nyu.edu", "CC@nyu.edu", 4, FALSE, "2018-09-18 03:12:30");
-INSERT INTO Tag VALUES ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:30");
-INSERT INTO Rate VALUES ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍");
-INSERT INTO Rate VALUES ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
-INSERT INTO Rate VALUES ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍");
+-- Adds Persons
+SELECT "Adding Persons" as "";
+INSERT INTO Person
+    (email, password, f_name, l_name)
+VALUES
+    ("AA@nyu.edu", SHA2("AA",256), "Ann", "Anderson"),
+    ("BB@nyu.edu", SHA2("BB",256),"Bob", "Baker"),
+    ("CC@nyu.edu", SHA2("CC",256), "Cathy", "Chang"),
+    ("DD@nyu.edu", SHA2("DD",256), "David", "Davidson"),
+    ("EE@nyu.edu", SHA2("EE",256), "Ellen", "Ellenberg"),
+    ("FF@nyu.edu", SHA2("FF",256), "Fred", "Fox"),
+    ("GG@nyu.edu", SHA2("GG",256), "Gina", "Gupta"),
+    ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper"),
+    ("HMH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
+    -- ("NotBB@nyu.edu", SHA2("BB",256), "Bob", "Baker");
+
+-- Adds Friend_Groups
+SELECT "Adding Friend_Groups" as "";
+INSERT INTO Friend_Group 
+    (fg_name, owner_email, description)
+VALUES 
+    ("family", "AA@nyu.edu", "Ann's Family"),
+    ("family", "BB@nyu.edu", "Bob's Family"),
+    ("roommates", "AA@nyu.edu", "Ann's Roommates"),
+    ("nomembersnomods", "AA@nyu.edu", "Test case!");
+
+-- Adds Owners to Friend Groups in Belong
+SELECT "Adding Owners to Belong" as "";
+INSERT INTO Belong 
+    (member_email, fg_name, owner_email, role) 
+VALUES 
+    ("AA@nyu.edu", "family", "AA@nyu.edu", 0),
+    ("BB@nyu.edu", "family", "BB@nyu.edu", 0),
+    ("AA@nyu.edu", "roommates", "AA@nyu.edu", 0),
+    ("AA@nyu.edu", "nomembersnomods", "AA@nyu.edu", 0);
+
+-- Adds Members to Friend Groups in Belong
+SELECT "Adding Members to Belong" as "";
+INSERT INTO Belong 
+    (member_email, fg_name, owner_email) 
+VALUES 
+    ("CC@nyu.edu", "family", "AA@nyu.edu"),
+    ("DD@nyu.edu", "family", "AA@nyu.edu"),
+    ("EE@nyu.edu", "family", "AA@nyu.edu"),
+    ("FF@nyu.edu", "family", "BB@nyu.edu"),
+    ("EE@nyu.edu", "family", "BB@nyu.edu"),
+    ("GG@nyu.edu", "roommates", "AA@nyu.edu"),
+    ("HH@nyu.edu", "roommates", "AA@nyu.edu");
+
+-- Adds Mods to Friend Groups in Belong
+SELECT "Adding Mods to Belong" as "";
+INSERT INTO Belong
+    (member_email, fg_name, owner_email, role)
+VALUES
+    ("BB@nyu.edu", "family", "AA@nyu.edu", 1);
+
+-- Adds Content_Items (1, 2, 3, 4, 5)
+SELECT "Adding Content_Items" as "";
+INSERT INTO Content_Item 
+    (poster_email, file_path, file_name, post_time, is_pub)
+VALUES 
+    ("AA@nyu.edu", "/Photos/Animals", "Whiskers", "2010-12-01 03:39:01", TRUE), 
+    ("AA@nyu.edu", "/Photos/Room21", "leftovers in fridge", "2014-06-10 04:00:30", FALSE),
+    ("BB@nyu.edu", "/Photos/Pets", "Rover", "2017-04-02 07:17:02", FALSE),
+    ("CC@nyu.edu", "/Taxes/2009/EpsteinMemes","OPM_Epstein", "2018-12-02 03:12:10", TRUE),
+    ("EE@nyu.edu", "no", "no", "2018-12-02 03:12:11", TRUE);
+
+-- Shares Content_Items
+SELECT "Adding Shares of Content_Items" as "";
+INSERT INTO Share
+    (fg_name, owner_email, item_id)
+VALUES
+    ("family", "AA@nyu.edu", 1),
+    ("roommates", "AA@nyu.edu", 2),
+    ("family", "BB@nyu.edu", 3),
+    ("family", "AA@nyu.edu", 4),
+    ("family", "BB@nyu.edu", 5);
+
+-- Adds Tags
+SELECT "Adding Tags" as "";
+INSERT INTO Tag
+    (tagger_email, tagged_email, item_id, status, tag_time)
+VALUES
+    ("AA@nyu.edu", "GG@nyu.edu", 2, TRUE, "2018-11-21 05:10:30"),
+    ("DD@nyu.edu", "CC@nyu.edu", 4, FALSE, "2018-09-18 03:12:30"),
+    ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:30");
+
+-- Adds Ratings
+SELECT "Adding Rates" as "";
+INSERT INTO Rate
+    (email, item_id, rate_time, emoji)
+VALUES 
+    ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍"),
+    ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍"),
+    ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
+
+-- Adds Content_Items in Past 24 Hours
+SELECT "Adding Content_Items in Past 24 Hours" as "";
 INSERT INTO Content_Item
   (poster_email, file_path, file_name, post_time, is_pub)
 VALUES
   ("HH@nyu.edu", "/home/data/pie.jpg", "Pie", NOW(), 1),
   ("HH@nyu.edu", "/home/data/turkey.jpg", "Turkey", NOW(), 1),
-  ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1)
+  ("HH@nyu.edu", "/home/data/mashed.jpg", "Mashed Potatoes", NOW(), 1);
+
+

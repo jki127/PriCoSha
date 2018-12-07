@@ -48,7 +48,14 @@ func main() {
 
 	http.HandleFunc("/profile", profileHandler)
 
-	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
+	http.HandleFunc("/managePrivilege", managePrivilegesHandler)
+	http.HandleFunc("/changePrivilege", changePrivilegeHandler)
+	http.HandleFunc("/unshare", unshareHandler)
+	http.HandleFunc("/renameGroup", renameGroupHandler)
+	http.HandleFunc("/changeOwner", changeOwnerHandler)
+	http.HandleFunc("/deleteGroup", deleteGroupHandler)
+
+  http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
 	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
 
 	// Start server
