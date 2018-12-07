@@ -85,8 +85,9 @@ func RemoveInvalidTags(memberEmail string) {
 							-- All friend groups the user belongs to
 							SELECT fg_name, owner_email FROM Belong
 							WHERE member_email=?
+								)
+							) 
 						)
-					) 
 					)`)
 	if err != nil {
 		log.Println(`add_friend_related: RemoveInvalidTags(): Could not prepare deletion`)
