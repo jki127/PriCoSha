@@ -79,10 +79,8 @@ func RemoveInvalidTags(memberEmail string) {
 					SELECT item_id
 					FROM Content_Item
 					WHERE item_id IN (
-						-- All item ids shared in a user's friendgroups
 						SELECT item_id FROM Share
 						WHERE (fg_name, owner_email) IN (
-							-- All friend groups the user belongs to
 							SELECT fg_name, owner_email FROM Belong
 							WHERE member_email=?
 								)
