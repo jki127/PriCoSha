@@ -25,7 +25,6 @@ create table Content_Item
         on delete set null
     );
 
-
 create table Friend_Group
     (fg_name varchar(32),
     owner_email varchar(64),
@@ -34,7 +33,6 @@ create table Friend_Group
     foreign key (owner_email) references Person(email)
         on delete cascade
     );
-
 
 create table Tag
     (tagger_email varchar(64),
@@ -46,6 +44,18 @@ create table Tag
     foreign key (tagger_email) references Person(email)
         on delete cascade,
     foreign key (tagged_email) references Person(email)
+        on delete cascade,
+    foreign key (item_id) references Content_Item(item_id)
+        on delete cascade
+    );
+
+create table Comment
+    (email varchar(64),
+    item_id int,
+    rate_time timestamp,
+    body varchar(64),
+    primary key (email, item_id, rate_time),
+    foreign key (email) references Person(email)
         on delete cascade,
     foreign key (item_id) references Content_Item(item_id)
         on delete cascade
