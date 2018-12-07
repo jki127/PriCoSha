@@ -14,7 +14,10 @@
                         alt="Avatar"></p>
                 <hr>
                 <h5 class="w3-margin-right w3-text-theme"><i class="fa fa-user fa-fw "></i>Bio</h5>
-                <p>Insert Bio Here</p>
+                <p>Insert Bio Here Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                    incididunt ut
+                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                    laboris nisi ut aliquip ex ea commodo consequat</p>
             </div>
         </div>
         <br>
@@ -69,6 +72,7 @@
                         {{end}}</p>
                 </div>
 
+
                 <!-- Folders display -->
                 <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
                     My Folders</button>
@@ -89,6 +93,31 @@
                         {{end}}
                     </div>
                 </div>
+
+                <!-- Friendlist display -->
+                <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    My Friends</button>
+                <div id="Demo4" class="w3-hide w3-container">
+                    <p>{{range .FriendsList}}
+                        <div class="w3-row w3-padding-small">
+                            <div class="w3-card w3-gray w3-padding">
+                                <div class="w3-cell-row">
+                                    <div class="w3-cell w3-cell-middle">
+                                        <img src="https://avatars1.githubusercontent.com/u/5100933?s=400&v=4" alt="Avatar"
+                                            class="w3-left w3-circle w3-margin-right" style="width:60px">
+                                    </div>
+                                    <div class="w3-cell w3-cell-middle w3-padding-small">
+                                            <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <p>No Friends</p>
+                        {{end}}</p>
+                </div>
+
+
             </div>
         </div>
         <br>
@@ -97,7 +126,7 @@
     </div>
     <!-- Middle Column -->
     <div class="w3-col m7">
-
+        <h1 class="w3-clear w3-margin-left">My Feed</h1>
         <!-- <div class="w3-row-padding">
             <div class="w3-col m12">
                 <div class="w3-card w3-round w3-white">
