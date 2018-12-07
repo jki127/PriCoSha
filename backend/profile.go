@@ -2,6 +2,7 @@ package backend
 
 import (
 	"log"
+	"math/rand"
 
 	// Used to interact with mySQL DB
 	_ "github.com/go-sql-driver/mysql"
@@ -54,6 +55,7 @@ func GetFriendsList(username string) []*FriendStruct {
 			log.Println(`backend: GetFriendsList(): Could not scan row data
 				from friends in user's friendgroups query.`)
 		}
+		CurrentFriend.FaceID = rand.Intn(25)
 		data = append(data, &CurrentFriend)
 	}
 
@@ -77,6 +79,7 @@ func GetFriendsList(username string) []*FriendStruct {
 			}
 		}
 		if !isPresent {
+			CurrentFriend.FaceID = rand.Intn(25)
 			data = append(data, &CurrentFriend)
 		}
 	}

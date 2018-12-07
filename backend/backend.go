@@ -43,6 +43,7 @@ type FriendStruct struct {
 	FriendFirstName string
 	FriendLastName  string
 	FriendUsername  string
+	FaceID int
 }
 type ContentItem struct {
 	ItemID   int

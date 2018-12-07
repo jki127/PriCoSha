@@ -24,7 +24,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	fgd := b.GetFriendGroup(username)
 	bfgd := b.GetBelongFriendGroup(username)
 	pendingTags := b.GetPendingTags(username)
-	pubCont := b.GetPubContent()
+	// pubCont := b.GetPubContent()
 	privCont := b.GetUserContent(username)
 	friends := b.GetFriendsList(username)
 
@@ -37,9 +37,9 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		FriendGroups       []*b.FriendGroup
 		BelongFriendGroups []*b.BFGDataElement
 		PendingTags        []*b.Tag
-		PublicItems        []*b.ContentItem
-		PrivateItems       []*b.ContentItem
-		FriendsList        []*b.FriendStruct
+		// PublicItems        []*b.ContentItem
+		PrivateItems []*b.ContentItem
+		FriendsList  []*b.FriendStruct
 	}{
 		logged,
 		username,
@@ -49,7 +49,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		fgd,
 		bfgd,
 		pendingTags,
-		pubCont,
+		// pubCont,
 		privCont,
 		friends,
 	}
