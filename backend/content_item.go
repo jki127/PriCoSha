@@ -51,8 +51,8 @@ func GetPubContent() []*ContentItem {
 // The items are ordered in reverse chronological order
 func GetUserContent(email string) []*ContentItem {
 	rows, err := db.Query(`
-	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub 
-	FROM Content_Item
+	SELECT item_id, poster_email, file_path, file_name, post_time, is_pub, f_name, l_name 
+	FROM Content_Item JOIN Person ON Content_Item.poster_email=Person.email
 	WHERE item_id IN (
 		-- All item ids shared in a user's friendgroups
 		SELECT item_id FROM Share
@@ -80,7 +80,7 @@ func GetUserContent(email string) []*ContentItem {
 		var CurrentItem ContentItem
 		err = rows.Scan(&CurrentItem.ItemID, &CurrentItem.Email,
 			&CurrentItem.FilePath, &CurrentItem.FileName,
-			&CurrentItem.PostTime, &isPub)
+			&CurrentItem.PostTime, &isPub, &CurrentItem.Fname, &CurrentItem.Lname)
 		if err != nil {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
