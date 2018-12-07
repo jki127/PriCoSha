@@ -47,6 +47,9 @@ func GetFriendsList(username string) []*FriendStruct {
 	var (
 		data []*FriendStruct
 	)
+
+	defer rows.Close()
+
 	for rows.Next() {
 		var CurrentFriend FriendStruct
 		err = rows.Scan(&CurrentFriend.FriendUsername, &CurrentFriend.FriendFirstName, &CurrentFriend.FriendLastName)
@@ -70,7 +73,6 @@ func GetFriendsList(username string) []*FriendStruct {
 			log.Println(`backend: GetFriendsList(): Could not scan row data
 					from friends in user's friendgroups query.`)
 		}
-
 		isPresent := false
 		for _, aFriend := range data {
 			if aFriend.FriendUsername == CurrentFriend.FriendUsername {

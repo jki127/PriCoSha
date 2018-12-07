@@ -43,7 +43,7 @@ type FriendStruct struct {
 	FriendFirstName string
 	FriendLastName  string
 	FriendUsername  string
-	FaceID int
+	FaceID          int
 }
 type ContentItem struct {
 	ItemID   int
@@ -53,6 +53,7 @@ type ContentItem struct {
 	PostTime time.Time
 	Fname    string
 	Lname    string
+	RandImg  int
 }
 
 type Rating struct {

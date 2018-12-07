@@ -2,6 +2,7 @@ package backend
 
 import (
 	"log"
+	"math/rand"
 )
 
 /*
@@ -35,6 +36,7 @@ func GetPubContent() []*ContentItem {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
+		CurrentItem.RandImg = rand.Intn(8)
 		data = append(data, &CurrentItem)
 	}
 
@@ -83,6 +85,7 @@ func GetUserContent(email string) []*ContentItem {
 			log.Println(`backend: GetPubContent(): Could not scan row data
 			from public content query.`)
 		}
+		CurrentItem.RandImg = rand.Intn(8)
 		data = append(data, &CurrentItem)
 	}
 

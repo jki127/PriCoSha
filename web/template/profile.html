@@ -172,7 +172,7 @@
         <!-- Show All Content Items that a user can see -->
         {{range .PrivateItems}}
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
+            <img src="/css/faces/{{.RandImg}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right"
                 style="width:60px">
             <span class="w3-right w3-opacity">{{.PostTime}}</span>
             <h4>{{.Email}}</h4><br>
@@ -180,7 +180,7 @@
             <p>{{.FileName}}</p>
             <div class="w3-row-padding" style="margin:0 -16px">
                 <div class="w3-content" style="max-width:600px">
-                    <img src="https://www.w3schools.com/w3images/lights.jpg" style="width:100%" alt="Northern Lights"
+                    <img src="/css/images/{{.RandImg}}.jpg" style="width:100%" alt="Northern Lights"
                         class="w3-margin-bottom">
                 </div>
             </div>
