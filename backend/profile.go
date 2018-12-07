@@ -85,3 +85,14 @@ func GetFriendsList(username string) []*FriendStruct {
 
 	return data
 }
+
+//AddBioToDB executes a query to the DB to add a bio to the user's entry
+func AddBioToDB(username string, bio string) {
+	_, err := db.Exec(`UPDATE Person SET bio=? WHERE email=?`, bio, username)
+	if err != nil {
+		log.Println(`backend: addBioToDB(): Could not
+		Update bio in DB.`)
+		return
+	}
+	log.Println("Bio added successfully")
+}

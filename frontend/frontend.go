@@ -56,8 +56,9 @@ func main() {
 	http.HandleFunc("/changeOwner", changeOwnerHandler)
 	http.HandleFunc("/deleteGroup", deleteGroupHandler)
 
-  http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
+ 	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
 	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
+	http.HandleFunc("/addBio",addBioHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")

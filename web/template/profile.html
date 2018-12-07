@@ -18,11 +18,38 @@
                 {{if $ifbio}}
                 <p>{{.Bio}}</p>
                 {{else}}
-                <p>No Bio</p>
+                <a onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-left-align"><i
+                        class="fa fa-fw fa-pencil"></i>Add Bio</a>
                 {{end}}
             </div>
         </div>
         <br>
+
+        <!-- Add Bio Popup -->
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+                <div class="w3-center"><br>
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright"
+                        title="Close Modal">×</span>
+                    <i alt="Avatar" style="width:30%" class="w3-circle w3-margin-top fa fa-5x fa-fw fa-pencil"></i>
+                </div>
+
+                <form class="w3-container" action="/addBio">
+                    <div class="w3-section">
+                        <label><b>Add your bio</b></label>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a bio"
+                            name="biography" required>
+                        <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Submit</button>
+                    </div>
+                </form>
+
+                <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                    <button onclick="document.getElementById('id02').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+                </div>
+            </div>
+        </div>
+
 
         <!-- Accordion -->
         <div class="w3-card w3-round">
@@ -80,12 +107,12 @@
                             <div class="w3-card w3-gray w3-padding">
                                 <div class="w3-cell-row">
                                     <div class="w3-cell w3-cell-middle">
-                                        <img src="/css/faces/{{.FaceID}}.jpg" alt="Avatar"
-                                            class="w3-left w3-circle w3-margin-right" style="width:60px">
+                                        <img src="/css/faces/{{.FaceID}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right"
+                                            style="width:60px">
                                     </div>
                                     <div class="w3-cell w3-cell-middle w3-padding-small">
-                                            <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
-                                        </div>
+                                        <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
