@@ -52,9 +52,9 @@ create table Tag
 create table Comment
     (email varchar(64),
     item_id int,
-    rate_time timestamp,
+    comment_time timestamp,
     body varchar(64),
-    primary key (email, item_id, rate_time),
+    primary key (email, item_id, comment_time),
     foreign key (email) references Person(email)
         on delete cascade,
     foreign key (item_id) references Content_Item(item_id)

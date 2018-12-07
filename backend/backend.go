@@ -50,8 +50,14 @@ type ContentItem struct {
 
 type Rating struct {
 	Email     string
-	Rate_time time.Time
+	Rate_time time.Time // WHO DID THIS // NO UNDERSCORES
 	Emoji     string
+}
+
+type Comment struct {
+	Email       string
+	Body        string
+	CommentTime time.Time
 }
 
 var db *sql.DB

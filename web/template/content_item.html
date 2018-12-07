@@ -45,6 +45,24 @@
       {{ end }}
     </ul>
 
+    <h2>Comments</h2>
+    <table cellspacing="20">
+      <thead>
+        <th>Comment</th>
+        <th>Email</th>
+        <th>Comment Time</th>
+      </thead>
+      <tr>
+          {{ range .Comments }}
+            <td>{{ .Body }}</td>
+            <td>{{ .Email }}</td>
+            <td>{{ .CommentTime }}</td>
+          {{ else }}
+          <td colspan="3">No Comments Yet!</td>
+          {{ end }}
+        </tr>
+    </table>
+
     <h2>Ratings</h2>
     <table cellspacing="20">
     <thead>
@@ -62,7 +80,6 @@
       {{ end }}
     </tr>
     </table>
-
 
     <script type="text/javascript">
       function openForm(ID) {

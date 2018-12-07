@@ -15,6 +15,7 @@ type PageData struct {
 	Item        *b.ContentItem
 	TaggedNames []*string
 	Ratings     []*b.Rating
+	Comments    []*b.Comment
 }
 
 // getUserSession takes in a http.Request, reads the username cookie and
@@ -56,6 +57,7 @@ func contentItemHandler(w http.ResponseWriter, r *http.Request) {
 		Item:        b.GetContentItemById(itemId),
 		TaggedNames: b.GetTaggedByItemId(itemId),
 		Ratings:     b.GetRatingsByItemId(itemId),
+		Comments:    b.GetCommentsByItemId(itemId),
 	}
 
 	t := template.Must(template.ParseFiles("../web/template/content_item.html"))
