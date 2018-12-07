@@ -43,6 +43,7 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if ok := b.ValidateBelongFriendGroup(memberEmail, fgName, ownerEmail); !ok { ///checks to see if member belongs in friend group to delete
+		b.RemoveInvalidTags(memberEmail)
 		b.DeleteFriend(memberEmail, fgName, ownerEmail)
 		log.Println("Deleted Person with email", memberEmail)
 	} else {
@@ -54,7 +55,6 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 	clearCookie(&w, r, "deleteFriendErr")
 
 	log.Println(memberEmail)
-	b.RemoveInvalidTags(memberEmail)
 	http.Redirect(w, r, "/friendgroups", http.StatusFound)
 	return
 }
