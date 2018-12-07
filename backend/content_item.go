@@ -120,11 +120,9 @@ func GetTaggedByItemId(itemId int) []*string {
 		log.Println("GetTaggedByItemId() query error: ", err)
 	}
 
-	var (
-		name        string
-		taggedNames []*string
-	)
+	var taggedNames []*string
 	for rows.Next() {
+		var name string
 		rows.Scan(&name)
 		taggedNames = append(taggedNames, &name)
 	}
