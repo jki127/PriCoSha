@@ -3,6 +3,7 @@ package backend
 import (
 	"database/sql"
 	"log"
+	"strings"
 )
 
 /*
@@ -183,6 +184,12 @@ RenameFG takes a FriendGroup primary key and a string and renames it to that
 string's value
 */
 func RenameFG(fgName string, ownerEmail string, newName string) {
+	if strings.EqualFold(fgName, newName) {
+		log.Println(`manage_privileges: RenameFG(): Names are too close
+			for SQL (case insensitive) to be changed`)
+		return
+	}
+
 	// Get the description of the Friend_Group
 	row := db.QueryRow(`SELECT description
 		FROM Friend_Group
