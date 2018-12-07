@@ -43,10 +43,10 @@ type FriendStruct struct {
 }
 
 func GetFriendsList(username string) []*FriendStruct {
-	rows, err := db.Query(`SELECT member_email, f_name, l_name 
+	rows, err := db.Query(`SELECT DISTINCT member_email, f_name, l_name 
 	FROM Belong JOIN Person ON Belong.member_email=Person.email
-	WHERE Belong.owner_email=?`,
-		username)
+	WHERE Belong.owner_email=? AND Belong.member_email!=?`,
+		username, username)
 
 	// Declare variables for processing data
 	var (
@@ -62,10 +62,10 @@ func GetFriendsList(username string) []*FriendStruct {
 		data = append(data, &CurrentFriend)
 	}
 
-	rows, err = db.Query(`SELECT owner_email, f_name, l_name 
+	rows, err = db.Query(`SELECT DISTINCT owner_email, f_name, l_name 
 	FROM Belong JOIN Person ON Belong.owner_email=Person.email
-	WHERE member_email=?`,
-		username)
+	WHERE member_email=? AND owner_email!=?`,
+		username, username)
 
 	for rows.Next() {
 		var CurrentFriend FriendStruct
@@ -74,7 +74,16 @@ func GetFriendsList(username string) []*FriendStruct {
 			log.Println(`backend: GetFriendsList(): Could not scan row data
 					from friends in user's friendgroups query.`)
 		}
-		data = append(data, &CurrentFriend)
+
+		isPresent := false
+		for _, aFriend := range data {
+			if aFriend.FriendUsername == CurrentFriend.FriendUsername {
+				isPresent = true
+			}
+		}
+		if !isPresent {
+			data = append(data, &CurrentFriend)
+		}
 	}
 
 	return data
