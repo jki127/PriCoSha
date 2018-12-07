@@ -50,7 +50,10 @@ func AddFriend(memberEmail string, fgname string, ownerEmail string) {
 	}
 }
 
-func DeleteFriend(memberEmail string, fgname string, ownerEmail string){
+/*
+DeleteFriend takes info of a friend entity and  deletes it from the Belong table
+*/
+func DeleteFriend(memberEmail string, fgname string, ownerEmail string) {
 	statement, err := db.Prepare(`DELETE FROM Belong WHERE member_email =? 
 			AND fg_name =? 
 			AND owner_email =?`)
@@ -63,5 +66,33 @@ func DeleteFriend(memberEmail string, fgname string, ownerEmail string){
 	if err != nil {
 		log.Println(`add_friend_related: DeleteFriend(): Could not execute deletion`)
 	}
-	log.Println ("Delete friend successfully!")
+	log.Println("Delete friend successfully!")
+}
+
+/*
+RemoveInvalidTags removes tags that no longer pertain because User got removed from being able to view
+*/
+func RemoveInvalidTags(memberEmail string) {
+	statement, err := db.Prepare(`DELETE FROM Tag WHERE 
+				(tagger_email=? OR tagged_email=?) 
+				AND item_id NOT IN
+				(SELECT item_id FROM Content_Item
+					WHERE item_id IN
+					(SELECT item_id FROM Share
+					WHERE (fg_name, owner_email) IN (
+						SELECT fg_name, owner_email FROM Belong
+						WHERE member_email=?)
+					)
+				)
+				)`)
+	if err != nil {
+		log.Println(`add_friend_related: RemoveInvalidTags(): Could not prepare deletion`)
+	}
+	defer statement.Close()
+	_, err = statement.Exec(memberEmail, memberEmail, memberEmail)
+
+	if err != nil {
+		log.Println(`add_friend_related: RemoveInvalidTags(): Could not execute deletion`)
+	}
+	log.Println("Removed invalid Tags successfully")
 }
