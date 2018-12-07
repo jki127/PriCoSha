@@ -105,7 +105,8 @@ VALUES
     ("EE@nyu.edu", SHA2("EE",256), "Ellen", "Ellenberg"),
     ("FF@nyu.edu", SHA2("FF",256), "Fred", "Fox"),
     ("GG@nyu.edu", SHA2("GG",256), "Gina", "Gupta"),
-    ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
+    ("HH@nyu.edu", SHA2("HH",256), "Helen", "Harper"),
+    ("HMH@nyu.edu", SHA2("HH",256), "Helen", "Harper");
     -- ("NotBB@nyu.edu", SHA2("BB",256), "Bob", "Baker");
 
 -- Adds Friend_Groups

@@ -33,6 +33,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	redirectStr := r.Header.Get("referer")
+	redirectStr2 := "/duplicateNames?" + url.RawQuery + "&fname=" + fname + "&lname=" + lname
 
 	fname := r.FormValue("fname")
 	lname := r.FormValue("lname")
@@ -51,7 +52,7 @@ func addFriendHandler(w http.ResponseWriter, r *http.Request) {
 	if len(EmailList) > 1 {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "duplicates"}
 		http.SetCookie(w, &cookie)
-		http.Redirect(w, r, redirectStr, http.StatusFound)
+		http.Redirect(w, r, redirectStr2, http.StatusFound)
 		return
 	} else if len(EmailList) == 0 {
 		cookie := http.Cookie{Name: "addFriendErr", Value: "nonexistent"}
