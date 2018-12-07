@@ -58,6 +58,20 @@ create table Tag
     foreign key (item_id) references Content_Item(item_id)
         on delete cascade
     );
+
+SELECT "Adding Comment Table" as "";
+create table Comment
+    (email varchar(64),
+    item_id int,
+    comment_time timestamp,
+    body varchar(64),
+    primary key (email, item_id, comment_time),
+    foreign key (email) references Person(email)
+        on delete cascade,
+    foreign key (item_id) references Content_Item(item_id)
+        on delete cascade
+    );
+
 SELECT "Adding Rate Table" as "";
 create table Rate
     (email varchar(64),
@@ -197,6 +211,15 @@ VALUES
     ("DD@nyu.edu", "CC@nyu.edu", 4, FALSE, "2018-09-18 03:12:30"),
     ("BB@nyu.edu", "FF@nyu.edu", 3, TRUE, "2018-10-27 09:22:30");
 
+-- Adds Comments
+SELECT "Adding Comments" as "";
+INSERT INTO Comment
+    (email, item_id, comment_time, body)
+VALUES 
+    ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "this is a comment"),
+    ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "loveitttt"),
+    ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "yummy");
+
 -- Adds Ratings
 SELECT "Adding Rates" as "";
 INSERT INTO Rate
@@ -232,7 +255,7 @@ VALUES
     ("family", "AA@nyu.edu", 9),
     ("family", "AA@nyu.edu", 10),
     ("family", "AA@nyu.edu", 11);
-
+   
 -- Add Votes
 SELECT "Adding Votes to Polls" as "";
 INSERT INTO Vote
