@@ -3,6 +3,7 @@ package main
 import (
 	"html/template"
 	"log"
+	"math/rand"
 	"net/http"
 	b "pricosha/backend"
 )
@@ -40,6 +41,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		PrivateItems []*b.ContentItem
 		FriendsList  []*b.FriendStruct
 		HasBio       bool
+		UserAvatar   int
 	}{
 		logged,
 		username,
@@ -53,6 +55,7 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 		privCont,
 		friends,
 		bioBool,
+		rand.Intn(24),
 	}
 
 	t := template.Must(template.New("").ParseFiles("../web/template/profile.html", "../web/template/base.html"))
