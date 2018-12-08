@@ -2,8 +2,10 @@ package main
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 	b "pricosha/backend"
+	"strconv"
 )
 
 func contentFolderHandler(w http.ResponseWriter, r *http.Request) {
@@ -18,14 +20,16 @@ func contentFolderHandler(w http.ResponseWriter, r *http.Request) {
 	folderName := urlParams["fn"][0]
 
 	pageData := struct {
-		Logged       bool
-		Username     string
-		ContentItems []*b.ContentItem
-		FolderName   string
+		Logged         bool
+		Username       string
+		ContentItems   []*b.ContentItem
+		PotentialItems []*b.ContentItem
+		FolderName     string
 	}{
 		logged,
 		username,
 		b.GetContentInFolder(folderName, username),
+		b.GetContentNotInFolder(folderName, username),
 		folderName,
 	}
 
@@ -93,4 +97,18 @@ func createFolderHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func addItemToFolderHandler(w http.ResponseWriter, r *http.Request) {
+	_, username := getUserSessionInfo(r)
+	folderName := r.PostFormValue("folder_name")
+	itemID, err := strconv.Atoi(r.PostFormValue("item_id"))
+	if err != nil {
+		log.Println("content_folder_handler: addItemToFolderHandler(): bad item_id param to int conversion: ", err)
+	}
+
+	b.AddItemToFolder(folderName, username, itemID)
+
+	redirectPath := "/folder?fn=" + folderName
+	http.Redirect(w, r, redirectPath, http.StatusFound)
 }

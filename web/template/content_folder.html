@@ -2,7 +2,7 @@
 <!-- This is the landing page for the PriCoSha website. -->
 <div class="content">
   <h1>PriCoSha</div>
-  {{ $iflogged := .Logged }}
+{{ $iflogged := .Logged }}
   </h1>
   <hr>
   <h2>{{ .FolderName }}</h2>
@@ -44,6 +44,41 @@
       <td colspan="5">No Items Available!<td>
     </tr>
     {{ end }}
+    </table>
+
+    {{ if .PotentialItems }}
+    <h2>Add Items to Folder:</h2>
+    <table class="poop w3-table" cellspacing="20">
+      <tr>
+        <th>Item ID</th>
+        <th>Item Name</th>
+        <th>File Path</th>
+        <th>Author</th>
+        <th>Add?</th>
+      </tr>
+      {{ $folderName := .FolderName }}
+      {{ range .PotentialItems }}
+      <tr>
+        <td>{{ .ItemID }}</td>
+        <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
+        <td>{{ .FilePath }}</td>
+        <td>{{ .Email }}</td>
+        <td>
+          <form action="/folder/addItem" method="post">
+            <input type="hidden" name="folder_name" value="{{$folderName}}">
+            <input type="hidden" name="item_id" value="{{.ItemID}}">
+            <input type="submit" value="Add">
+          </form>
+        </td>
+      </tr>
+      {{ else }}
+      <tr>
+        <td colspan="5">No Items Available!<td>
+      </tr>
+      {{ end }}
+    </table>
+    {{ end }}
+
     <script>
       function openForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "block";
@@ -54,5 +89,5 @@
         document.getElementById("tag-button-"+ID).style.display = "block";
       }
     </script>
-</div>
-{{ end }}
+    </div>
+    {{ end }}
