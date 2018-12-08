@@ -66,6 +66,8 @@ func main() {
 	http.HandleFunc("/location", contentLocationHandler)
 
 	http.HandleFunc("/folder", contentFolderHandler)
+	http.HandleFunc("/folder/new", newFolderHandler)
+	http.HandleFunc("/folder/create", createFolderHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")

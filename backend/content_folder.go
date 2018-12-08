@@ -46,3 +46,23 @@ func GetContentInFolder(folderName string, email string) []*ContentItem {
 
 	return items
 }
+
+func CreateFolder(folderName string, email string) error {
+	statement, err := db.Prepare(`
+	INSERT INTO Folder (folder_name, email)
+	VALUES (?, ?)
+	`)
+	if err != nil {
+		log.Println("content_folder: createFolder(): could not prepare insert folder:", err)
+		return err
+	}
+	defer statement.Close()
+
+	_, err = statement.Exec(folderName, email)
+	if err != nil {
+		log.Println("content_folder: createFolder(): could not insert folder", err)
+		return err
+	}
+
+	return nil
+}

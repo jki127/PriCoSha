@@ -55,3 +55,7 @@ html, body, h1, h2, h3, h4,h5, p, div, span {
   box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302),
   0 4px 8px 3px rgba(60,64,67,0.149)
 }
+
+.error {
+  color: red;
+}

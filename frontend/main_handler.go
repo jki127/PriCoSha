@@ -21,6 +21,7 @@ type MPD struct {
 // Handles requests to root page (referred to as both / and main)
 func mainHandler(w http.ResponseWriter, r *http.Request) {
 	// Checks for requests to non-existent pages
+	clearCookie(&w, r, "folderErr")
 	if r.URL.Path != "/" {
 		errorHandler(w, r, http.StatusNotFound)
 		return
