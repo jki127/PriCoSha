@@ -20,12 +20,15 @@ html, body, h1, h2, h3, h4,h5, p, div, span {
 }
 
 .pill-list {
-  margin-top: 20px;
   margin-bottom: 20px;
-  margin-left: 15px;
+  display: inline-block;
+  width: 47%;
+  box-sizing: border-box;
 }
 
 .pill-list .pill {
+  margin-bottom: 10px;
+  width: 50%
   background: #FFFFFF;
   display: inline-block;
   text-decoration: none;
