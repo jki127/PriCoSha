@@ -9,7 +9,7 @@ It was authored by: Madeleine Nicolas (mcpnicolas), Jayson Isaac (jki127), Andre
 * Go MySQL Driver (Found at: https://github.com/go-sql-driver/mysql)
 
 ### Building
-The project directory, hereby referred to as `/pricosha`, must be located in the `/src` folder of your GOPATH. Afterwards, navigate to /frontend with `/pricosha` and type the following to build to binary:
+The project directory, hereby referred to as `pricosha/`, must be located in the `src/` folder of your GOPATH. Afterwards, navigate to `frontend/` with `pricosha/` and type the following to build to binary:
 
 ```bash
 make
@@ -21,10 +21,10 @@ make clean
 ```
 
 ### Running
-In the /frontend folder, type the following to run the prebuilt binary:
+In the `frontend/` folder, type the following to run the prebuilt binary:
 
 ```bash
-./frontend
+.frontend/
 ```
 
 If you want to build and run at the same time, type:
@@ -55,66 +55,159 @@ All appear of question marks in query sections represent a point at which our pr
 
 Database is hereby referred to as DB.
 
+All features require the following files:
+
+pricosha/
+
+    backend/
+
+        backend.go
+    
+    frontend/
+
+        frontend.go
+
+All source files descriptions are given within the scope of the `pricosha/` folder.
+
 ### Defriend
 **Author:** Andrea Vasquez
 
 **Description:**
 
-Description text
+User navigates to Friend Group page where they see their respective Friend Groups that they own and belong to. If the user owns a group or has respective privileges, next to the friend group information is the add friend and delete friend button. When the user clicks on delete friend, it directs to a new page where the user can type the username of the friend group they want to delete. If the user belongs in the friend group, they get deleted; otherwise an error message pops up that you cannot delete a friend that doesn’t already belong in the friend group.
 
 **Why this feature?**
 
-Selling text
+This is a good feature to add as it allows the owner of the friend group to control who they want in their friend group. It is relevant as the application already contains a feature to add a new member to a friend group, therefore it make logical sense to have a counteractive feature to remove members from the same friend group. With the removal of a friend it is important to tackle what information relevant to the deleted friend gets removes as well (Tags, Comments, & Rates)
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+None.
 
 **Queries:**
 
-ex. Add bio information to DB
+Deletes row from Belong table
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+DELETE FROM Belong
+WHERE member_email=?
+AND fg_name=?
+AND owner_email=?
+```
+
+Subquery seen in following queries can be assumed to be within the queries as the following name: `VALID_SUB_QUERY`
+
+Finds all item_ids a user can view
+
+```sql
+SELECT item_id
+FROM Content_Item
+WHERE item_id IN (
+    SELECT item_id FROM Share
+    WHERE (fg_name, owner_email) IN (
+        SELECT fg_name, owner_email
+        FROM Belong
+        WHERE member_email=?
+    )
+) OR (is_pub = 1 AND post_time > DATE_SUB(NOW(), INTERVAL 24 HOUR))
+OR poster_email=?
+```
+
+Clears invalid Tag rows
+
+```sql
+DELETE FROM Tag
+WHERE item_id NOT IN (
+    VALID_SUB_QUERY
+)
+AND
+(tagger_email=?
+OR
+tagged_email=?)
+```
+
+Clears invalid Rate rows
+
+```sql
+DELETE FROM Rate
+WHERE item_id NOT IN (
+    VALID_SUB_QUERY
+)
+AND email=?
+```
+
+Clears invalid Vote rows
+
+```sql
+DELETE FROM Vote
+WHERE item_id NOT IN (
+    VALID_SUB_QUERY
+)
+AND voter_email=?
+```
+
+Clears invalid Comment rows
+
+```sql
+DELETE FROM Comment
+WHERE item_id NOT IN (
+    VALID_SUB_QUERY
+)
+AND email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+backend/
 
-        /profile.go
+    remove_hanging.go
+    
+    add_friend_related.go
 
-    /frontend
+    friend_group.go
 
-        /profile_handler.go
+frontend/
 
-        /add_bio_handler.go
+    delete_friend_handler.go
 
-    /web
+    form_delete_friend_handler.go
 
-        /template
+    friend_group_handler.go
 
-            profile.html
+web/
+
+    template/
+
+        delete_friend.html
+
+        friend_groups.html
+
 
 **Images**
 
 Put images here.
 
 ### Add Comments
-**Author:** Anthony Taldone 
+**Author:** Madeleine Nicolas
 
 **Description:**
 
-Description text
+User navigates to the page for any content item that is visible to that person. On each content item page, there is a button to add a text comment to that content item. After submitting the comment, the page reloads and displays all comments on that item to the user.
 
 **Why this feature?**
 
-Selling text
+This is a good feature to add because it enables users to interact with other users on the PriCoSha platform by commenting on each other’s content items. Unlike rating, comments allow users to give personal, customized feedback on a content item.
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+Created a new table Comment with primary keys:
+
+    * Email of Commenter (references Person(email))
+    
+    * Content_Item ID (references Content_Item(item_id))
+
+    * Timestamp of Comment
+
 
 **Queries:**
 
@@ -125,21 +218,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -171,21 +263,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -215,7 +306,9 @@ All appear of question marks represents a point at which our prepared statement 
 Add bio information to database (hereby referred to as DB):
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+UPDATE Person
+SET bio=? 
+WHERE email=?
 ```
 
 Get list of friends that are members of groups that you own
@@ -247,21 +340,20 @@ WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -293,21 +385,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -339,21 +430,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -385,21 +475,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
@@ -431,21 +520,20 @@ UPDATE Person SET bio=? WHERE email=?
 ```
 
 **Source Files**
-Assuming you are within `/pricosha`:
 
-    /backend
+    backend/
 
         /profile.go
 
-    /frontend
+    frontend/
 
         /profile_handler.go
 
         /add_bio_handler.go
 
-    /web
+    web/
 
-        /template
+        template/
 
             profile.html
 
