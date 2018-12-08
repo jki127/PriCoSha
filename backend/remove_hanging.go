@@ -114,6 +114,23 @@ func cleanComments(email string) {
 	}
 }
 
+func cleanInclude(email string) {
+	stmtStr := `
+	DELETE FROM Include
+	WHERE item_id NOT IN (
+		` + validItemSubQuery + `
+	)
+	AND email=?`
+	statement, err := db.Prepare(stmtStr)
+	if err != nil {
+		log.Println(`remove_hanging: cleanInclude(): Could not prepare statement`)
+	}
+	_, err = statement.Exec(email, email, email)
+	if err != nil {
+		log.Println(`remove_hanging: cleanInclude(): Could not execute statement`)
+	}
+}
+
 /*
 CleanUp checks for invalid entities and deletes them.
 */
@@ -129,5 +146,7 @@ func CleanUp(email string) {
 	cleanVotes(email)
 	log.Println("4. Cleaning comments...")
 	cleanComments(email)
+	log.Println("5. Cleaning includes...")
+	cleanInclude(email)
 	log.Println("Cleaned up!")
 }

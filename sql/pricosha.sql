@@ -130,6 +130,7 @@ create table Folder
     email varchar(64),
     primary key (folder_name, email),
     foreign key (email) references Person(email)
+        on delete cascade
     );
 
 SELECT "Adding Include Table" as "";
@@ -140,6 +141,7 @@ create table Include
     primary key (folder_name, email, item_id),
     foreign key (folder_name, email) references Folder(folder_name, email),
     foreign key (item_id) references Content_Item(item_id)
+        on delete cascade
     );
 
 SELECT "------------------------- Adding Data -------------------------" as "";
