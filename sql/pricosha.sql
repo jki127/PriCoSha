@@ -124,6 +124,24 @@ create table Vote
         on delete cascade
     );
 
+SELECT "Adding Folder Table" as "";
+create table Folder
+    (folder_name varchar(64),
+    email varchar(64),
+    primary key (folder_name, email),
+    foreign key (email) references Person(email)
+    );
+
+SELECT "Adding Include Table" as "";
+create table Include
+    (folder_name varchar(64),
+    email varchar(64),
+    item_id int,
+    primary key (folder_name, email, item_id),
+    foreign key (folder_name, email) references Folder(folder_name, email),
+    foreign key (item_id) references Content_Item(item_id)
+    );
+
 SELECT "------------------------- Adding Data -------------------------" as "";
 -- Insert dummy data
 -- Adds Persons
@@ -288,3 +306,25 @@ VALUES
     ("EE@nyu.edu", 1, "2018-11-27 09:22:30", "👍"),
     ("CC@nyu.edu", 4, "2018-03-23 12:22:30", "👍"),
     ("HH@nyu.edu", 2, "2018-07-17 04:22:30", "👍");
+
+-- Add Folders
+SELECT "Adding Folders" as "";
+INSERT INTO Folder
+    (folder_name, email)
+VALUES
+    ("memes", "AA@nyu.edu"),
+    ("projects", "AA@nyu.edu"),
+    ("memes", "BB@nyu.edu"),
+    ("empty-folder", "CC@nyu.edu"),
+    ("myFolderIsGreat", "GG@nyu.edu");
+
+-- Add content items to folders in Include
+SELECT "Adding items to folders in Include" as "";
+INSERT INTO Include
+    (folder_name, email, item_id)
+VALUES
+    ("memes", "AA@nyu.edu", 1),
+    ("memes", "AA@nyu.edu", 2),
+    ("projects", "AA@nyu.edu", 1),
+    ("memes", "BB@nyu.edu", 2),
+    ("myFolderIsGreat", "GG@nyu.edu", 2);
