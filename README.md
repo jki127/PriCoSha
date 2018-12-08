@@ -74,8 +74,6 @@ pricosha/
 All source files descriptions are given within the scope of the `pricosha/` folder.
 
 ### Defriend
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Andrea Vasquez
 
 **Description:**
@@ -212,8 +210,6 @@ Viewing removed tag of GG@nyu.edu
 ![](https://i.imgur.com/ZKVPz0Z.png)
 
 ### Add Comments
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Madeleine Nicolas
 
 **Description:**
@@ -337,8 +333,6 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### Profile Page
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Anthony Taldone 
 
 **Description:**
@@ -499,8 +493,6 @@ Seeing content inside location group
 ![](https://i.imgur.com/xaPtTzr.png)
 
 ### User Privileges
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Graeme Ferguson
 
 **Description:**
@@ -694,11 +686,41 @@ AND owner_email=?
 
 **Images**
 
-Put images here.
+BB@nyu.edu is an admin of his family group
+
+![](https://i.imgur.com/TvGNJVo.png)
+
+BB@nyu.edu is a mod of AA@nyu.edu's family group
+
+![](https://i.imgur.com/GUpl52T.png)
+
+BB can manage privileges, add, and delete friends of both groups
+
+![](https://i.imgur.com/PqgLu8v.png)
+
+BB can unshare posts from both groups
+
+![](https://i.imgur.com/xovqfZe.png)
+
+BB can promote/demote members in his group
+
+![](https://i.imgur.com/ieRAhOP.png)
+
+BB can rename his group
+
+![](https://i.imgur.com/CyE0LnO.png)
+
+![](https://i.imgur.com/n0lJWHp.png)
+
+BB can delete his group
+
+![](https://i.imgur.com/ZQezisR.png)
+
+BB can swap ownership of the group to FF@nyu.edu
+
+![](https://i.imgur.com/ZwMN8JW.png)
 
 ### Content Item Deletion
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Madeleine Nicolas
 
 **Description:**
@@ -759,8 +781,6 @@ Being alerted that delete will occur
 ![](https://i.imgur.com/UCjdMEI.png)
 
 ### Poll Content Item
----------------------- IMAGES LEFT -------------------------
-
 **Author:** Graeme Ferguson 
 
 **Description:**
@@ -856,4 +876,20 @@ VALUES
 
 **Images**
 
-Put images here.
+View identifying poll info on main page
+
+![](https://i.imgur.com/8tZm6Ms.png)
+
+View detailed poll info on content item page
+
+![](https://i.imgur.com/3f1lvZ8.png)
+
+Click option button to vote on pre-existing option
+
+![](https://i.imgur.com/8MGTFRd.png)
+
+Write in option to vote differently
+
+![](https://i.imgur.com/3Ton1Ly.png)
+
+![](https://i.imgur.com/jYs80Wd.png)
