@@ -74,7 +74,7 @@ pricosha/
 All source files descriptions are given within the scope of the `pricosha/` folder.
 
 ### Defriend
----------------------- DONE -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Andrea Vasquez
 
@@ -191,10 +191,28 @@ AND email=?
 
 **Images**
 
-Put images here.
+Viewing friend groups as GG@nyu.edu
+
+![](https://i.imgur.com/YrJGbdy.png)
+
+Viewing tag of private Content_Item in Friend Group as GG@nyu.edu
+
+![](https://i.imgur.com/iqjd0ul.png)
+
+Deleting GG@nyu.edu from Friend Group
+
+![](https://i.imgur.com/rA82A8o.png)
+
+Viewing lack of friend group as GG@nyu.edu
+
+![](https://i.imgur.com/zazV7Xh.png)
+
+Viewing removed tag of GG@nyu.edu
+
+![](https://i.imgur.com/ZKVPz0Z.png)
 
 ### Add Comments
----------------------- NEEDS TO BE COMPLETED -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Madeleine Nicolas
 
@@ -219,10 +237,20 @@ Created a new table Comment with primary keys:
 
 **Queries:**
 
-ex. Add bio information to DB
+Find comments on Content_Item
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT Comment.email, comment_time, body, f_name, l_name 
+FROM Comment JOIN Person ON Comment.email=Person.email 
+WHERE item_id=?
+ORDER BY comment_time DESC
+```
+
+Insert Comment row into DB with primary key and body
+
+```sql
+INSERT INTO Comment (email, item_id, comment_time, body)
+VALUES (?, ?, ?, ?)
 ```
 
 **Source Files**
@@ -249,7 +277,17 @@ UPDATE Person SET bio=? WHERE email=?
 
 **Images**
 
-Put images here.
+Viewing comments
+
+![](https://i.imgur.com/lFG4K1p.png)
+
+Writing a comment
+
+![](https://i.imgur.com/BDoKf2O.png)
+
+Viewing written comments
+
+![](https://i.imgur.com/3vxzrOI.png)
 
 ### Location Data
 ---------------------- NEEDS TO BE COMPLETED -------------------------
@@ -299,7 +337,7 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### Profile Page
----------------------- DONE -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Anthony Taldone 
 
@@ -375,7 +413,37 @@ WHERE email=?
 
 **Images**
 
-Put images here.
+Complete profile page
+
+![](https://i.imgur.com/UCn54ra.png)
+
+Viewing bio
+
+![](https://i.imgur.com/SrCbzfa.png)
+
+Writing bio
+
+![](https://i.imgur.com/uhi4fVK.png)
+
+Seeing pending tag request
+
+![](https://i.imgur.com/yqFK95c.png)
+
+Viewing/adding comments
+
+![](https://i.imgur.com/Z3Iz9qC.png)
+
+Viewing owned friend groups
+
+![](https://i.imgur.com/EsjJiqH.png)
+
+Viewing friend groups which you are a member of
+
+![](https://i.imgur.com/oQwfN2M.png)
+
+Viewing friends list
+
+![](https://i.imgur.com/nabSGY6.png)
 
 ### Folders
 ---------------------- NEEDS TO BE COMPLETED -------------------------
@@ -422,10 +490,16 @@ UPDATE Person SET bio=? WHERE email=?
 
 **Images**
 
-Put images here.
+Seeing location groups on main page
+
+![](https://i.imgur.com/hGvua6v.png)
+
+Seeing content inside location group
+
+![](https://i.imgur.com/xaPtTzr.png)
 
 ### User Privileges
----------------------- NEEDS TO BE COMPLETED -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Graeme Ferguson
 
@@ -623,54 +697,69 @@ AND owner_email=?
 Put images here.
 
 ### Content Item Deletion
----------------------- NEEDS TO BE COMPLETED -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Madeleine Nicolas
 
 **Description:**
 
-Description text
+This feature adds the ability for user's to delete Content_Items they have posted.
 
 **Why this feature?**
 
-text
+Removing posts is a standard feature of any social media platform. If you can post content, you should be able to remove it.
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+None.
 
 **Queries:**
 
-ex. Add bio information to DB
+Verify that user is Content_Item poster by selecting that row and checking if it exists
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT poster_email 
+FROM Content_Item 
+WHERE item_id = ?
+```
+
+Delete Content_Item from DB
+
+```sql
+DELETE FROM Content_Item
+WHERE item_id=?
 ```
 
 **Source Files**
 
     backend/
 
-        /profile.go
+        delete_content.go
 
     frontend/
 
-        /profile_handler.go
+        content_item_handler.go
 
-        /add_bio_handler.go
+        delete_item_handler.go
 
     web/
 
         template/
 
-            profile.html
+            content_item.html
 
 **Images**
 
-Put images here.
+Selecting delete
+
+![](https://i.imgur.com/BQoeFVf.png)
+
+Being alerted that delete will occur
+
+![](https://i.imgur.com/UCjdMEI.png)
 
 ### Poll Content Item
----------------------- NEEDS TO BE COMPLETED -------------------------
+---------------------- IMAGES LEFT -------------------------
 
 **Author:** Graeme Ferguson 
 
