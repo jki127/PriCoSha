@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+	"math/rand"
 	"os"
 	"time"
 
@@ -45,6 +46,7 @@ type FriendStruct struct {
 	FriendUsername  string
 	FaceID          int
 }
+
 // ContentItem holds info related to ContentItem management
 type ContentItem struct {
 	ItemID   int
@@ -52,7 +54,7 @@ type ContentItem struct {
 	FilePath string
 	FileName string
 	PostTime time.Time
-	Fname    string 
+	Fname    string
 	Lname    string
 	RandImg  int
 	Comments []*Comment
@@ -113,7 +115,7 @@ func ValidateInfo(username string, password string) bool {
 
 func init() {
 	var configData Conf
-
+	rand.Seed(time.Now().UTC().UnixNano())
 	configFile, err := os.Open("../backend/config.json")
 	if err != nil {
 		log.Println("backend: init(): Could not open config file.")
