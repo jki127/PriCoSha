@@ -14,6 +14,7 @@ type MPD struct {
 	Logged       bool // true if logged in, false otherwise
 	Username     string
 	ContentItems []*b.ContentItem
+	Locations    map[string]int
 }
 
 // Handles requests to root page (referred to as both / and main)
@@ -37,8 +38,9 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	CurrentMPD := MPD{
-		Logged:   logged,
-		Username: username,
+		Logged:    logged,
+		Username:  username,
+		Locations: b.GetUserLocations(username),
 	}
 
 	// All users see public content items that have been posted in the past

@@ -52,9 +52,8 @@ func deleteFriendHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	clearCookie(&w, r, "deleteFriendErr")
+	b.CleanUp(memberEmail)
 
-	log.Println(memberEmail)
 	http.Redirect(w, r, "/friendgroups", http.StatusFound)
 	return
 }
-

@@ -40,6 +40,6 @@ func addCommentHandler(w http.ResponseWriter, r *http.Request) {
 	b.ExecInsertComment(NewComment)
 	log.Println("Adding comment to", r.FormValue("itemID"))
 
-	http.Redirect(w, r, "/item?iid="+r.FormValue("itemID"), http.StatusFound)
+	http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
 	return
 }

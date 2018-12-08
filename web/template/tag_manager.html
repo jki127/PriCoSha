@@ -1,15 +1,6 @@
 {{define "content"}}
 <!-- This is the tag management page for the PriCoSha website. -->
-<h1>
-    Tag Manager
-    <div style="float:right">
-        {{if .Logged}}
-        Logged in as: <b>{{.Username}}</b>
-        {{else}}
-        <a href="/login">Login!</a>
-        {{end}}
-    </div>
-</h1>
+<h1>Tag Manager</h1>
 
 <!-- defined a row, content in this container will occupy the same horizontal space -->
 <div class="w3-row">
@@ -34,8 +25,8 @@
                     </thead>
                     {{ range .PendingTagData }}
                     <tr>
-                        <td align="center"><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager"><i
-                                    class="fa fa-fw fa-check" style="color:green"></i></a><b>/</b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=tag_manager"><i
+                        <td align="center"><a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i
+                                    class="fa fa-fw fa-check" style="color:green"></i></a><b>/</b><a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><i
                                     class="fa fa-fw fa-times" style="color:red"></i></a></td>
                         <td align="left">{{ .FileName }}</td>
                         <td align="left">{{ .TaggerEmail }}</td>

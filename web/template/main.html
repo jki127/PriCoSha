@@ -1,19 +1,22 @@
 {{define "content"}}
 <!-- This is the landing page for the PriCoSha website. -->
 <div class="content">
-  <h1>
-    PriCoSha
-      <div style="float:right">
-        {{ $iflogged := .Logged}}
-        {{if $iflogged}}
-        Logged in as: <b>{{.Username}}</b>
-        {{end}}
-      </div>
-  </h1>
+  {{ $iflogged := .Logged}}
+  <h1>PriCoSha</h1>
   <hr>
   <h2>
     Content Items:
   </h2>
+  {{ if .Locations }}
+  <div class="location-list">
+  {{ range $location, $locationCount := .Locations }}
+    <a class="location-pill" href="/location?loc={{ $location }}">
+      {{ $location }}
+      <span class="location-count">{{ $locationCount }}</span>
+    </a>
+  {{ end }}
+  </div>
+  {{ end }}
   <!-- Changed class of table to w3-table to allow easier customization and viewability -->
   <table class="w3-table" cellspacing="20">
     <tr>

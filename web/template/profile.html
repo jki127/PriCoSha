@@ -10,149 +10,223 @@
         <div class="w3-card w3-round w3-white">
             <div class="w3-container">
                 <h4 class="w3-center">{{.Fname}} {{.Lname}}</h4>
-                <p class="w3-center"><img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:106px;width:106px"
+                <p class="w3-center"><img src="/css/faces/ggmf.png" class="w3-circle" style="height:106px;width:106px"
                         alt="Avatar"></p>
                 <hr>
                 <h5 class="w3-margin-right w3-text-theme"><i class="fa fa-user fa-fw "></i>Bio</h5>
-                <p>Insert Bio Here</p>
+                {{$ifbio := .HasBio}}
+                {{if $ifbio}}
+                <p>{{.Bio}}</p>
+                {{else}}
+                <a onclick="document.getElementById('id02').style.display='block'" class="w3-button w3-left-align"><i
+                        class="fa fa-fw fa-pencil"></i>Add Bio</a>
+                {{end}}
             </div>
         </div>
         <br>
+
+        <!-- Add Bio Popup -->
+        <div id="id02" class="w3-modal">
+            <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+                <div class="w3-center"><br>
+                    <span onclick="document.getElementById('id02').style.display='none'" class="w3-button w3-xlarge w3-transparent w3-display-topright"
+                        title="Close Modal">×</span>
+                    <i alt="Avatar" style="width:30%" class="w3-circle w3-margin-top fa fa-5x fa-fw fa-pencil"></i>
+                </div>
+
+                <form class="w3-container" action="/addBio">
+                    <div class="w3-section">
+                        <label><b>Add your bio</b></label>
+                        <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter a bio" name="biography"
+                            maxlength="38" required>
+                        <button class="w3-button w3-block w3-green w3-section w3-padding" type="submit">Submit</button>
+                    </div>
+                </form>
+
+                <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+                    <button onclick="document.getElementById('id02').style.display='none'" type="button" class="w3-button w3-red">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Accordion -->
-        <!-- <div class="w3-card w3-round">
-                    <div class="w3-white">
-                        <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align">
-                            <i class="fa fa-users fa-fw w3-margin-right" style="color:black"></i> My Groups</button>
-                        <div id="Demo1" class="w3-hide w3-container">
-                            {{ range .FriendGroups }}
-                            <p>{{ .FGName }}</p>
-                            {{end}}
+        <div class="w3-card w3-round">
+            <div class="w3-white">
+
+                <!-- FriendGroups owned display -->
+                <button onclick="myFunction('Demo1')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    Friend Groups I Own</button>
+                <div id="Demo1" class="w3-hide w3-container">
+                    {{range .FriendGroups}}
+                    <div class="w3-row w3-padding-small">
+                        <div class="w3-card w3-gray w3-padding">
+                            <div class="w3-cell-row">
+                                <div class="w3-cell w3-cell-middle">
+                                    <i class="fa fa-users fa-3x"></i>
+                                </div>
+                                <div class="w3-cell w3-cell-middle w3-padding-small">
+                                    <p>{{.FGName}}</p>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    {{else}}
+                    <p>No Groups Owned!</p>
+                    {{end}}
+                </div>
+
+                <!-- Friend groups in display -->
+                <button onclick="myFunction('Demo2')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    Friend Groups I'm In</button>
+                <div id="Demo2" class="w3-hide w3-container">
+                    <p>{{range .BelongFriendGroups}}
+                        <div class="w3-row w3-padding-small">
+                            <div class="w3-card w3-gray w3-padding">
+                                <div class="w3-cell-row">
+                                    <div class="w3-cell w3-cell-middle">
+                                        <i class="fa fa-users fa-3x"></i>
+                                    </div>
+                                    <div class="w3-cell w3-cell-middle w3-padding-small">
+                                        <p>{{.FG.OwnerEmail}}'s {{.FG.FGName}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <p>Not In Any Groups!</p>
+                        {{end}}</p>
+                </div>
+                <!-- Friendlist display -->
+                <button onclick="myFunction('Demo4')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i>
+                    My Friends</button>
+                <div id="Demo4" class="w3-hide w3-container">
+                    <p>{{range .FriendsList}}
+                        <div class="w3-row w3-padding-small">
+                            <div class="w3-card w3-gray w3-padding">
+                                <div class="w3-cell-row">
+                                    <div class="w3-cell w3-cell-middle">
+                                        <img src="/css/faces/{{.FaceID}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right"
+                                            style="width:60px">
+                                    </div>
+                                    <div class="w3-cell w3-cell-middle w3-padding-small">
+                                        <p>{{.FriendFirstName}} {{.FriendLastName}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{else}}
+                        <p>No Friends</p>
+                        {{end}}</p>
+                </div>
+
+
+                <!-- Folders display -->
+                <!-- <button onclick="myFunction('Demo3')" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-folder fa-fw w3-margin-right"></i>
+                    My Folders</button>
+                <div id="Demo3" class="w3-hide w3-container">
+                    <br>
+                    <div class="w3-row-padding">
+                        {{/*range .PendingTags*/}}
+                        <div class="w3-half w3-margin-bottom">
+                            <div class="w3-card w3-gray">
+                                <div class="w3-container">
+                                    <i class="fa fa-folder-open fa-3x"></i>
+                                </div>
+                                <div class="w3-container">
+                                    <p>FOLDERNAME</p>
+                                </div>
+                            </div>
+                        </div>
+                        {{/*else*/}}
+                        <p>No Folders</p>
+                        {{/*end*/}}
                     </div>
                 </div> -->
 
-        <!-- Friend Groups User Owns Card -->
-        <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-users fa-fw"></i>My
-                Groups</header>
-            {{range .FriendGroups}}
-            <div class="w3-row w3-padding-small">
-                <div class="w3-card w3-gray w3-padding">
-                    <p> <img src="https://www.w3schools.com/w3images/avatar3.png" class="w3-circle" style="height:80px;width:80px">
-                        My {{.FGName}}</p>
-                </div>
+
+
             </div>
-            {{end}}
         </div>
         <br>
-        <!-- Friend Groups User is In Card -->
-        <div class="w3-card w3-padding-large w3-white">
-            <header class="w3-padding-16 w3-margin-right w3-text-theme"><i class="fa fa-users fa-fw"></i>Friend
-                Groups I'm In</header>
-            {{range .BelongFriendGroups}}
-            <div class="w3-row w3-padding-small">
-                <div class="w3-card w3-gray w3-padding">
-
-                    <p><i class="fa fa-users fa-3x"></i> {{.FG.OwnerEmail}}'s {{.FG.FGName}}</p>
-                </div>
-            </div>
-            {{end}}
-        </div>
 
         <!-- End Left Column -->
     </div>
     <!-- Middle Column -->
     <div class="w3-col m7">
+        <h1 class="w3-clear w3-margin-left">My Feed</h1>
 
-        <!-- <div class="w3-row-padding">
-            <div class="w3-col m12">
-                <div class="w3-card w3-round w3-white">
-                    <div class="w3-container w3-padding">
-                        <h6 class="w3-opacity">Social Media template by w3.css</h6>
-                        <p contenteditable="true" class="w3-border w3-padding">Status: Feeling Blue</p>
-                        <button type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i> Post</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-
-        <!-- This will Show Posts From Groups the User is a Part Of -->
-
-        <!-- range .BelongGroups -->
-        <!-- range .GroupPosts -->
+        <!-- Show All Content Items that a user can see -->
+        {{range .PrivateItems}}
+        {{ $ifPoll := .IsPoll}}
+        {{if $ifPoll}}
+        {{else}}
         <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <img src="https://www.w3schools.com/w3images/avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
-                style="width:60px">
-            <span class="w3-right w3-opacity">1 min</span>
-            <h4>John Doe</h4><br>
+            <img src="/css/faces/{{.RandImg}}.jpg" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
+            <span class="w3-right w3-opacity">{{.PostTime}}</span>
+            <h4>{{.Fname}} {{.Lname}}</h4><br>
             <hr class="w3-clear">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p class="w3-margin-left">{{.FileName}}</p>
             <div class="w3-row-padding" style="margin:0 -16px">
-                <div class="w3-half">
-                    <img src="https://www.w3schools.com/w3images/lights.jpg" style="width:100%" alt="Northern Lights"
-                        class="w3-margin-bottom">
-                </div>
-                <div class="w3-half">
-                    <img src="https://www.w3schools.com/w3images/nature.jpg" style="width:100%" alt="Nature" class="w3-margin-bottom">
+                <div class="w3-content" style="max-width:600px">
+                    <img src="/css/images/{{.RandImg}}.jpg" style="width:100%" alt="Northern Lights" class="w3-margin-bottom">
                 </div>
             </div>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>
-                Like</button>
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
-                Comment</button>
+
+            <!-- Ratings Button -->
+            <button onclick="myFunction2('Ratings{{.ItemID}}')" type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i
+                    class="fa fa-star"></i>
+                Ratings</button>
+            <!-- Comments Button -->
+            <button onclick="myFunction2('Comments{{.ItemID}}')" type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i
+                    class="fa fa-comment"></i>
+                Comments</button>
+
+            <!-- Ratings Display -->
+            <div id="Ratings{{.ItemID}}" class="w3-hide w3-container w3-white">
+                <p><b>Ratings:</b> {{range .Ratings}}
+                    {{.Emoji}}
+                    {{else}}
+                    <p>No Ratings!</p>
+                    {{end}}</p>
+            </div>
+
+
+            <!-- Comments Display -->
+            <div id="Comments{{.ItemID}}" class="w3-hide w3-container">
+                <h4>Comments</h4>
+                <p>{{range .Comments}}
+                    <div class="w3-row w3-padding-small">
+                        <hr class="w3-clear">
+                        <span class="w3-right w3-opacity">{{.CommentTime}}</span>
+                        <h5>{{.Fname}} {{.Lname}}</h5>
+                        {{.Body}}
+                    </div>
+                    {{else}}
+                    <p>No Comments!</p>
+                    {{end}}</p>
+                <form action="/addComment" method="POST">
+                    <label for="comment"></label>
+                    <input class="w3-input w3-border" type="text" placeholder="Add a comment" name="body" required>
+                    <input type="hidden" name="itemID" value="{{.ItemID}}">
+                    <input type="hidden" name="loc" value="profile">
+                    <input class="w3-button w3-blue w3-padding" type="submit" value="Add Comment">
+                </form>
+                <br>
+
+            </div>
+
         </div>
+        {{end}}
+        {{end}}
 
-        <!-- keeping for reference -->
-        <!-- <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <img src="https://www.w3schools.com/w3images/avatar5.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
-                style="width:60px">
-            <span class="w3-right w3-opacity">16 min</span>
-            <h4>Jane Doe</h4><br>
-            <hr class="w3-clear">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>
-                Like</button>
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
-                Comment</button>
-        </div> -->
 
-        <!-- <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
-            <img src="https://www.w3schools.com/w3images/avatar6.png" alt="Avatar" class="w3-left w3-circle w3-margin-right"
-                style="width:60px">
-            <span class="w3-right w3-opacity">32 min</span>
-            <h4>Angie Jane</h4><br>
-            <hr class="w3-clear">
-            <p>Have you seen this?</p>
-            <img src="https://www.w3schools.com/w3images/nature.jpg" style="width:100%" class="w3-margin-bottom">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat.</p>
-            <button type="button" class="w3-button w3-theme-d1 w3-margin-bottom"><i class="fa fa-thumbs-up"></i>
-                Like</button>
-            <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>
-                Comment</button>
-        </div> -->
 
         <!-- End Middle Column -->
     </div>
     <!-- Right Column -->
     <div class="w3-col m2">
-
-        <!-- keeping for reference -->
-        <!-- <div class="w3-card w3-round w3-white w3-center">
-            <div class="w3-container">
-                <p>Upcoming Events:</p>
-                <img src="https://www.w3schools.com/w3images/forest.jpg" alt="Forest" style="width:100%;">
-                <p><strong>Holiday</strong></p>
-                <p>Friday 15:00</p>
-                <p><button class="w3-button w3-block w3-theme-l4">Info</button></p>
-            </div>
-        </div>
-        <br> -->
 
         <!-- Show Tag Requests here -->
         {{range .PendingTags}}
@@ -163,11 +237,11 @@
                 <span>{{.TaggerEmail}} tagged you on {{.FileName}}</span>
                 <div class="w3-row w3-opacity">
                     <div class="w3-half">
-                        <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
+                        <a href="/accept?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><button
                                 class="w3-button w3-block w3-green w3-section" title="Accept"><i class="fa fa-check"></i></button></a>
                     </div>
                     <div class="w3-half">
-                        <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}&loc=profile"><button
+                        <a href="/decline?ter={{.TaggerEmail}}&iid={{.ItemID}}&ted={{.TaggedEmail}}"><button
                                 class="w3-button w3-block w3-red w3-section" title="Decline"><i class="fa fa-remove"></i></button></a>
                     </div>
                 </div>
@@ -180,4 +254,30 @@
     </div>
 
     <!-- End Grid -->
+
+
+    <script>
+        // Accordion
+        function myFunction(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className += " w3-theme-d1";
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        } function myFunction2(id) {
+            var x = document.getElementById(id);
+            if (x.className.indexOf("w3-show") == -1) {
+                x.className += " w3-show";
+                x.previousElementSibling.className;
+            } else {
+                x.className = x.className.replace("w3-show", "");
+                x.previousElementSibling.className =
+                    x.previousElementSibling.className.replace(" w3-theme-d1", "");
+            }
+        }
+    </script>
     {{end}}
