@@ -286,47 +286,65 @@ Viewing written comments
 ![](https://i.imgur.com/3vxzrOI.png)
 
 ### Location Data
----------------------- NEEDS TO BE COMPLETED -------------------------
-
 **Author:** Jayson Isaac
 
 **Description:**
-
-Description text
+Content Items can be filtered by Location
 
 **Why this feature?**
-
-Selling text
+It’s useful to be able to filter files by their location such as images.
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+ex. Addition of location attribute to Content_Item table
 
 **Queries:**
-
-ex. Add bio information to DB
-
+Get locations of user’s content items as well as the number of content items that the user has from each location
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT location, count(item_id) FROM Content_Item
+WHERE (item_id IN (
+	-- All item ids shared in a user's friendgroups
+	SELECT item_id FROM Share
+	WHERE (fg_name, owner_email) IN (
+		-- All friend groups the user belongs to
+		SELECT fg_name, owner_email FROM Belong
+		WHERE member_email= ?
+	)
+)  OR (is_pub = 1 AND post_time > DATE_SUB(NOW(), INTERVAL 24 HOUR))
+OR poster_email = ?)
+AND location IS NOT NULL
+GROUP BY location
+```
+
+Get all the content items that a user has access to from one location
+```sql
+SELECT item_id, poster_email, file_path, file_name, post_time
+FROM Content_Item
+WHERE location = ? AND (item_id IN (
+	-- All item ids shared in a user's friendgroups
+	SELECT item_id FROM Share
+	WHERE (fg_name, owner_email) IN (
+		-- All friend groups the user belongs to
+		SELECT fg_name, owner_email FROM Belong
+		WHERE member_email = ?
+	)
+)  OR (is_pub = 1 AND post_time > DATE_SUB(NOW(), INTERVAL 24 HOUR))
+OR poster_email = ?)
+ORDER BY Content_Item.post_time DESC
 ```
 
 **Source Files**
 
     backend/
-
-        /profile.go
+        /content_location.go
 
     frontend/
-
-        /profile_handler.go
-
-        /add_bio_handler.go
+        /content_location_handler.go
 
     web/
-
         template/
-
-            profile.html
+            content_location.html
+	    main.html
 
 **Images**
 
@@ -440,57 +458,79 @@ Viewing friends list
 ![](https://i.imgur.com/nabSGY6.png)
 
 ### Folders
----------------------- NEEDS TO BE COMPLETED -------------------------
 
 **Author:** Jayson Isaac
 
 **Description:**
 
-Description text
+Content Items can be categorized by a common folder name
 
 **Why this feature?**
-
-text
+It’s useful to be able to view common files on one page
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+ex. Addition of Folder and Include tables. 
 
 **Queries:**
-
-ex. Add bio information to DB
-
+Get all folders a user has
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT folder_name FROM Folder WHERE email =?
 ```
 
+Get all content items in a folder
+```sql
+SELECT item_id, poster_email, file_path, file_name, post_time FROM Include
+NATURAL JOIN Content_Item
+WHERE folder_name = ? AND email = ?
+```
+
+Create Folder
+```sql
+INSERT INTO Folder (folder_name, email)
+VALUES (?, ?)
+```
+
+Get Content not in a specified folder (so the user can add those items)
+```sql
+SELECT item_id, poster_email, file_path, file_name
+FROM Content_Item
+WHERE (item_id IN (
+	-- All item ids shared in a user's friendgroups
+	SELECT item_id FROM Share
+	WHERE (fg_name, owner_email) IN (
+		-- All friend groups the user belongs to
+		SELECT fg_name, owner_email FROM Belong
+		WHERE member_email=?
+	)
+)  OR (is_pub = 1 AND post_time > DATE_SUB(NOW(), INTERVAL 24 HOUR))
+OR poster_email=?) AND
+item_id NOT IN (
+	SELECT item_id FROM Include
+	NATURAL JOIN Content_Item
+	WHERE folder_name = ? AND email = ?
+)
+ORDER BY Content_Item.post_time DESC
+```
+
+Add item to folder
+```
+INSERT INTO Include (folder_name, email, item_id)
+VALUES (?, ?, ?)
+```
 **Source Files**
 
     backend/
-
-        /profile.go
+        /content_folder.go
 
     frontend/
-
-        /profile_handler.go
-
-        /add_bio_handler.go
+        /content_folder_handler.go
 
     web/
-
         template/
+            content_folder.html
+	    main.html
 
-            profile.html
-
-**Images**
-
-Seeing location groups on main page
-
-![](https://i.imgur.com/hGvua6v.png)
-
-Seeing content inside location group
-
-![](https://i.imgur.com/xaPtTzr.png)
 
 ### User Privileges
 **Author:** Graeme Ferguson
@@ -893,3 +933,10 @@ Write in option to vote differently
 ![](https://i.imgur.com/3Ton1Ly.png)
 
 ![](https://i.imgur.com/jYs80Wd.png)
+
+## Base Feature Contribution
+View Shared Content - Jayson
+Manage Tags - Anthony
+Post a Content Item - Maddie
+Tag a Content Item - Graeme
+Add Friend - Andrea
