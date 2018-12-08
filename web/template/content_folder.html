@@ -1,38 +1,11 @@
 {{define "content"}}
 <!-- This is the landing page for the PriCoSha website. -->
 <div class="content">
-  {{ $iflogged := .Logged}}
-  <h1>PriCoSha</h1>
+  <h1>PriCoSha</div>
+{{ $iflogged := .Logged }}
+  </h1>
   <hr>
-  <h2>
-    Content Items:
-  </h2>
-  {{ if .Locations }}
-  <div class="pill-list">
-  {{ range $location, $locationCount := .Locations }}
-    <a class="pill" href="/location?loc={{ $location }}">
-      {{ $location }}
-      <span class="pill-count">{{ $locationCount }}</span>
-    </a>
-  {{ end }}
-  </div>
-  {{ end }}
-
-  {{ if $iflogged }}
-  <div class="pill-list">
-  {{ if .Folders }}
-  {{ range .Folders }}
-    <a class="pill" href="/folder?fn={{ .Name }}">
-      {{ .Name }}
-    </a>
-  {{ end }}
-  {{ end }}
-  <a class="pill" href="/folder/new">
-    Create Folders
-    <span class="pill-count">+</span>
-  </a>
-  </div>
-  {{ end }}
+  <h2>{{ .FolderName }}</h2>
   <!-- Changed class of table to w3-table to allow easier customization and viewability -->
   <table class="w3-table" cellspacing="20">
     <tr>
@@ -46,13 +19,7 @@
     <tr>
       <td>{{ .ItemID }}</td>
       <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
-      {{if .IsPoll}}
-      <td>
-        n/a
-      </td>
-      {{else}}
       <td>{{ .FilePath }}</td>
-      {{end}}
       <td>{{ .Email }}</td>
       <td>{{ .PostTime }}</td>
     </tr>
@@ -77,6 +44,41 @@
       <td colspan="5">No Items Available!<td>
     </tr>
     {{ end }}
+    </table>
+
+    {{ if .PotentialItems }}
+    <h2>Add Items to Folder:</h2>
+    <table class="poop w3-table" cellspacing="20">
+      <tr>
+        <th>Item ID</th>
+        <th>Item Name</th>
+        <th>File Path</th>
+        <th>Author</th>
+        <th>Add?</th>
+      </tr>
+      {{ $folderName := .FolderName }}
+      {{ range .PotentialItems }}
+      <tr>
+        <td>{{ .ItemID }}</td>
+        <td><a href="/item?iid={{.ItemID}}">{{ .FileName }}</a></td>
+        <td>{{ .FilePath }}</td>
+        <td>{{ .Email }}</td>
+        <td>
+          <form action="/folder/addItem" method="post">
+            <input type="hidden" name="folder_name" value="{{$folderName}}">
+            <input type="hidden" name="item_id" value="{{.ItemID}}">
+            <input type="submit" value="Add">
+          </form>
+        </td>
+      </tr>
+      {{ else }}
+      <tr>
+        <td colspan="5">No Items Available!<td>
+      </tr>
+      {{ end }}
+    </table>
+    {{ end }}
+
     <script>
       function openForm(ID) {
         document.getElementById("tag-form-"+ID).style.display = "block";
@@ -87,5 +89,5 @@
         document.getElementById("tag-button-"+ID).style.display = "block";
       }
     </script>
-</div>
-{{ end }}
+    </div>
+    {{ end }}

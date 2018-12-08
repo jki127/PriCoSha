@@ -19,13 +19,16 @@ html, body, h1, h2, h3, h4,h5, p, div, span {
   padding: 10px;
 }
 
-.location-list {
-  margin-top: 20px;
+.pill-list {
   margin-bottom: 20px;
-  margin-left: 15px;
+  display: inline-block;
+  width: 47%;
+  box-sizing: border-box;
 }
 
-.location-list .location-pill {
+.pill-list .pill {
+  margin-bottom: 10px;
+  width: 50%
   background: #FFFFFF;
   display: inline-block;
   text-decoration: none;
@@ -39,7 +42,7 @@ html, body, h1, h2, h3, h4,h5, p, div, span {
   transition: box-shadow .08s linear,min-width .15s cubic-bezier(0.4,0.0,0.2,1)
 }
 
-.location-list .location-pill .location-count{
+.pill-list .pill .pill-count{
   background: #000000;
   box-sizing: border-box;
   display: inline-block;
@@ -51,7 +54,11 @@ html, body, h1, h2, h3, h4,h5, p, div, span {
   border-radius: 100%;
 }
 
-.location-pill:hover, .location-pill:focus{
+.pill:hover, .pill:focus{
   box-shadow: 0 1px 3px 0 rgba(60,64,67,0.302),
   0 4px 8px 3px rgba(60,64,67,0.149)
+}
+
+.error {
+  color: red;
 }

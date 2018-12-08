@@ -59,11 +59,16 @@ func main() {
 
 	http.HandleFunc("/duplicateNames", duplicateAddFriendHandler)
 	http.HandleFunc("/chooseName", chooseAddedFriendHandler)
-	http.HandleFunc("/addBio",addBioHandler)
+	http.HandleFunc("/addBio", addBioHandler)
 
 	http.HandleFunc("/addVote", addVoteHandler)
 
 	http.HandleFunc("/location", contentLocationHandler)
+
+	http.HandleFunc("/folder", contentFolderHandler)
+	http.HandleFunc("/folder/new", newFolderHandler)
+	http.HandleFunc("/folder/create", createFolderHandler)
+	http.HandleFunc("/folder/addItem", addItemToFolderHandler)
 
 	// Start server
 	log.Println("Frontend spun up!")
