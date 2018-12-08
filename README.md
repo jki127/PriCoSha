@@ -935,8 +935,8 @@ Write in option to vote differently
 ![](https://i.imgur.com/jYs80Wd.png)
 
 ## Base Feature Contribution
-View Shared Content - Jayson
-Manage Tags - Anthony
-Post a Content Item - Maddie
-Tag a Content Item - Graeme
-Add Friend - Andrea
+- View Shared Content - Jayson
+- Manage Tags - Anthony
+- Post a Content Item - Maddie
+- Tag a Content Item - Graeme
+- Add Friend - Andrea
