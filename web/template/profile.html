@@ -185,11 +185,33 @@
 
             <!-- Ratings Display -->
             <div id="Ratings{{.ItemID}}" class="w3-hide w3-container w3-white">
-                <p><b>Ratings:</b> {{range .Ratings}}
+                <div class="w3-row-padding">
+                    <form action="/addRating" method="POST">
+                        <input class="w3-radio" type="radio" name="emoji" value="😍" checked>
+                        <label>😍</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="😆">
+                        <label>😆</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="😲">
+                        <label>😲</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="😢">
+                        <label>😢</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="😠">
+                        <label>😠</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="👍">
+                        <label>👍</label>
+                        <input class="w3-radio" type="radio" name="emoji" value="👎">
+                        <label>👎</label>
+                        <input type="hidden" name="itemID" value="{{.ItemID}}">
+                        <input class="w3-button" type="submit" value="Rate!">
+                    </form>
+                </div>
+                <div class="w3-row-padding">
+                    <b>Ratings:</b> {{range .Ratings}}
                     {{.Emoji}}
                     {{else}}
-                    <p>No Ratings!</p>
-                    {{end}}</p>
+                    No Ratings!
+                    {{end}}
+                </div>
             </div>
 
 
