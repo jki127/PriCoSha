@@ -1,15 +1,8 @@
 {{define "content"}}
 <!-- This is the landing page for the PriCoSha website. -->
 <div class="content">
-  <h1>
-    PriCoSha
-      <div style="float:right">
-        {{ $iflogged := .Logged}}
-        {{if $iflogged}}
-        Logged in as: <b>{{.Username}}</b>
-        {{end}}
-      </div>
-  </h1>
+  {{ $iflogged := .Logged}}
+  <h1>PriCoSha</h1>
   <hr>
   <h2>
     Content Items:

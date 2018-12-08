@@ -10,7 +10,7 @@ func addBioHandler(w http.ResponseWriter, r *http.Request) {
 	logged, username := getUserSessionInfo(r)
 
 	if !logged {
-		log.Println("User is not logged in and cannot add friends.")
+		log.Println("User is not logged in and cannot add bio.")
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}

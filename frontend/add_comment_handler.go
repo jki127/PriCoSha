@@ -40,12 +40,6 @@ func addCommentHandler(w http.ResponseWriter, r *http.Request) {
 	b.ExecInsertComment(NewComment)
 	log.Println("Adding comment to", r.FormValue("itemID"))
 
-	differentLocation := r.FormValue("loc")
-	if differentLocation != "" {
-		http.Redirect(w, r, "/"+differentLocation, http.StatusFound)
-		return
-	} else {
-		http.Redirect(w, r, "/item?iid="+r.FormValue("itemID"), http.StatusFound)
-		return
-	}
+	http.Redirect(w, r, r.Header.Get("referer"), http.StatusFound)
+	return
 }
