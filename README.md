@@ -66,10 +66,16 @@ pricosha/
     frontend/
 
         frontend.go
+    
+    sql/
+
+        pricosha.sql
 
 All source files descriptions are given within the scope of the `pricosha/` folder.
 
 ### Defriend
+---------------------- DONE -------------------------
+
 **Author:** Andrea Vasquez
 
 **Description:**
@@ -158,29 +164,29 @@ AND email=?
 
 **Source Files**
 
-backend/
+    backend/
 
-    remove_hanging.go
-    
-    add_friend_related.go
+        remove_hanging.go
+        
+        add_friend_related.go
 
-    friend_group.go
+        friend_group.go
 
-frontend/
+    frontend/
 
-    delete_friend_handler.go
+        delete_friend_handler.go
 
-    form_delete_friend_handler.go
+        form_delete_friend_handler.go
 
-    friend_group_handler.go
+        friend_group_handler.go
 
-web/
+    web/
 
-    template/
+        template/
 
-        delete_friend.html
+            delete_friend.html
 
-        friend_groups.html
+            friend_groups.html
 
 
 **Images**
@@ -188,6 +194,8 @@ web/
 Put images here.
 
 ### Add Comments
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
 **Author:** Madeleine Nicolas
 
 **Description:**
@@ -221,26 +229,32 @@ UPDATE Person SET bio=? WHERE email=?
 
     backend/
 
-        /profile.go
+        add_comment.go
+
+        content_item.go
 
     frontend/
 
-        /profile_handler.go
+        add_comment_handler.go
 
-        /add_bio_handler.go
+        content_item_handler.go
+
+        post_item_handler.go
 
     web/
 
         template/
 
-            profile.html
+            content_item.html
 
 **Images**
 
 Put images here.
 
 ### Location Data
-**Author:** Anthony Taldone 
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
+**Author:** Jayson Isaac
 
 **Description:**
 
@@ -285,6 +299,8 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### Profile Page
+---------------------- DONE -------------------------
+
 **Author:** Anthony Taldone 
 
 **Description:**
@@ -362,7 +378,9 @@ WHERE email=?
 Put images here.
 
 ### Folders
-**Author:** Anthony Taldone 
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
+**Author:** Jayson Isaac
 
 **Description:**
 
@@ -407,43 +425,196 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### User Privileges
-**Author:** Anthony Taldone 
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
+**Author:** Graeme Ferguson
 
 **Description:**
 
-Description text
+This feature adds three distinct roles for FriendGroup members. These roles are as follows: member which can post content, comment, rate, and tag; mod which can invite new members, ban/kick members, delete posts, and everything a member can do; admin which can delete the group, promote members to mod and vice versa, rename the group, give away admin privilege to another member, and everything a mod can do. Notably, there can only be one group admin. The first group admin is the owner. Ownership of the group transfers with transfer of admin privileges.
 
 **Why this feature?**
 
-text
+Most social media platforms integrate some form of moderation and user privileges into themselves. It is a necessary feature in an online platform where users can behave outside of what owners of groups would prefer.
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+Add a role field to Belong 
 
 **Queries:**
 
-ex. Add bio information to DB
+Find users at certain role in FriendGroup
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT member_email
+FROM Belong
+WHERE fg_name=?
+AND owner_email=?
+AND role=?
+```
+
+Find user's role in FriendGroup
+
+```sql
+SELECT role
+FROM Belong
+WHERE fg_name=?
+AND owner_email=?
+AND member_email=?
+```
+
+Update user's role in FriendGroup
+
+```sql
+UPDATE Belong
+SET role=?
+WHERE member_email=?
+AND fg_name=?
+AND owner_email=?
+```
+
+Find Friend Groups user can unshare item from
+
+```sql
+SELECT fg_name, owner_email
+FROM Share NATURAL JOIN Friend_Group NATURAL JOIN Belong
+-- Check if the user is the original poster of the Content_Item
+WHERE (member_email IN (
+    SELECT poster_email
+    FROM Content_Item
+    WHERE item_id=?
+)
+-- Or if the user has mod privileges over the Shared Content_Item
+OR role < 2)
+AND member_email =?
+AND item_id = ?
+```
+
+Delete row from share based on primary key
+
+```sql
+DELETE FROM Share
+WHERE fg_name=?
+AND owner_email=?
+AND item_id=?
+```
+
+Renaming a friend group is the following queries based on creating a new friend group with a new name (and old description), updating all rows in Belong and Share to that new friend group, and deleting the old friend group
+
+```sql
+SELECT description
+FROM Friend_Group
+WHERE fg_name=?
+AND owner_email=?
+```
+
+```sql
+INSERT INTO Friend_Group
+(fg_name, owner_email, description)
+VALUES
+(?, ?, ?)
+```
+
+```sql
+UPDATE Belong
+SET fg_name=?
+WHERE fg_name=?
+AND owner_email=?
+```
+
+```sql
+UPDATE Share
+SET fg_name=?
+WHERE fg_name=?
+AND owner_email=?
+```
+
+```sql
+DELETE FROM Friend_Group
+WHERE fg_name=?
+AND owner_email=?
+```
+
+SwapOwner consists of checking if the new owner exists, checking that that new owner does not already own a group with the same name as the one being swapped to them, creating a new group with that owner (and old description), updating all belong and share rows tied to that group, and deleting the old group. Any repeated quries from Rename have been left out for the sake of brevity.
+
+```sql
+SELECT email
+FROM Person
+WHERE email=?
+```
+
+```sql
+SELECT fg_name
+FROM Friend_Group
+Where fg_name=?
+AND owner_email=?
+```
+
+```sql
+UPDATE Belong
+SET owner_email=?
+WHERE fg_name=?
+AND owner_email=?
+```
+
+```sql
+UPDATE Share
+SET owner_email=?
+WHERE fg_name=?
+AND owner_email=?
+```
+
+Delete Friend Group specified by primary key
+
+```sql
+DELETE FROM Friend_Group
+WHERE fg_name=?
+AND owner_email=?
 ```
 
 **Source Files**
 
     backend/
 
-        /profile.go
+        friend_group.go
+
+        manage_privileges.go
 
     frontend/
 
-        /profile_handler.go
+        add_friend_handler.go
 
-        /add_bio_handler.go
+        change_owner_handler.go
+
+        change_privilege_handler.go
+
+        delete_friend_handler.go
+
+        delete_group_handler.go
+
+        form_add_friend_handler.go
+
+        form_delete_friend_handler.go
+
+        friend_group_handler.go
+
+        manage_privileges_handler.go
+
+        profile_handler.go
+
+        rename_group_handler.go
+
+        unshare_handler.go
 
     web/
 
         template/
+
+            content_item.html
+
+            friend_groups.html
+
+            manage_privileges.html
 
             profile.html
 
@@ -452,7 +623,9 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### Content Item Deletion
-**Author:** Anthony Taldone 
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
+**Author:** Madeleine Nicolas
 
 **Description:**
 
@@ -497,45 +670,100 @@ UPDATE Person SET bio=? WHERE email=?
 Put images here.
 
 ### Poll Content Item
-**Author:** Anthony Taldone 
+---------------------- NEEDS TO BE COMPLETED -------------------------
+
+**Author:** Graeme Ferguson 
 
 **Description:**
 
-Description text
+This feature adds a new type of Content_Item called Poll that allows users to vote on options (one vote per user per poll) which is then displayed on the frontend as Content_Item information with interactive buttons to vote differently or for the first time.
 
 **Why this feature?**
 
-text
+Many social media platforms feature polls (such as Messenger). They are a useful way for users to interact and choose various things or simply list and aggregate opinions.
 
 **Schema Changes:**
 
-ex. Addition of bio field to Person
+* Add format field to Content_Item
+
+* Created a new table Vote with primary keys:
+
+    * Email of Voter (references Person(email))
+    
+    * Content_Item ID (references Content_Item(item_id))
+
+    * Choice
 
 **Queries:**
 
-ex. Add bio information to DB
+Find if item is poll by selecting it only if it is a poll
+
 
 ```sql
-UPDATE Person SET bio=? WHERE email=?
+SELECT item_id
+FROM Content_Item
+WHERE format=1
+AND item_id=?
+```
+
+Find all choices and the votes for said choices for certain poll
+
+```sql
+SELECT choice, COUNT(*) as vote_count
+FROM Vote
+WHERE item_id=?
+GROUP BY choice
+ORDER BY vote_count DESC
+```
+
+Find if a vote has been cast by selecting the vote if it exists
+
+```sql
+SELECT item_id
+FROM Vote
+WHERE voter_email=?
+AND item_id=?
+```
+
+Update voter's choice if new choice is chosen
+
+```sql
+UPDATE Vote
+SET choice=?
+WHERE voter_email=?
+AND item_id=?
+```
+
+If voter has not voted on poll before, insert Vote row with primary key
+
+```sql
+INSERT INTO Vote
+(voter_email, item_id, choice)
+VALUES
+(?, ?, ?)
 ```
 
 **Source Files**
 
     backend/
 
-        /profile.go
+        content_item.go
+
+        polls.go
+
+        remove_hanging.go
 
     frontend/
 
-        /profile_handler.go
-
-        /add_bio_handler.go
+        add_vote_handler.go
 
     web/
 
         template/
 
-            profile.html
+            content_item.html
+
+            main.html
 
 **Images**
 
