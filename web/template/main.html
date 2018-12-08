@@ -18,12 +18,14 @@
   </div>
   {{ end }}
 
-  {{ if .Folders }}
+  {{ if $iflogged }}
   <div class="pill-list">
+  {{ if .Folders }}
   {{ range .Folders }}
     <a class="pill" href="/folder?fn={{ .Name }}">
       {{ .Name }}
     </a>
+  {{ end }}
   {{ end }}
   <a class="pill" href="/folder/new">
     Create Folders
