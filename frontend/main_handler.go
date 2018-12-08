@@ -15,6 +15,7 @@ type MPD struct {
 	Username     string
 	ContentItems []*b.ContentItem
 	Locations    map[string]int
+	Folders      []*b.Folder
 }
 
 // Handles requests to root page (referred to as both / and main)
@@ -38,9 +39,8 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	CurrentMPD := MPD{
-		Logged:    logged,
-		Username:  username,
-		Locations: b.GetUserLocations(username),
+		Logged:   logged,
+		Username: username,
 	}
 
 	// All users see public content items that have been posted in the past
@@ -48,6 +48,8 @@ func mainHandler(w http.ResponseWriter, r *http.Request) {
 	// them or that they own
 	if logged {
 		CurrentMPD.ContentItems = b.GetUserContent(username)
+		CurrentMPD.Locations = b.GetUserLocations(username)
+		CurrentMPD.Folders = b.GetFolders(username)
 	} else {
 		CurrentMPD.ContentItems = b.GetPubContent()
 	}

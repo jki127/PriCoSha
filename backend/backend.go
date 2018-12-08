@@ -45,6 +45,7 @@ type FriendStruct struct {
 	FriendUsername  string
 	FaceID          int
 }
+
 // ContentItem holds info related to ContentItem management
 type ContentItem struct {
 	ItemID   int
@@ -52,7 +53,7 @@ type ContentItem struct {
 	FilePath string
 	FileName string
 	PostTime time.Time
-	Fname    string 
+	Fname    string
 	Lname    string
 	RandImg  int
 	Comments []*Comment
@@ -76,6 +77,10 @@ type Comment struct {
 	CommentTime time.Time
 	Fname       string
 	Lname       string
+}
+
+type Folder struct {
+	Name string
 }
 
 var db *sql.DB
