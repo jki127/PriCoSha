@@ -2,7 +2,9 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"net/http"
+	"time"
 
 	b "pricosha/backend"
 )
@@ -16,6 +18,8 @@ func main() {
 	} else {
 		log.Fatal("Database could not be contacted.")
 	}
+
+	rand.Seed(time.Now().UTC().UnixNano())
 
 	// Serve CSS files from assets/css
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("../assets/css/"))))
@@ -64,6 +68,7 @@ func main() {
 	http.HandleFunc("/addVote", addVoteHandler)
 
 	http.HandleFunc("/location", contentLocationHandler)
+	http.HandleFunc("/addRating", addRatingHandler)
 
 	http.HandleFunc("/folder", contentFolderHandler)
 	http.HandleFunc("/folder/new", newFolderHandler)

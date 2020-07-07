@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"log"
+	"math/rand"
 	"os"
 	"time"
 
@@ -118,7 +119,7 @@ func ValidateInfo(username string, password string) bool {
 
 func init() {
 	var configData Conf
-
+	rand.Seed(time.Now().UTC().UnixNano())
 	configFile, err := os.Open("../backend/config.json")
 	if err != nil {
 		log.Println("backend: init(): Could not open config file.")
